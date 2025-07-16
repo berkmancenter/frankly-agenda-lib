@@ -1,0 +1,18 @@
+{
+    "section": "Introductions",
+    "sectionDescription": "Getting to know one another, and why we are here.",
+    "items": [
+        {
+            "title": "Basic Introduction",
+            "content": [
+                "Share your name, where you live, and what drew you here."
+            ]
+        },
+        {
+            "title": "Partcipation Reason",
+            "content": [
+                "Why did you decide to participate in this conversation?"
+            ]
+        }
+    ]
+}

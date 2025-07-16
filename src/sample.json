@@ -1,0 +1,17 @@
+{
+    "goals": [
+        "dialogue",
+        "exploration",
+        "evaluation"
+    ],
+    "topic": "dfsafdasfdas",
+    "topicDescription": "fasdfadsfdasfadsf",
+    "audienceDescription": "dfasfdsfaadfdasfas",
+    "participantCount": "fiveToTen",
+    "hasBreakoutGroups": true,
+    "isFacilitated": false,
+    "isSeries": false,
+    "eventCount": 2,
+    "eventLength": 2700000000,
+    "isConcrete": false
+}

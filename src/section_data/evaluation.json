@@ -1,0 +1,45 @@
+{
+    "section": "Evaluation",
+    "sectionDescription": "Coalescing around ideas, perhaps coming to an agreement or making a decision.",
+    "concrete_items": [
+        {
+            "title": "Propose a future action",
+            "content": [
+                "Does anyone want to propose a future action or decision?"
+            ],
+            "guidance": "Each member of the group votes or comments on the proposal."
+        },
+        {
+            "title": "Partcipation Reason",
+            "content": [
+                "Why did you decide to participate in this conversation?"
+            ]
+        }
+    ],
+    "non_concrete_items": [
+        {
+            "title": "Future Actions",
+            "content": [
+                "How might the perspectives raised today necessitate future actions or change?"
+            ]
+        },
+        {
+            "title": "Needed Change",
+            "content": [
+                "What needs to change in our institutions, systems, and society so that everyone can flourish?"
+            ]
+        },
+        {
+            "title": "Moving Forward",
+            "content": [
+                "How might we move forward? What actions can each of us take individually?"
+            ]
+        },
+        {
+            "title": "Action Opportunities",
+            "content": [
+                "What opportunities for action are there?"
+            ]
+        }
+    ]
+}

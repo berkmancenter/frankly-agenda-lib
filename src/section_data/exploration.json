@@ -1,0 +1,20 @@
+{
+    "section": "Exploration",
+    "sectionDescription": "An exploration of a topic: meant to generate ideas, questions, and unknowns.",
+    "items": [
+        {
+            "title": "Topic Background Recommendations",
+            "content": [
+                "Focus on objective facts that are relevant to the conversation.",
+                "Provide accredited citations.",
+                "Be careful with framing: do not frame the facts as benefitting one side or the other.",
+                "The goal with facts is to generate a shared reality, and to create a starting point",
+                "Be careful: facts can be triggering. If people cannot agree on the facts, that can also be a starting point for the conversation. How people feel is most important."
+            ]
+        },
+        {
+            "title": "Topic Background",
+            "content": []
+        }
+    ]
+}

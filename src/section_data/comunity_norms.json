@@ -1,0 +1,45 @@
+{
+    "section": "Community Norms",
+    "sectionDescription": "These are a set of norms that we all agree on. These will set the tone of the conversation and ensure that it is welcoming and constructive.",
+    "items": [
+        {
+            "title": "Be curious and listen.",
+            "content": [
+                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
+                "We are here to explain and understand each other, not to convince others to change their minds."
+            ]
+        },
+        {
+            "title": "Be respectful and do not judge.",
+            "content": [
+                "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
+                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+            ]
+        },
+        {
+            "title": "Seek common ground.",
+            "content": [
+                "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
+                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+            ]
+        },
+        {
+            "title": "Embrace and welcome authenticity.",
+            "content": [
+                "Share what is important to you, speak from experience, and welcome others doing the same."
+            ]
+        },
+        {
+            "title": "Be purposeful and to the point.",
+            "content": [
+                "Keep your comments concise and relevant. Be conscious of the time you spend speaking and leave space for others to speak."
+            ]
+        },
+        {
+            "title": "ake responsibility for the conversation.",
+            "content": [
+                "Take responsibility for the quality of the conversation. Be proactive about keeping yourself and others on track. Ensure conversation agreements are honored."
+            ]
+        }
+    ]
+}
