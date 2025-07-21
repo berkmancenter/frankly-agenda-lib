@@ -1,6 +1,6 @@
 import { SectionBuilder } from './section_controllers/section_builder.js';
 import { Agenda, createAgenda, EventPlan } from './models/agenda_models.js'
-import { EventInputs } from './models/input_models.js'
+import { EventInputs, EventSection } from './models/input_models.js'
 import { Goals } from "./utils/global_enums.js";
 
 
@@ -58,24 +58,27 @@ function _createAgenda(name: string, eventInput: EventInputs): EventPlan {
   const eventPlan: EventPlan = new EventPlan(name, eventInput.topicDescription, true);
 
   const agendaList: Agenda[] = [];
+  let eventSections: EventSection[];
 
   // Create agendas 
   if (eventInput.isSeries) {
+    eventSections = _calculateSectionsPerEvent(eventInput.eventCount, eventInput.goals.length);
     for (var i = 0; i < eventInput.eventCount; i++) {
       // TODO: input whatever is needed to determine agenda characteristics 
       const newName: string = name + " One";
-      agendaList.push(createAgenda({eventNumber: i }));
+      agendaList.push(createAgenda({ eventNumber: i }));
     }
   } else {
     agendaList.push(createAgenda({}));
   }
 
-  // build out agendas
-  for (let agenda of agendaList) {
-    const builder: SectionBuilder = new SectionBuilder(agenda, eventInput);
+  for (let i = 0; i < agendaList.length; i++) {
+    console.log(eventSections[i]);
+    const builder: SectionBuilder = new SectionBuilder(agendaList[i], eventInput, eventSections[i]);
     builder.buildStructure();
-    eventPlan.addAgendas(agenda);
+    eventPlan.addAgendas(agendaList[i]);
   }
+
   return eventPlan;
 }
 
@@ -150,6 +153,53 @@ function _validateEvent(event: EventInputs): string[] {
   }
 
   return errorMessages;
+}
+
+function _getEventSections(sectionsPerEvent: number[][]): EventSection[] {
+  
+}
+
+function _calculateSectionsPerEvent(eventCount: number, totalSections: number): EventSection[] {
+  let eventList: EventSection[] = [];
+  const sectionsPerEventDecimal: number = totalSections / eventCount;
+
+  if (sectionsPerEventDecimal < 1) {
+    // more events than sections 
+    const eventsPerSection: number = Math.floor(eventCount / totalSections);
+    const leftOverEvents: number = eventCount % totalSections;
+    let eventsAdded: number = 0;
+    let sectionAdding: number = 1;
+    for (let i = 0; i < eventCount; i++) {
+      let tempEventPerSection = eventsPerSection;
+      if (totalSections - sectionAdding < leftOverEvents) {
+        // the last events are where we want to add the extra sections 
+        // i.e. an extra event per section
+        tempEventPerSection = eventsPerSection + 1;
+      }
+      if (eventsAdded >= tempEventPerSection) {
+        sectionAdding = sectionAdding + 1;
+        eventsAdded = 0;
+      }
+      eventList[i].sections.push(Goals[sectionAdding]);
+      eventsAdded = eventsAdded + 1;
+    }
+  } else {
+    const sectionsPerEvent: number = Math.floor(totalSections / eventCount);
+    const leftOverSections: number = totalSections % eventCount;
+
+    let sectionAdding: number = 1;
+    for (let i = 0; i < eventCount; i++) {
+      for (let j = 0; j < sectionsPerEvent; j++) {
+        eventList[i].sections.push(Goals[sectionAdding]);
+        sectionAdding = sectionAdding + 1;
+      }
+      if (i < leftOverSections) {
+        eventList[i].sections.push(Goals[sectionAdding]);
+        sectionAdding = sectionAdding + 1;
+      }
+    }
+  }
+  return eventList;
 }
 
 
