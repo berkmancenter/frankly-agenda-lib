@@ -2,7 +2,7 @@
     "goals": [
         "dialogue",
         "exploration",
-        "evaluation"
+        "deliberation"
     ],
     "topic": "dfsafdasfdas",
     "topicDescription": "fasdfadsfdasfadsf",
@@ -10,7 +10,7 @@
     "participantCount": "fiveToTen",
     "hasBreakoutGroups": true,
     "isFacilitated": false,
-    "isSeries": false,
+    "isSeries": true,
     "eventCount": 2,
     "eventLength": 2700000000,
     "isConcrete": false

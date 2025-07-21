@@ -1,3 +1,5 @@
+import { Goals } from "../utils/global_enums";
+
 interface IEventInputs {
     goals: string[],
     topic: string,
@@ -9,6 +11,10 @@ interface IEventInputs {
     isSeries: boolean,
     eventCount?: number,
     eventLength: Number,
+}
+
+interface IEventSection {
+    sections: Goals[],
 }
 
 export class EventInputs implements IEventInputs {
@@ -23,4 +29,11 @@ export class EventInputs implements IEventInputs {
     eventCount?: number;
     eventLength: number;
     isConcrete?: boolean;
+}
+
+export class EventSection implements IEventSection {
+    sections: Goals[];
+    constructor() {
+        this.sections = [];
+    }
 }
