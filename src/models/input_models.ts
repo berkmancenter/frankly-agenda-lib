@@ -33,4 +33,7 @@ export class EventInputs implements IEventInputs {
 
 export class EventSection implements IEventSection {
     sections: Goals[];
+    constructor() {
+        this.sections = [];
+    }
 }

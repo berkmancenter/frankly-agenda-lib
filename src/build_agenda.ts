@@ -13,12 +13,14 @@ export function generateAgenda(eventJsonString: string) {
   // 4. Add it all to the agenda 
   ///
 
-  // Parse and validate event input
-  const eventInput: EventInputs = _parseEventInput(eventJsonString);
-  const agendaName: string = eventInput.topic + " Agenda";
+  // Parse input
+  const eventInputs: EventInputs = _parseEventInput(eventJsonString);
 
-  // Create new agenda
-  const eventPlan: EventPlan = _createAgenda(agendaName, eventInput);
+  // Agenda builder 
+  const agendaBuilder: AgendaBuilder = new AgendaBuilder(eventInputs);
+
+  // Create new agendas
+  const eventPlan: EventPlan = agendaBuilder.createAgendaPlan();
 
   return JSON.stringify(eventPlan);
 }
@@ -47,159 +49,206 @@ function _parseEventInput(eventJsonString: string): EventInputs {
     console.log(errors);
     throw Error("Missing information!!");
   }
-
-}
-
-///
-// Creates the agenda 
-///
-function _createAgenda(name: string, eventInput: EventInputs): EventPlan {
-
-  const eventPlan: EventPlan = new EventPlan(name, eventInput.topicDescription, true);
-
-  const agendaList: Agenda[] = [];
-  let eventSections: EventSection[];
-
-  // Create agendas 
-  if (eventInput.isSeries) {
-    eventSections = _calculateSectionsPerEvent(eventInput.eventCount, eventInput.goals.length);
-    for (var i = 0; i < eventInput.eventCount; i++) {
-      // TODO: input whatever is needed to determine agenda characteristics 
-      const newName: string = name + " One";
-      agendaList.push(createAgenda({ eventNumber: i }));
-    }
-  } else {
-    agendaList.push(createAgenda({}));
-  }
-
-  for (let i = 0; i < agendaList.length; i++) {
-    console.log(eventSections[i]);
-    const builder: SectionBuilder = new SectionBuilder(agendaList[i], eventInput, eventSections[i]);
-    builder.buildStructure();
-    eventPlan.addAgendas(agendaList[i]);
-  }
-
-  return eventPlan;
 }
 
 ///
 // Validates that all required fields are present and properly typed
 // Event should be typesafe after this function 
 ///
-function _validateEvent(event: EventInputs): string[] {
+function _validateEvent(eventInput: EventInputs): string[] {
   let errorMessages: string[] = [];
 
   // goal validation 
-  if (event.goals == null) {
+  if (eventInput.goals == null) {
     errorMessages.push("Event goals are required.")
-  } else if (Array.isArray(event.goals) && event.goals.length > 0 && !(typeof event.goals[0] === 'string')) {
+  } else if (Array.isArray(eventInput.goals) && eventInput.goals.length > 0 && !(typeof eventInput.goals[0] === 'string')) {
     errorMessages.push("Event goals must be an array of strings.");
-  } else if (!event.goals.includes(Goals.evaluation)) {
+  } else if (!eventInput.goals.includes(Goals.deliberation)) {
     errorMessages.push("If evaluation is a goal, user must specify if they want a concrete decision.");
   }
 
   // topic validation 
-  if (event.topic == null) {
+  if (eventInput.topic == null) {
     errorMessages.push("Event topic is required.")
-  } else if (typeof event.topic !== 'string') {
+  } else if (typeof eventInput.topic !== 'string') {
     errorMessages.push("Event topic must be a string.")
   }
 
   // audience validation 
-  if (event.audienceDescription == null) {
+  if (eventInput.audienceDescription == null) {
     errorMessages.push("Event audience description is required.")
-  } else if (typeof event.topic !== 'string') {
+  } else if (typeof eventInput.topic !== 'string') {
     errorMessages.push("Event audience description must be a string.")
   }
 
   // participantCount validation 
-  if (event.participantCount == null) {
+  if (eventInput.participantCount == null) {
     errorMessages.push("Event participant count is required.")
-  } else if (typeof event.topic !== 'string') {
+  } else if (typeof eventInput.topic !== 'string') {
     errorMessages.push("Event participation count must be a string.")
   }
 
   // breakoutGroup validation 
-  if (event.hasBreakoutGroups == null) {
+  if (eventInput.hasBreakoutGroups == null) {
     errorMessages.push("Event breakout group information is required.")
-  } else if (typeof event.hasBreakoutGroups !== 'boolean') {
+  } else if (typeof eventInput.hasBreakoutGroups !== 'boolean') {
     errorMessages.push("Event breakout group information must be a boolean.")
   }
 
   // facilitation validation 
-  if (event.isFacilitated == null) {
+  if (eventInput.isFacilitated == null) {
     errorMessages.push("Event facilitation information is required.")
-  } else if (typeof event.isFacilitated !== 'boolean') {
+  } else if (typeof eventInput.isFacilitated !== 'boolean') {
     errorMessages.push("Event facilitation information must be a boolean.")
   }
 
   // series validation 
-  if (event.isSeries == null) {
+  if (eventInput.isSeries == null) {
     errorMessages.push("Event series information is required.")
   }
-  else if (typeof event.isSeries !== "boolean") {
+  else if (typeof eventInput.isSeries !== "boolean") {
     errorMessages.push("Event series information must be a boolean.")
   }
-  else if (event.isSeries) {
-    if (event.eventCount == null || typeof event.eventLength !== 'number') {
+  else if (eventInput.isSeries) {
+    if (eventInput.eventCount == null || typeof eventInput.eventLength !== 'number') {
       errorMessages.push("Event count is a required number if event is a series.")
     }
   }
 
-  if (event.eventLength == null) {
+  if (eventInput.eventLength == null) {
     errorMessages.push("Event length is required.")
-  } else if (typeof event.eventLength !== 'number') {
+  } else if (typeof eventInput.eventLength !== 'number') {
     errorMessages.push("Event length must be a number.")
   }
 
   return errorMessages;
 }
 
-function _getEventSections(sectionsPerEvent: number[][]): EventSection[] {
-  
-}
+class AgendaBuilder {
+  eventInput: EventInputs;
+  eventPlan: EventPlan;
+  agendaName: string;
 
-function _calculateSectionsPerEvent(eventCount: number, totalSections: number): EventSection[] {
-  let eventList: EventSection[] = [];
-  const sectionsPerEventDecimal: number = totalSections / eventCount;
-
-  if (sectionsPerEventDecimal < 1) {
-    // more events than sections 
-    const eventsPerSection: number = Math.floor(eventCount / totalSections);
-    const leftOverEvents: number = eventCount % totalSections;
-    let eventsAdded: number = 0;
-    let sectionAdding: number = 1;
-    for (let i = 0; i < eventCount; i++) {
-      let tempEventPerSection = eventsPerSection;
-      if (totalSections - sectionAdding < leftOverEvents) {
-        // the last events are where we want to add the extra sections 
-        // i.e. an extra event per section
-        tempEventPerSection = eventsPerSection + 1;
-      }
-      if (eventsAdded >= tempEventPerSection) {
-        sectionAdding = sectionAdding + 1;
-        eventsAdded = 0;
-      }
-      eventList[i].sections.push(Goals[sectionAdding]);
-      eventsAdded = eventsAdded + 1;
-    }
-  } else {
-    const sectionsPerEvent: number = Math.floor(totalSections / eventCount);
-    const leftOverSections: number = totalSections % eventCount;
-
-    let sectionAdding: number = 1;
-    for (let i = 0; i < eventCount; i++) {
-      for (let j = 0; j < sectionsPerEvent; j++) {
-        eventList[i].sections.push(Goals[sectionAdding]);
-        sectionAdding = sectionAdding + 1;
-      }
-      if (i < leftOverSections) {
-        eventList[i].sections.push(Goals[sectionAdding]);
-        sectionAdding = sectionAdding + 1;
-      }
-    }
+  constructor(eventInput: EventInputs) {
+    this.eventInput = eventInput;
+    this.agendaName = this.eventInput.topic + " Agenda";
   }
-  return eventList;
+
+  ///
+  // Creates the agenda 
+  ///
+  createAgendaPlan(): EventPlan {
+
+    this.eventPlan = new EventPlan(this.agendaName, this.eventInput.topicDescription, true);
+
+    const agendaList: Agenda[] = [];
+    const eventSections: EventSection[] = this._getEventSections(this.eventInput.eventCount, this.eventInput.goals);
+
+    // Create agendas 
+    if (this.eventInput.isSeries) {
+      for (var i = 0; i < this.eventInput.eventCount; i++) {
+        // TODO: input whatever is needed to determine agenda characteristics 
+        const newName: string = name + " One";
+        agendaList.push(createAgenda({ eventNumber: i }));
+      }
+    } else {
+      agendaList.push(createAgenda({}));
+    }
+
+    for (let i = 0; i < agendaList.length; i++) {
+      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i]);
+      builder.buildStructure();
+      this.eventPlan.addAgendas(agendaList[i]);
+    }
+
+    return this.eventPlan;
+  }
+
+  ///
+  // Convert raw numbers to actual goals 
+  ///
+  _getEventSections(eventCount: number, goals: String[]): EventSection[] {
+    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goals.length);
+    let eventSections: EventSection[] = [];
+    const goalsArray: Goals[] = [];
+
+    // dialogue section
+    if (goals.includes(Goals.dialogue) || goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
+      goalsArray.push(Goals.dialogue);
+    }
+    // exploration section 
+    if (goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
+      goalsArray.push(Goals.exploration);
+    }
+
+    // deliberation section 
+    if (goals.includes(Goals.deliberation)) {
+      goalsArray.push(Goals.deliberation);
+    }
+    for (let i = 0; i < eventSectionsRaw.length; i++) {
+      const event = new EventSection();
+      for (let j = 0; j < eventSectionsRaw[i].length; j++) {
+        event.sections.push(goalsArray[eventSectionsRaw[i][j] - 1]);
+      }
+      eventSections.push(event);
+    }
+    return eventSections;
+  }
+
+  ///
+  // Calculate raw numbers for sections per event etc
+  ///
+  _calculateSectionsPerEvent(eventCount: number, totalSections: number): number[][] {
+    let eventList: number[][] = [];
+    const sectionsPerEventDecimal: number = totalSections / eventCount;
+
+    if (sectionsPerEventDecimal < 1) {
+      // more events than sections 
+      const eventsPerSection: number = Math.floor(eventCount / totalSections);
+      const leftOverEvents: number = eventCount % totalSections;
+
+      let eventsAdded: number = 0;
+      let sectionAdding: number = 1;
+      for (let i = 0; i < eventCount; i++) {
+        let tempEventPerSection = eventsPerSection;
+        if (totalSections - sectionAdding < leftOverEvents) {
+          // the last events are where we want to add the extra sections, i.e. an extra event per section
+          tempEventPerSection = eventsPerSection + 1;
+        }
+        if (eventsAdded >= tempEventPerSection) {
+          sectionAdding = sectionAdding + 1;
+          eventsAdded = 0;
+        }
+        eventList[i] = [sectionAdding];
+        eventsAdded = eventsAdded + 1;
+      }
+    } else {
+      const sectionsPerEvent: number = Math.floor(totalSections / eventCount);
+      const leftOverSections: number = totalSections % eventCount;
+      let sectionAdding: number = 1;
+      for (let i = 0; i < eventCount; i++) {
+        eventList[i] = [];
+        for (let j = 0; j < sectionsPerEvent; j++) {
+          eventList[i].push(sectionAdding);
+          sectionAdding = sectionAdding + 1;
+        }
+        if (i < leftOverSections) {
+          eventList[i].push(sectionAdding);
+          sectionAdding = sectionAdding + 1;
+        }
+      }
+    }
+    console.log(eventList)
+    return eventList;
+  }
+
 }
+
+
+
+
+
+
+
 
 
