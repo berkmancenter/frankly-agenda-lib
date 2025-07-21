@@ -2,7 +2,7 @@ import { Agenda, AgendaSection } from "../models/agenda_models.js";
 import { EventInputs, EventSection } from "../models/input_models.js";
 import { CommunityNormBuilder } from "./community_norm_builder.js";
 import { DialogueBuilder } from "./dialogue_builder.js";
-import { EvaluationBuilder } from "./evaluation_builder.js";
+import { DeliberationBuilder } from "./deliberation_builder.js";
 import { ExplorationBuilder } from "./exploration_builder.js";
 import { IntroductionBuilder } from "./introduction_builder.js";
 import { Goals } from "../utils/global_enums.js";
@@ -50,7 +50,7 @@ export class SectionBuilder {
                 this.builders.push(new ExplorationBuilder(this.eventInput.topic));
             }
             if (section == Goals.deliberation) {
-                this.builders.push(new EvaluationBuilder(this.eventInput.topic, this.eventInput.isConcrete));
+                this.builders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcrete));
             }
         }
     }

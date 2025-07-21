@@ -64,7 +64,7 @@ function _validateEvent(eventInput: EventInputs): string[] {
   } else if (Array.isArray(eventInput.goals) && eventInput.goals.length > 0 && !(typeof eventInput.goals[0] === 'string')) {
     errorMessages.push("Event goals must be an array of strings.");
   } else if (!eventInput.goals.includes(Goals.deliberation)) {
-    errorMessages.push("If evaluation is a goal, user must specify if they want a concrete decision.");
+    errorMessages.push("If deliberation is a goal, user must specify if they want a concrete decision.");
   }
 
   // topic validation 
@@ -168,7 +168,6 @@ class AgendaBuilder {
   // Convert raw numbers to actual goals 
   ///
   _getEventSections(eventCount: number, goals: String[]): EventSection[] {
-    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goals.length);
     let eventSections: EventSection[] = [];
     const goalsArray: Goals[] = [];
 
@@ -183,8 +182,12 @@ class AgendaBuilder {
 
     // deliberation section 
     if (goals.includes(Goals.deliberation)) {
+      console.log("getting deliberation")
       goalsArray.push(Goals.deliberation);
     }
+
+    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goalsArray.length);
+
     for (let i = 0; i < eventSectionsRaw.length; i++) {
       const event = new EventSection();
       for (let j = 0; j < eventSectionsRaw[i].length; j++) {
@@ -199,6 +202,9 @@ class AgendaBuilder {
   // Calculate raw numbers for sections per event etc
   ///
   _calculateSectionsPerEvent(eventCount: number, totalSections: number): number[][] {
+    console.log("total sections: " + totalSections);
+    console.log("total event count: " + eventCount);
+
     let eventList: number[][] = [];
     const sectionsPerEventDecimal: number = totalSections / eventCount;
 
