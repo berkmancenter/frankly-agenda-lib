@@ -106,7 +106,7 @@ class Duration implements IDuration {
     }
 }
 
-export function createAgenda({eventNumber: number = null, additionalInformation = null }): Agenda {
+export function createAgenda({eventNumber = null, additionalInformation = null }): Agenda {
     const newAgenda = new Agenda();
 
     newAgenda.eventNumber = eventNumber;
