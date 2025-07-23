@@ -7,7 +7,7 @@ interface IEventPlan {
 
 interface IAgenda {
     sections: IAgendaSection[]
-    eventNumber?: number[], // which event(s) in a series of events 
+    eventNumber?: number, // which event(s) in a series of events 
     additionalInformation?: IAgendaItem[] // Additional information, i.e. best practices for facilitators
 }
 
@@ -51,10 +51,10 @@ export class EventPlan implements IEventPlan {
 
 export class Agenda implements IAgenda {
     sections: AgendaSection[];
-    eventNumber?: number[]; // which event(s) in a series of events 
+    eventNumber?: number; // which event(s) in a series of events 
     additionalInformation?: AgendaItem[];
 
-    constructor(eventNumber?: number[], additionalInformation?: AgendaItem[]) {
+    constructor(eventNumber?: number, additionalInformation?: AgendaItem[]) {
         this.sections = [];
         this.eventNumber = eventNumber;
         this.additionalInformation = additionalInformation;
@@ -106,7 +106,7 @@ class Duration implements IDuration {
     }
 }
 
-export function createAgenda({eventNumber = null, additionalInformation = null }): Agenda {
+export function createAgenda({eventNumber: number = null, additionalInformation = null }): Agenda {
     const newAgenda = new Agenda();
 
     newAgenda.eventNumber = eventNumber;

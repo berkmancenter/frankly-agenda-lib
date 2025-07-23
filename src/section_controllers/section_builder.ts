@@ -18,19 +18,17 @@ export class SectionBuilder {
     eventInput: EventInputs;
     builders: ISectionBuilder[] = [];
     sectionList: EventSection;
-    isInitial: boolean;
 
-    constructor(agenda: Agenda, eventInput: EventInputs, sectionList: EventSection, isInitial: boolean) {
+    constructor(agenda: Agenda, eventInput: EventInputs, sectionList: EventSection) {
         this.agenda = agenda;
         this.eventInput = eventInput;
         this.sectionList = sectionList;
-        this.isInitial = isInitial;
     }
 
     public buildStructure(): void {
 
-        this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.isInitial));
-        this.builders.push(new CommunityNormBuilder(this.eventInput.topic, this.isInitial));
+        this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber));
+        this.builders.push(new CommunityNormBuilder(this.eventInput.topic, this.agenda.eventNumber));
 
         // add the sections 
         this._addMiddleSections();

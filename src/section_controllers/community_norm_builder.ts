@@ -8,9 +8,9 @@ export class CommunityNormBuilder implements ISectionBuilder {
     topic: string;
     isInitial: boolean;
 
-    constructor(topic: string, isInitial: boolean) {
+    constructor(topic: string, eventNumber: number) {
         this.topic = topic;
-        this.isInitial = isInitial;
+        this.isInitial = eventNumber == 0 || eventNumber == null; // first event or single event
     }
 
     public createSection(): AgendaSection {

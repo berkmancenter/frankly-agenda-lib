@@ -156,8 +156,7 @@ class AgendaBuilder {
     }
 
     for (let i = 0; i < agendaList.length; i++) {
-      let isInitial = true ? i == 0 : false;
-      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], isInitial);
+      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i]);
       builder.buildStructure();
       this.eventPlan.addAgendas(agendaList[i]);
     }
