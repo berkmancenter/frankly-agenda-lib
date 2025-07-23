@@ -1,5 +1,5 @@
 import { Agenda, AgendaItem, AgendaSection } from "../models/agenda_models.js";
-import dialogueData from "../section_data/dialogue.json"
+import dialogueData from "../section_data/initial_event/dialogue.json"
 import { ISectionBuilder } from "./section_builder.js";
 
 export class DialogueBuilder implements ISectionBuilder {

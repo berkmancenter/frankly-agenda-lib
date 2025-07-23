@@ -156,7 +156,8 @@ class AgendaBuilder {
     }
 
     for (let i = 0; i < agendaList.length; i++) {
-      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i]);
+      let isInitial = true ? i == 0 : false;
+      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], isInitial);
       builder.buildStructure();
       this.eventPlan.addAgendas(agendaList[i]);
     }
@@ -202,9 +203,6 @@ class AgendaBuilder {
   // Calculate raw numbers for sections per event etc
   ///
   _calculateSectionsPerEvent(eventCount: number, totalSections: number): number[][] {
-    console.log("total sections: " + totalSections);
-    console.log("total event count: " + eventCount);
-
     let eventList: number[][] = [];
     const sectionsPerEventDecimal: number = totalSections / eventCount;
 

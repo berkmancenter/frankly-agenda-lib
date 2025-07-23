@@ -1,5 +1,5 @@
 import { AgendaItem, AgendaSection } from "../models/agenda_models.js";
-import communityNormData from "../section_data/comunity_norms.json"
+import communityNormData from "../section_data/initial_event/comunity_norms.json"
 import { ISectionBuilder } from "./section_builder.js";
 
 export class CommunityNormBuilder implements ISectionBuilder {

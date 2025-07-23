@@ -1,6 +1,6 @@
 import { AgendaItem, AgendaSection } from "../models/agenda_models";
 import { ISectionBuilder } from "./section_builder";
-import deliberationData from "../section_data/deliberation.json"
+import deliberationData from "../section_data/initial_event/deliberation.json"
 
 export class DeliberationBuilder implements ISectionBuilder {
     topic: string;

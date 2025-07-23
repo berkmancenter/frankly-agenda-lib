@@ -1,6 +1,6 @@
 import { AgendaItem, AgendaSection } from "../models/agenda_models";
 import { ISectionBuilder } from "./section_builder";
-import conclusionData from "../section_data/conclusion.json";
+import conclusionData from "../section_data/initial_event/conclusion.json";
 
 enum ConclusionElements {
     conversationReflections = "conversationReflections",

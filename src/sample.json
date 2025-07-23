@@ -3,6 +3,7 @@
         "exploration",
         "deliberation"
     ],
+    "isConcreteDecision": true,
     "topic": "Climate Change Discussion",
     "topicDescription": "This is to discuss policy options for climate change.",
     "audienceDescription": "They are very diverse, from parts of rural Maine. Not extremely politically engaged.",

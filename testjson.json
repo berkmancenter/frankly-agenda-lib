@@ -108,24 +108,13 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
                                 "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
+                                "minutes": 6,
                                 "seconds": 0
                             }
                         }
@@ -210,24 +199,13 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
                                 "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
+                                "minutes": 6,
                                 "seconds": 0
                             }
                         }
@@ -312,24 +290,13 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
                                 "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
+                                "minutes": 6,
                                 "seconds": 0
                             }
                         }
@@ -416,24 +383,13 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
                                 "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
+                                "minutes": 6,
                                 "seconds": 0
                             }
                         }

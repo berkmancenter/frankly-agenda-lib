@@ -1,0 +1,18 @@
+{
+    "section": "Introductions",
+    "sectionDescription": "Refresher on who we are and why we are here.",
+    "items": [
+        {
+            "title": "Basic Refresher",
+            "content": [
+                "Briefly refresh us on your name and why you decided to participate in this conversation."
+            ]
+        },
+        {
+            "title": "Previous Event Reflections",
+            "content": [
+                "Have you had any reflections or additional thoughts on the first conversation?"
+            ]
+        }
+    ]
+}

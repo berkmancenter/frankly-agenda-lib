@@ -1,5 +1,5 @@
 import { ISectionBuilder } from "./section_builder";
-import explorationData from "../section_data/exploration.json"
+import explorationData from "../section_data/initial_event/exploration.json"
 import { AgendaItem, AgendaSection } from "../models/agenda_models";
 
 export class ExplorationBuilder implements ISectionBuilder {
