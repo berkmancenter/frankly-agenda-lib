@@ -17,24 +17,26 @@ export class IntroductionBuilder implements ISectionBuilder {
         // section info
         const introSection = new AgendaSection(introductionData.section, introductionData.sectionDescription);
 
+        let introItems: AgendaItem[];
+
         if (this.isInitial) {
-            const introItems: AgendaItem[] = this.createItems();
-            for (let introItem of introItems) {
-                introSection.addItem(introItem);
-            }
+            introItems = this.createItems(introductionData, 10);
+
         } else {
-            const introDuration = createDuration({ minutes: 6 });
-            const basicRefresher: AgendaItem = new AgendaItem(introductionRefresherData.items[0].title, introductionRefresherData.items[0].content, introDuration);
-            introSection.addItem(basicRefresher);
+            introItems = this.createItems(introductionRefresherData, 6);
+        }
+
+        for (let introItem of introItems) {
+            introSection.addItem(introItem);
         }
 
         return introSection;
     }
 
-    createItems(): AgendaItem[] {
+    createItems(introData, duration: number): AgendaItem[] {
         var agendaItems = [];
-        for (let item of introductionData.items) {
-            const introDuration = createDuration({ minutes: 10 });
+        for (let item of introData.items) {
+            const introDuration = createDuration({ minutes: duration });
             agendaItems.push(new AgendaItem(item.title, item.content, introDuration));
         }
         return agendaItems;

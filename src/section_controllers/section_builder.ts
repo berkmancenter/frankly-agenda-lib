@@ -30,7 +30,7 @@ export class SectionBuilder {
     public buildStructure(): void {
 
         this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.isInitial));
-        this.builders.push(new CommunityNormBuilder(this.eventInput.topic));
+        this.builders.push(new CommunityNormBuilder(this.eventInput.topic, this.isInitial));
 
         // add the sections 
         this._addMiddleSections();
