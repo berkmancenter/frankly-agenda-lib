@@ -20,7 +20,7 @@ interface IAgendaSection {
 interface IAgendaItem {
     title: string,
     content: string[],
-    duration?: Duration,
+    duration?: EventDuration,
     importance?: string[]
     guidance?: string[];
 }
@@ -84,11 +84,11 @@ export class AgendaSection implements IAgendaSection {
 export class AgendaItem implements IAgendaItem {
     title: string;
     content: string[];
-    duration?: Duration;
+    duration?: EventDuration;
     importance?: string[];
     guidance?: string[];
 
-    constructor(title: string, content: string[], duration?: Duration, importance?: string[], guidance?: string[]) {
+    constructor(title: string, content: string[], duration?: EventDuration, importance?: string[], guidance?: string[]) {
         this.title = title;
         this.content = content;
         this.duration = duration;
@@ -97,7 +97,7 @@ export class AgendaItem implements IAgendaItem {
     }
 }
 
-class Duration implements IDuration {
+class EventDuration implements IDuration {
     hours?: number;
     minutes?: number;
     seconds?: number;
@@ -115,8 +115,8 @@ export function createAgenda({eventNumber = null, additionalInformation = null }
     return newAgenda;
 }
 
-export function createDuration({ hours = 0, minutes = 0, seconds = 0 }): Duration {
-    const newDuration = new Duration();
+export function createDuration({ hours = 0, minutes = 0, seconds = 0 }): EventDuration {
+    const newDuration = new EventDuration();
 
     newDuration.hours = hours;
     newDuration.minutes = minutes;

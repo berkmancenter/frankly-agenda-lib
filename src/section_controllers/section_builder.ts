@@ -44,7 +44,8 @@ export class SectionBuilder {
         for (let i = 0; i < this.sectionList.sections.length; i++) {
             let section = this.sectionList.sections[i];
             if (section == Goals.dialogue) {
-                this.builders.push(new DialogueBuilder(this.eventInput.topic));
+                let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
+                this.builders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, this.eventInput.eventLength));
             }
             if (section == Goals.exploration) {
                 this.builders.push(new ExplorationBuilder(this.eventInput.topic));
