@@ -1,16 +1,15 @@
 {
     "goals": [
-        "exploration",
-        "deliberation"
+        "dialogue"
     ],
     "isConcreteDecision": true,
-    "topic": "Climate Change Discussion",
+    "topic": "Climate Change",
     "topicDescription": "This is to discuss policy options for climate change.",
     "audienceDescription": "They are very diverse, from parts of rural Maine. Not extremely politically engaged.",
     "participantCount": "fiveToTen",
     "hasBreakoutGroups": true,
     "isFacilitated": true,
-    "isSeries": true,
-    "eventCount": 5,
+    "isSeries": false,
+    "eventCount": 1,
     "eventLength": 2700000000
 }

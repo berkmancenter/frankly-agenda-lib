@@ -19,7 +19,6 @@ export class DialogueBuilder implements ISectionBuilder {
         const dialogueSection = new AgendaSection(dialogueData.section, dialogueData.sectionDescription);
 
         const recommendedDialogue: number[] = this.determineItems();
-
         const dialogueItems: AgendaItem[] = this.createItems(recommendedDialogue);
 
         for (let introItem of dialogueItems) {
@@ -29,9 +28,8 @@ export class DialogueBuilder implements ISectionBuilder {
     }
 
     createItems(recommendedDialogue: number[]): AgendaItem[] {
-
+        var agendaItems: AgendaItem[] = [];
         for (let item in recommendedDialogue) {
-            var agendaItems: AgendaItem[] = [];
             const title: string = dialogueData.items[item].title;
             const contentStrings: string[] = [];
 
@@ -40,17 +38,14 @@ export class DialogueBuilder implements ISectionBuilder {
             }
             agendaItems.push(new AgendaItem(title, contentStrings));
         }
-
-
         return agendaItems;
     }
 
     determineItems(): number[] {
-        if (this.isMainGoal && this.eventLength > 2700000000) {
+        if (this.isMainGoal && this.eventLength >= 2700000000) {
             return [0, 1]; // return both dialogue questions
         } else {
             return [0]
         }
     }
-
 }
