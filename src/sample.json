@@ -8,6 +8,7 @@
     "audienceDescription": "They are very diverse, from parts of rural Maine. Not extremely politically engaged.",
     "participantCount": "fiveToTen",
     "hasBreakoutGroups": true,
+    "participantsPerBreakoutGroup": 5,
     "isFacilitated": true,
     "isSeries": false,
     "eventCount": 1,

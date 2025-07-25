@@ -9,6 +9,7 @@ interface IAgenda {
     sections: IAgendaSection[]
     eventNumber?: number, // which event(s) in a series of events 
     additionalInformation?: IAgendaItem[] // Additional information, i.e. best practices for facilitators
+    duration?: CustomDuration,
 }
 
 interface IAgendaSection {
@@ -20,12 +21,12 @@ interface IAgendaSection {
 interface IAgendaItem {
     title: string,
     content: string[],
-    duration?: EventDuration,
+    duration?: CustomDuration,
     importance?: string[]
     guidance?: string[];
 }
 
-interface IDuration {
+interface ICustomDuration {
     hours?: number,
     minutes?: number,
     seconds?: number
@@ -53,6 +54,7 @@ export class Agenda implements IAgenda {
     sections: AgendaSection[];
     eventNumber?: number; // which event(s) in a series of events 
     additionalInformation?: AgendaItem[];
+    duration?: CustomDuration;
 
     constructor(eventNumber?: number, additionalInformation?: AgendaItem[]) {
         this.sections = [];
@@ -62,6 +64,10 @@ export class Agenda implements IAgenda {
 
     addSection(item: AgendaSection): void {
         this.sections.push(item);
+    }
+
+    addDuration(milliseconds: number) {
+        this.duration = new CustomDuration(milliseconds);
     }
 }
 
@@ -84,11 +90,11 @@ export class AgendaSection implements IAgendaSection {
 export class AgendaItem implements IAgendaItem {
     title: string;
     content: string[];
-    duration?: EventDuration;
+    duration?: CustomDuration;
     importance?: string[];
     guidance?: string[];
 
-    constructor(title: string, content: string[], duration?: EventDuration, importance?: string[], guidance?: string[]) {
+    constructor(title: string, content: string[], duration?: CustomDuration, importance?: string[], guidance?: string[]) {
         this.title = title;
         this.content = content;
         this.duration = duration;
@@ -97,16 +103,27 @@ export class AgendaItem implements IAgendaItem {
     }
 }
 
-class EventDuration implements IDuration {
+export class CustomDuration implements ICustomDuration {
+    totalMilliseconds: number;
     hours?: number;
     minutes?: number;
     seconds?: number;
 
-    constructor() {
+    constructor(milliseconds: number) {
+        this.totalMilliseconds = milliseconds;
+        const totalSeconds = milliseconds / 1000000;
+        this.seconds = totalSeconds % 60;
+        const totalMinutes = (((totalSeconds - this.seconds) / 60));
+        this.minutes = totalMinutes % 60;
+        this.hours = (totalMinutes - this.minutes) / 60;
+    }
+
+    calculateSubDuration(subDivides: number): number {
+        return this.totalMilliseconds / subDivides;
     }
 }
 
-export function createAgenda({eventNumber = null, additionalInformation = null }): Agenda {
+export function createAgenda({ eventNumber = null, additionalInformation = null }): Agenda {
     const newAgenda = new Agenda();
 
     newAgenda.eventNumber = eventNumber;
@@ -115,12 +132,10 @@ export function createAgenda({eventNumber = null, additionalInformation = null }
     return newAgenda;
 }
 
-export function createDuration({ hours = 0, minutes = 0, seconds = 0 }): EventDuration {
-    const newDuration = new EventDuration();
-
-    newDuration.hours = hours;
-    newDuration.minutes = minutes;
-    newDuration.seconds = seconds;
+export function createDurationByTimeUnit({ hours = 0, minutes = 0, seconds = 0 }): CustomDuration {
+    
+    const milliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000000
+    const newDuration = new CustomDuration(milliseconds);
 
     return newDuration;
 }

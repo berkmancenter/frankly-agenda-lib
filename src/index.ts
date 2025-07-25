@@ -1,7 +1,7 @@
-import { generateAgenda } from './build_agenda.js'
+import { generateEventPlan } from './build_event_plan.js'
 import agendaJson from './sample.json';
 
-export { generateAgenda } from './build_agenda.js'
+export { generateEventPlan } from './build_event_plan.js'
 
 
-console.log(generateAgenda(JSON.stringify(agendaJson)));
+console.log(generateEventPlan(JSON.stringify(agendaJson)));

@@ -1,4 +1,4 @@
-import { Agenda, AgendaItem, AgendaSection, createDuration } from "../models/agenda_models.js";
+import { Agenda, AgendaItem, AgendaSection, createDurationByTimeUnit } from "../models/agenda_models.js";
 import introductionData from '../section_data/initial_event/introduction.json';
 import introductionRefresherData from '../section_data/follow_on_event/introduction.json'
 import { ISectionBuilder } from "./section_builder.js";
@@ -36,7 +36,7 @@ export class IntroductionBuilder implements ISectionBuilder {
     createItems(introData, duration: number): AgendaItem[] {
         var agendaItems = [];
         for (let item of introData.items) {
-            const introDuration = createDuration({ minutes: duration });
+            const introDuration = createDurationByTimeUnit({ minutes: duration });
             agendaItems.push(new AgendaItem(item.title, item.content, introDuration));
         }
         return agendaItems;

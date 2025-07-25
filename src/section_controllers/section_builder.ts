@@ -1,4 +1,4 @@
-import { Agenda, AgendaSection } from "../models/agenda_models.js";
+import { Agenda, AgendaSection, CustomDuration } from "../models/agenda_models.js";
 import { EventInputs, EventSection } from "../models/input_models.js";
 import { CommunityNormBuilder } from "./community_norm_builder.js";
 import { DialogueBuilder } from "./dialogue_builder.js";
@@ -23,6 +23,7 @@ export class SectionBuilder {
         this.agenda = agenda;
         this.eventInput = eventInput;
         this.sectionList = sectionList;
+        this.agenda.addDuration(this.eventInput.eventLength);
     }
 
     public buildStructure(): void {
@@ -41,14 +42,19 @@ export class SectionBuilder {
     }
 
     _addMiddleSections() {
-        for (let i = 0; i < this.sectionList.sections.length; i++) {
+
+        const totalSections: number = this.sectionList.sections.length;
+
+        const newDuration: number = this.agenda.duration.calculateSubDuration(totalSections);
+
+        for (let i = 0; i < totalSections; i++) {
             let section = this.sectionList.sections[i];
             if (section == Goals.dialogue) {
                 let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
                 this.builders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, this.eventInput.eventLength));
             }
             if (section == Goals.exploration) {
-                this.builders.push(new ExplorationBuilder(this.eventInput.topic));
+                this.builders.push(new ExplorationBuilder(this.eventInput.topic, new CustomDuration(newDuration), 5));
             }
             if (section == Goals.deliberation) {
                 this.builders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcrete));
