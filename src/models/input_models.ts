@@ -25,6 +25,8 @@ export class EventInputs implements IEventInputs {
     topicDescription?: string;
     audienceDescription: string;
     participantCount: string;
+    upperParticipantCount: number;
+    lowerParticipantCount: number;
     participantsPerBreakoutGroup: number;
     hasBreakoutGroups: boolean;
     isFacilitated: boolean;
@@ -36,7 +38,7 @@ export class EventInputs implements IEventInputs {
 
 export class EventSection implements IEventSection {
     sections: Goals[];
-    
+
     constructor() {
         this.sections = [];
     }

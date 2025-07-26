@@ -23,13 +23,10 @@ export class AgendaBuilder {
     const agendaList: Agenda[] = [];
     const eventSections: EventSection[] = this._getEventSections(this.eventInput.eventCount, this.eventInput.goals);
 
-    
-
     // Create agendas 
     if (this.eventInput.isSeries) {
       for (var i = 0; i < this.eventInput.eventCount; i++) {
         // TODO: input whatever is needed to determine agenda characteristics 
-        const newName: string = name + " One";
         agendaList.push(createAgenda({ eventNumber: i }));
       }
     } else {
