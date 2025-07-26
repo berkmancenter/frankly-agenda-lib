@@ -197,103 +197,13 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
                             },
                             "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt One",
-                            "content": [
-                                "hello, I'm prompt 1"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Two",
-                            "content": [
-                                "hello, I'm prompt 2"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Three",
-                            "content": [
-                                "hello, I'm prompt 3"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Four",
-                            "content": [
-                                "hello, I'm prompt 4"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Five",
-                            "content": [
-                                "hello, I'm prompt 5"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Six",
-                            "content": [
-                                "hello, I'm prompt 6"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
                             ]
                         },
                         {
@@ -302,9 +212,90 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 390000000,
-                                "seconds": 30,
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt One",
+                            "content": [
+                                "hello, I'm prompt 1"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
                                 "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Two",
+                            "content": [
+                                "hello, I'm prompt 2"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Three",
+                            "content": [
+                                "hello, I'm prompt 3"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }
@@ -421,103 +412,13 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
                             },
                             "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt One",
-                            "content": [
-                                "hello, I'm prompt 1"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Two",
-                            "content": [
-                                "hello, I'm prompt 2"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Three",
-                            "content": [
-                                "hello, I'm prompt 3"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Four",
-                            "content": [
-                                "hello, I'm prompt 4"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Five",
-                            "content": [
-                                "hello, I'm prompt 5"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Prompt Six",
-                            "content": [
-                                "hello, I'm prompt 6"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 40928571428.57143,
-                                "seconds": 8.571428571427532,
-                                "minutes": 22,
-                                "hours": 11
-                            },
-                            "guidance": [
-                                "Each participant gets from 3 to 3 to explore the question prompt."
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
                             ]
                         },
                         {
@@ -526,9 +427,90 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 390000000,
-                                "seconds": 30,
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt One",
+                            "content": [
+                                "hello, I'm prompt 1"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
                                 "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Two",
+                            "content": [
+                                "hello, I'm prompt 2"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Three",
+                            "content": [
+                                "hello, I'm prompt 3"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 360000000,
+                                "seconds": 0,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 465000000,
+                                "seconds": 45,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }

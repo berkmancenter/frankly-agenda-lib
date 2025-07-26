@@ -53,6 +53,9 @@ export class ExplorationBuilder implements ISectionBuilder {
         // TODO only return topic recommendations if we don't have background to give them
         var agendaItems = [];
 
+        const groupDiscussionTitle: string = explorationData.items[1].title;
+        const groupDiscussionContent: string[] = explorationData.items[1].content;
+
         this._calculateTimingandPromptQuantity();
 
         for (let i = 0; i < this.totalPrompts; i++) {
@@ -63,19 +66,19 @@ export class ExplorationBuilder implements ISectionBuilder {
             const item: AgendaItem = new AgendaItem(promptTitle, [tempPrompt]);
 
             item.duration = createDurationByTimeUnit({ minutes: this.totalMinutesPerPrompt });
-            item.guidance = ["Each participant gets from " + this.minTimePerParticipant + " to " + this.maxMinutesToSpeak + " to explore the question prompt."];
+            item.guidance = ["Each participant takes " + this.maxTimePerParticipant + " to " + this.minTimePerParticipant + " minutes to explore the question prompt."];
             agendaItems.push(item);
+
+            // add item for group discussion
+            const groupDiscussionItem: AgendaItem = new AgendaItem(groupDiscussionTitle, groupDiscussionContent);
+
+            groupDiscussionItem.duration = createDurationByTimeUnit({ minutes: this.groupDiscussionTime });
+            agendaItems.push(groupDiscussionItem);
+
         }
 
-        // add item for group discussion
-        const groupDiscussionTitle: string = explorationData.items[1].title;
-        const groupDiscussionContent: string[] = explorationData.items[1].content;
 
-        const groupDiscussionItem: AgendaItem = new AgendaItem(groupDiscussionTitle, groupDiscussionContent);
 
-        groupDiscussionItem.duration = createDurationByTimeUnit({ minutes: this.groupDiscussionTime });
-
-        agendaItems.push(groupDiscussionItem);
 
         return agendaItems;
     }
@@ -105,6 +108,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         // how many total prompts
         // based on time available and number of participants 
+        let initialPrompts: number;
         let totalPrompts: number;
 
         // total time each participant can have to talk
@@ -123,32 +127,32 @@ export class ExplorationBuilder implements ISectionBuilder {
         // calculate how many prompts can be fit into the time 
         // based on time and on average how much time is needed for participants to speak on one item
         // go with lowest amount, we don't want to squeeze in more prompts if not enough time
-        totalPrompts = Math.floor(sectionDuration / ((participantTimeNeeded_minParts + participantTimeNeeded_maxParts) / 2));
+        initialPrompts = Math.floor(sectionDuration / ((participantTimeNeeded_minParts + participantTimeNeeded_maxParts) / 2));
 
-        console.log("calculating " + totalPrompts + " total prompts at the beginning.");
+        console.log("calculating " + initialPrompts + " total prompts at the beginning.");
 
         // but then there will probably be leftover time
         // calculate total leftover time for most and least amount of participants in range 
-        let leftOverTime_minParts = sectionDuration - (participantTimeNeeded_minParts * totalPrompts);
-        let leftOverTime_maxParts = sectionDuration - (participantTimeNeeded_maxParts * totalPrompts);
+        let leftOverTime_minParts = sectionDuration - this.groupDiscussionTime - (participantTimeNeeded_minParts * initialPrompts);
+        let leftOverTime_maxParts = sectionDuration - this.groupDiscussionTime - (participantTimeNeeded_maxParts * initialPrompts);
 
         // if floor gets us to zero prompts, bump it up
         // we need at least one prompt
-        totalPrompts = totalPrompts > 0 ? totalPrompts : 1;
+        totalPrompts = initialPrompts > 0 ? initialPrompts : 1;
 
         // calculate the leftover time per participant per prompt
         let leftOverTimePerParticipant_minParts = Math.floor(10 * (leftOverTime_minParts / (lowerCount * totalPrompts))) / 10;
         let leftOverTimePerParticipant_maxParts = Math.floor(10 * (leftOverTime_maxParts / (upperCount * totalPrompts))) / 10;
 
-        console.log("There will be " + leftOverTimePerParticipant_minParts + " minutes per participant per prompt leftover if minimum participants and " + leftOverTimePerParticipant_maxParts + " leftover for maximum participants.");
+        console.log("There will be " + leftOverTimePerParticipant_minParts + " minutes per participant per prompt leftover if minimum participants and " + leftOverTimePerParticipant_maxParts + " leftover for maximum participants.\n");
 
-        if (totalPrompts > 1) {
+        if (initialPrompts >= 1) {
             // more than 1 prompt, give each participant the leftover time
             timePerParticipant_maxparts = this.idealMinutesToSpeak + leftOverTimePerParticipant_maxParts;
             timePerParticipant_minparts = this.idealMinutesToSpeak + leftOverTimePerParticipant_minParts;
         }
-        else if (totalPrompts <= 1 && leftOverTimePerParticipant_maxParts >= .75) {
-            // Only 1 prompt, each participant gets only the leftover time 
+        else if (initialPrompts < 1 && leftOverTimePerParticipant_maxParts >= .75) {
+            // Only 1 prompt where each participant gets only the leftover time 
             timePerParticipant_maxparts = leftOverTimePerParticipant_maxParts;
             timePerParticipant_minparts = leftOverTimePerParticipant_minParts;
         } else {
@@ -166,12 +170,16 @@ export class ExplorationBuilder implements ISectionBuilder {
         if (timePerParticipant_minparts > this.maxMinutesToSpeak) {
             // with least participants, delta from max amount
             let minDelta = timePerParticipant_minparts - this.maxMinutesToSpeak;
+
             // with the most participants, delta from max amount
-            let maxDelta = timePerParticipant_maxparts - this.maxMinutesToSpeak;
+            let maxDelta = timePerParticipant_maxparts - this.idealMinutesToSpeak;
+
+            // keep some time for the case with max participants 
+            // minDelta = minDelta - maxDelta;
 
             // based on these deltas, how much time can we give to group discussion
             // being conservative with our estimates to not use too much time, so use lowerCount
-            let timeToRemove = lowerCount * ((minDelta + maxDelta) / 2);
+            let timeToRemove = lowerCount * (minDelta + maxDelta);
 
             this.groupDiscussionTime = this.groupDiscussionTime + timeToRemove;
             timePerParticipant_minparts = this.maxMinutesToSpeak; // set to max time
@@ -184,27 +192,32 @@ export class ExplorationBuilder implements ISectionBuilder {
         this.minTimePerParticipant = timePerParticipant_minparts;
         this.maxTimePerParticipant = timePerParticipant_maxparts;
         this.totalPrompts = totalPrompts;
-        this.totalMinutesPerPrompt = sectionDuration / totalPrompts;
+        this.totalMinutesPerPrompt = sectionDuration / totalPrompts - this.groupDiscussionTime;
 
         console.log("\n")
         console.log("totalItems: " + totalPrompts)
         console.log("groupDiscussionTime: " + this.groupDiscussionTime)
 
-        console.log("total time for fewest participants: " + totalPrompts * (this.minTimePerParticipant * this.lowerParticipantCount + this.groupDiscussionTime));
+        console.log("time per participant: min " + this.minTimePerParticipant)
+        console.log("time per participant: max " + this.maxTimePerParticipant)
 
-        console.log("total time for maximum participants: " + totalPrompts * (this.maxTimePerParticipant * this.upperParticipantCount + this.groupDiscussionTime));
+        console.log("total time for fewest participants: " + (totalPrompts * (this.minTimePerParticipant * this.lowerParticipantCount + this.groupDiscussionTime)));
 
-        console.log("total time for maximum participants: " + totalPrompts * (((this.maxTimePerParticipant + this.minTimePerParticipant) / 2) * avgCount + this.groupDiscussionTime));
+        console.log("total time for maximum participants: " + (totalPrompts * (this.maxTimePerParticipant * this.upperParticipantCount + this.groupDiscussionTime)));
+
+        console.log("total time for average participants: " + (totalPrompts * (((this.maxTimePerParticipant + this.minTimePerParticipant) / 2) * avgCount + this.groupDiscussionTime)));
 
         console.log("total minutes per prompt: " + this.totalMinutesPerPrompt);
+
+        console.log("total minutes per prompt with group discussion: " + (this.totalMinutesPerPrompt + this.groupDiscussionTime));
 
         let neededByParts: number = ((this.minTimePerParticipant + this.maxTimePerParticipant) / 2) * avgCount + this.groupDiscussionTime;
         console.log("needed per prompt based on calculations: " + neededByParts)
 
-        let neededByPartsMin: number = this.minTimePerParticipant * lowerCount + this.groupDiscussionTime;
-        console.log("needed per prompt based on calculations if min parts: " + neededByPartsMin)
+        let neededByPartsMinCouldBe: number = this.maxTimePerParticipant * lowerCount + this.groupDiscussionTime;
+        console.log("needed per prompt based on calculations most min: " + neededByPartsMinCouldBe)
 
-        let neededByPartsMax: number = this.maxTimePerParticipant * upperCount + this.groupDiscussionTime;
-        console.log("needed per prompt based on calculations if min parts: " + neededByPartsMax)
+        let neededByPartsMaxCouldBe: number = this.minTimePerParticipant * upperCount + this.groupDiscussionTime;
+        console.log("needed per prompt based on calculations most max: " + neededByPartsMaxCouldBe)
     }
 }
