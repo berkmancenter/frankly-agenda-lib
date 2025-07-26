@@ -122,7 +122,7 @@ export class ExplorationBuilder implements ISectionBuilder {
         const participantTimeNeeded_minParts = lowerCount * this.idealMinutesToSpeak + this.groupDiscussionTime;
         const participantTimeNeeded_maxParts = upperCount * this.idealMinutesToSpeak + this.groupDiscussionTime;
 
-        console.log("We need " + participantTimeNeeded_minParts + " for minumum participants and " + participantTimeNeeded_maxParts + " for maximum participants.");
+        console.log("We need " + Math.round(participantTimeNeeded_minParts) + " for minumum participants and " + Math.round(participantTimeNeeded_maxParts) + " for maximum participants.");
 
         // calculate how many prompts can be fit into the time 
         // based on time and on average how much time is needed for participants to speak on one item
