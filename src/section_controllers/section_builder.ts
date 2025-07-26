@@ -54,10 +54,10 @@ export class SectionBuilder {
                 this.builders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, this.eventInput.eventLength));
             }
             if (section == Goals.exploration) {
-                this.builders.push(new ExplorationBuilder(this.eventInput.topic, new CustomDuration(newDuration), 5));
+                this.builders.push(new ExplorationBuilder(this.eventInput.topic, new CustomDuration(newDuration), this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount));
             }
             if (section == Goals.deliberation) {
-                this.builders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcrete));
+                this.builders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision));
             }
         }
     }

@@ -105,9 +105,9 @@ export class AgendaItem implements IAgendaItem {
 
 export class CustomDuration implements ICustomDuration {
     totalMilliseconds: number;
-    hours?: number;
-    minutes?: number;
-    seconds?: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
 
     constructor(milliseconds: number) {
         this.totalMilliseconds = milliseconds;
@@ -120,6 +120,10 @@ export class CustomDuration implements ICustomDuration {
 
     calculateSubDuration(subDivides: number): number {
         return this.totalMilliseconds / subDivides;
+    }
+
+    getMinutes(): number {
+        return this.hours*60 + this.minutes + this.seconds/60;
     }
 }
 

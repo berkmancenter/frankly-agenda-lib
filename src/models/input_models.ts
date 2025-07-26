@@ -13,6 +13,7 @@ interface IEventInputs {
     isSeries: boolean,
     eventCount?: number,
     eventLength: Number,
+    isConcreteDecision?: boolean
 }
 
 interface IEventSection {
@@ -33,7 +34,7 @@ export class EventInputs implements IEventInputs {
     isSeries: boolean;
     eventCount?: number;
     eventLength: number;
-    isConcrete?: boolean;
+    isConcreteDecision?: boolean;
 }
 
 export class EventSection implements IEventSection {

@@ -63,7 +63,7 @@ function _validateEvent(eventInput: EventInputs): string[] {
   } else if (Array.isArray(eventInput.goals) && eventInput.goals.length > 0 && !(typeof eventInput.goals[0] === 'string')) {
     errorMessages.push("Event goals must be an array of strings.");
   } else if (eventInput.goals.includes(Goals.deliberation)) {
-    if (eventInput.isConcrete == null) {
+    if (eventInput.isConcreteDecision == null) {
       errorMessages.push("If deliberation is a goal, user must specify if they want a concrete decision.");
     }
   }

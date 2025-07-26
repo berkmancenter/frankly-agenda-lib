@@ -13,8 +13,10 @@
             ]
         },
         {
-            "title": "Topic Background",
-            "content": []
+            "title": "Group Discussion",
+            "content": [
+                "This is a time for everyone to explore as a group what was discussed."
+            ]
         }
     ]
 }
