@@ -1,6 +1,7 @@
-import { AgendaItem, AgendaSection } from "../models/agenda_models";
+import { AgendaItem, AgendaSection, createDurationByTimeUnit } from "../models/agenda_models";
 import { ISectionBuilder } from "./section_builder";
 import conclusionData from "../section_data/initial_event/conclusion.json";
+import { EventLengthType } from "../utils/global_enums";
 
 enum ConclusionElements {
     conversationReflections = "conversationReflections",
@@ -9,40 +10,66 @@ enum ConclusionElements {
 
 export class ConclusionBuilder implements ISectionBuilder {
     topic: string;
+    isFollowOn: boolean;
+    eventLengthType: EventLengthType;
+    totalLength: number;
 
-    constructor(topic: string) {
+    constructor(topic: string, eventLengthType: EventLengthType, isFollowOn: boolean) {
         this.topic = topic;
+        this.isFollowOn = isFollowOn; // follow on in a series
+        this.eventLengthType = eventLengthType;
+        this.totalLength = 0;
+    }
+
+    public getIntroLengthInMinutes(): number {
+        return this.totalLength;
     }
 
     public createSection(): AgendaSection {
         // section info
-        const dialogueSection = new AgendaSection(conclusionData.section, conclusionData.sectionDescription);
+        const conclusionSection = new AgendaSection(conclusionData.section, conclusionData.sectionDescription);
 
-        const recommendedConclusion: ConclusionElements[] = this.determineItems();
+        const conclusionItems: AgendaItem[] = this.createItems();
 
-        const dialogueItems: AgendaItem[] = this.createItems(recommendedConclusion);
-
-        for (let introItem of dialogueItems) {
-            dialogueSection.addItem(introItem);
+        for (let introItem of conclusionItems) {
+            conclusionSection.addItem(introItem);
         }
-        return dialogueSection;
+        return conclusionSection;
     }
 
-    createItems(recommendedConclusion: ConclusionElements[]): AgendaItem[] {
+    createItems(): AgendaItem[] {
         var agendaItems: AgendaItem[] = [];
+        let tempDur;
 
-        for (let i = 0; i < recommendedConclusion.length; i++) {
-            const title: string = conclusionData.items[i].title;
-            const content: string[] = conclusionData.items[i].content;
-            const guidance: string[] = [conclusionData.items[i].guidance];
+        if (this.eventLengthType == EventLengthType.long) {
+            tempDur = 10;
+            // 10 minute for conversation reflection 
+            const title: string = conclusionData.items[0].title;
+            const content: string[] = conclusionData.items[0].content;
+            const guidance: string[] = [conclusionData.items[0].guidance];
 
-            agendaItems.push(new AgendaItem(title, content, null, null, guidance));
+            this.totalLength = this.totalLength + tempDur;
 
+            agendaItems.push(new AgendaItem(title, content, createDurationByTimeUnit({ minutes: tempDur }), null, guidance));
+
+            // 4 for appreciation , already did reflection
+            tempDur = 4;
+        } else if (this.eventLengthType == EventLengthType.short) {
+            // 5 for appreciation and wrap up
+            tempDur = 5;
+        } else {
+            // 7 for appreciation and wrap up
+            tempDur = 7;
         }
-        return agendaItems;
-    }
 
-    determineItems(): ConclusionElements[] {
-        return [ConclusionElements.appreciation]
+        const title: string = conclusionData.items[1].title;
+        const content: string[] = conclusionData.items[1].content;
+        const guidance: string[] = [conclusionData.items[1].guidance];
+
+        this.totalLength = this.totalLength + tempDur;
+
+        agendaItems.push(new AgendaItem(title, content, createDurationByTimeUnit({ minutes: tempDur }), null, guidance));
+
+        return agendaItems;
     }
 }

@@ -75,6 +75,7 @@ export class AgendaSection implements IAgendaSection {
     name: string;
     description: string;
     items: AgendaItem[];
+    duration?: CustomDuration;
 
     constructor(name: string, description: string) {
         this.name = name;

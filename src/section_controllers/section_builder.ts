@@ -5,7 +5,7 @@ import { DialogueBuilder } from "./dialogue_builder.js";
 import { DeliberationBuilder } from "./deliberation_builder.js";
 import { ExplorationBuilder } from "./exploration_builder.js";
 import { IntroductionBuilder } from "./introduction_builder.js";
-import { Goals } from "../utils/global_enums.js";
+import { EventLengthType, Goals } from "../utils/global_enums.js";
 import { ConclusionBuilder } from "./conclusion_builder.js";
 
 export interface ISectionBuilder {
@@ -16,41 +16,60 @@ export interface ISectionBuilder {
 export class SectionBuilder {
     agenda: Agenda;
     eventInput: EventInputs;
-    builders: ISectionBuilder[] = [];
+    middleSectionBuilders: ISectionBuilder[] = [];
     sectionList: EventSection;
+    eventLengthType: EventLengthType;
+
+    isFollowOn: boolean;
 
     constructor(agenda: Agenda, eventInput: EventInputs, sectionList: EventSection) {
         this.agenda = agenda;
         this.eventInput = eventInput;
         this.sectionList = sectionList;
         this.agenda.addDuration(this.eventInput.eventLength);
+        this.isFollowOn = this.eventInput.isSeries == true && this.agenda.eventNumber > 0;
     }
 
     public buildStructure(): void {
-
-        if (this.agenda.eventNumber > 0) {
-            // if we have a lot of time, longer refreher intro 
-            let longerIntro = false;
-            console.log("hours: " + this.agenda.duration.hours);
-            if (this.agenda.eventNumber > 0 && this.sectionList.sections.length < 2 && this.agenda.duration.hours >= 1) {
-                longerIntro = true;
-            }
-            this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber, longerIntro));
+        // what event length type 
+        if (this.agenda.duration.hours > 1.25) {
+            this.eventLengthType = EventLengthType.long;
+        } else if (this.agenda.duration.hours < 1 && this.agenda.duration.minutes <= 30) {
+            this.eventLengthType = EventLengthType.short;
         } else {
-            this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber));
+            this.eventLengthType = EventLengthType.regular;
         }
+        // introduction
+        const intro: IntroductionBuilder = new IntroductionBuilder(this.eventInput.topic, this.eventLengthType, this.isFollowOn);
+        const introSection: AgendaSection = intro.createSection();
+        const introTime: number = intro.getIntroLengthInMinutes();
 
+        // community norms 
+        const communityNorm: CommunityNormBuilder = new CommunityNormBuilder(this.eventInput.topic, this.isFollowOn)
+        const communityNormSection: AgendaSection = communityNorm.createSection();
+        const communityNormTime: number = communityNorm.getIntroLengthInMinutes();
 
-        this.builders.push(new CommunityNormBuilder(this.eventInput.topic, this.agenda.eventNumber));
+        // conclusion
+        const conclusionNorm: ConclusionBuilder = new ConclusionBuilder(this.eventInput.topic, this.eventLengthType, this.isFollowOn);
+        const conclusionNormSection: AgendaSection = conclusionNorm.createSection();
+        const conclusionNormTime: number = conclusionNorm.getIntroLengthInMinutes();
 
-        // add the sections 
+        // determine how long middle sections are 
+        const middleSectionMinutes: number = this._determineMiddleSectionTiming(introTime, communityNormTime, conclusionNormTime);
+
+        console.log(middleSectionMinutes);
+
+        // add sections
+        this.agenda.addSection(introSection);
+        this.agenda.addSection(communityNormSection);
+
+        // add the middle sections 
         this._addMiddleSections();
-
-        this.builders.push(new ConclusionBuilder(this.eventInput.topic));
-
-        for (let builder of this.builders) {
+        for (let builder of this.middleSectionBuilders) {
             this.agenda.addSection(builder.createSection());
         }
+
+        this.agenda.addSection(conclusionNormSection);
     }
 
     _addMiddleSections() {
@@ -63,15 +82,24 @@ export class SectionBuilder {
             let section = this.sectionList.sections[i];
             if (section == Goals.dialogue) {
                 let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
-                this.builders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, this.eventInput.eventLength));
+                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, this.eventInput.eventLength));
             }
             if (section == Goals.exploration) {
-                this.builders.push(new ExplorationBuilder(this.eventInput.topic, new CustomDuration(newDuration), this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount));
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, new CustomDuration(newDuration), this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount));
             }
             if (section == Goals.deliberation) {
-                this.builders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision));
+                this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision));
             }
         }
+    }
+
+    _determineMiddleSectionTiming(introTime: number, communityNormTime: number, conclusionNormTime: number): number {
+
+        const middleSectionsLength = this.agenda.duration.getMinutes() - (introTime + communityNormTime + conclusionNormTime);
+
+        const individualSectionLength = Math.floor(middleSectionsLength / this.sectionList.sections.length)
+
+        return individualSectionLength;
     }
 }
 

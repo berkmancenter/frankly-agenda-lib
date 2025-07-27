@@ -1,4 +1,4 @@
-import { AgendaItem, AgendaSection } from "../models/agenda_models.js";
+import { AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
 import communityNormData from "../section_data/initial_event/comunity_norms.json"
 import communityNormFollowOnData from "../section_data/follow_on_event/comunity_norms.json"
 import { ISectionBuilder } from "./section_builder.js";
@@ -6,11 +6,17 @@ import { ISectionBuilder } from "./section_builder.js";
 export class CommunityNormBuilder implements ISectionBuilder {
 
     topic: string;
-    isInitial: boolean;
+    isFollowOn: boolean;
+    totalLength: number;
 
-    constructor(topic: string, eventNumber: number) {
+    constructor(topic: string, isFollowOn: boolean) {
         this.topic = topic;
-        this.isInitial = eventNumber == 0 || eventNumber == null; // first event or single event
+        this.isFollowOn = isFollowOn; // first event or single event
+        this.totalLength = 0;
+    }
+
+    public getIntroLengthInMinutes(): number {
+        return this.totalLength;
     }
 
     public createSection(): AgendaSection {
@@ -19,12 +25,18 @@ export class CommunityNormBuilder implements ISectionBuilder {
         const recommendedNorms: number[] = this.determineItems();
 
         let normItems: AgendaItem[];
+        let tempDur: number = 0;
 
-        if (this.isInitial) {
-            normItems = this.createItems(recommendedNorms, communityNormData);
-        } else {
+        if (this.isFollowOn) {
+            tempDur = 2;
             normItems = this.createItems(recommendedNorms, communityNormFollowOnData);
+            this.totalLength = this.totalLength + tempDur;
+        } else {
+            tempDur = 5;
+            normItems = this.createItems(recommendedNorms, communityNormData);
+            this.totalLength = this.totalLength + tempDur;
         }
+        normSection.duration = createDurationByTimeUnit({ minutes: tempDur });
 
         for (let introItem of normItems) {
             normSection.addItem(introItem);

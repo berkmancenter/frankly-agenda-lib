@@ -54,7 +54,13 @@
                                 "Share what is important to you, speak from experience, and welcome others doing the same."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 300000000,
+                        "seconds": 0,
+                        "minutes": 5,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Dialogue",
@@ -79,16 +85,20 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
@@ -115,9 +125,9 @@
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
+                                "totalMilliseconds": 420000000,
                                 "seconds": 0,
-                                "minutes": 6,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }
@@ -151,7 +161,13 @@
                                 "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Exploration",
@@ -282,16 +298,20 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
@@ -318,9 +338,9 @@
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
+                                "totalMilliseconds": 420000000,
                                 "seconds": 0,
-                                "minutes": 6,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }
@@ -354,7 +374,13 @@
                                 "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Exploration",
@@ -485,16 +511,20 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
@@ -521,9 +551,9 @@
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
+                                "totalMilliseconds": 420000000,
                                 "seconds": 0,
-                                "minutes": 6,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }
@@ -557,7 +587,13 @@
                                 "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Deliberation",
@@ -582,16 +618,20 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
@@ -618,9 +658,9 @@
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
+                                "totalMilliseconds": 420000000,
                                 "seconds": 0,
-                                "minutes": 6,
+                                "minutes": 7,
                                 "hours": 0
                             }
                         }
@@ -654,7 +694,13 @@
                                 "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Deliberation",
@@ -679,16 +725,20 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
