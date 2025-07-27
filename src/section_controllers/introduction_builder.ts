@@ -7,10 +7,12 @@ export class IntroductionBuilder implements ISectionBuilder {
 
     topic: string;
     isInitial: boolean;
+    longerIntro?: boolean;
 
-    constructor(topic: string, eventNumber?: number) {
+    constructor(topic: string, eventNumber?: number, longerIntro?: boolean) {
         this.topic = topic;
         this.isInitial = eventNumber == 0 || eventNumber == null; // first event or single event
+        this.longerIntro = longerIntro;
     }
 
     public createSection(): AgendaSection {
@@ -20,10 +22,10 @@ export class IntroductionBuilder implements ISectionBuilder {
         let introItems: AgendaItem[];
 
         if (this.isInitial) {
-            introItems = this.createItems(introductionData, 10);
+            introItems = this.createItems(introductionData);
 
         } else {
-            introItems = this.createItems(introductionRefresherData, 6);
+            introItems = this.createRefresherItems(introductionRefresherData, this.longerIntro);
         }
 
         for (let introItem of introItems) {
@@ -33,12 +35,30 @@ export class IntroductionBuilder implements ISectionBuilder {
         return introSection;
     }
 
-    createItems(introData, duration: number): AgendaItem[] {
+    createItems(introData): AgendaItem[] {
         var agendaItems = [];
-        for (let item of introData.items) {
-            const introDuration = createDurationByTimeUnit({ minutes: duration });
-            agendaItems.push(new AgendaItem(item.title, item.content, introDuration));
-        }
+
+        const introDuration = createDurationByTimeUnit({ minutes: 10 });
+        agendaItems.push(new AgendaItem(introData.items[0].title, introData.items[0].content, introDuration));
+
         return agendaItems;
+    }
+
+    createRefresherItems(introData, isLonger: boolean): AgendaItem[] {
+        var agendaItems = [];
+
+        const introDuration = createDurationByTimeUnit({ minutes: 6 });
+        agendaItems.push(new AgendaItem(introData.items[0].title, introData.items[0].content, introDuration));
+
+        if (isLonger) {
+            const introDuration = createDurationByTimeUnit({ minutes: 10 });
+            agendaItems.push(new AgendaItem(introData.items[1].title, introData.items[1].content, introDuration));
+        }
+
+        return agendaItems;
+    }
+
+    determineItems() {
+
     }
 }

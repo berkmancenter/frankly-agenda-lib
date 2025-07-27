@@ -28,7 +28,19 @@ export class SectionBuilder {
 
     public buildStructure(): void {
 
-        this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber));
+        if (this.agenda.eventNumber > 0) {
+            // if we have a lot of time, longer refreher intro 
+            let longerIntro = false;
+            console.log("hours: " + this.agenda.duration.hours);
+            if (this.agenda.eventNumber > 0 && this.sectionList.sections.length < 2 && this.agenda.duration.hours >= 1) {
+                longerIntro = true;
+            }
+            this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber, longerIntro));
+        } else {
+            this.builders.push(new IntroductionBuilder(this.eventInput.topic, this.agenda.eventNumber));
+        }
+
+
         this.builders.push(new CommunityNormBuilder(this.eventInput.topic, this.agenda.eventNumber));
 
         // add the sections 

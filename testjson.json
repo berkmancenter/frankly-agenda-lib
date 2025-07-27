@@ -20,18 +20,6 @@
                                 "minutes": 10,
                                 "hours": 0
                             }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 600000000,
-                                "seconds": 0,
-                                "minutes": 10,
-                                "hours": 0
-                            }
                         }
                     ]
                 },
@@ -109,9 +97,9 @@
             "eventNumber": 0,
             "additionalInformation": null,
             "duration": {
-                "totalMilliseconds": 3300000000,
-                "seconds": 0,
-                "minutes": 55,
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
                 "hours": 0
             }
         },
@@ -125,18 +113,6 @@
                             "title": "Basic Refresher",
                             "content": [
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Previous Event Reflections",
-                            "content": [
-                                "Have you had any reflections or additional thoughts on the first conversation?"
                             ],
                             "duration": {
                                 "totalMilliseconds": 360000000,
@@ -197,9 +173,9 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -212,9 +188,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -224,9 +200,9 @@
                                 "hello, I'm prompt 1"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -239,9 +215,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -251,9 +227,9 @@
                                 "hello, I'm prompt 2"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -266,9 +242,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -278,9 +254,9 @@
                                 "hello, I'm prompt 3"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -293,9 +269,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         }
@@ -324,9 +300,9 @@
             "eventNumber": 1,
             "additionalInformation": null,
             "duration": {
-                "totalMilliseconds": 3300000000,
-                "seconds": 0,
-                "minutes": 55,
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
                 "hours": 0
             }
         },
@@ -340,18 +316,6 @@
                             "title": "Basic Refresher",
                             "content": [
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Previous Event Reflections",
-                            "content": [
-                                "Have you had any reflections or additional thoughts on the first conversation?"
                             ],
                             "duration": {
                                 "totalMilliseconds": 360000000,
@@ -412,9 +376,9 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -427,9 +391,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -439,9 +403,9 @@
                                 "hello, I'm prompt 1"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -454,9 +418,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -466,9 +430,9 @@
                                 "hello, I'm prompt 2"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -481,9 +445,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         },
@@ -493,9 +457,9 @@
                                 "hello, I'm prompt 3"
                             ],
                             "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
+                                "totalMilliseconds": 349000000,
+                                "seconds": 49,
+                                "minutes": 5,
                                 "hours": 0
                             },
                             "guidance": [
@@ -508,9 +472,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 465000000,
-                                "seconds": 45,
-                                "minutes": 7,
+                                "totalMilliseconds": 501000000,
+                                "seconds": 21,
+                                "minutes": 8,
                                 "hours": 0
                             }
                         }
@@ -539,9 +503,9 @@
             "eventNumber": 2,
             "additionalInformation": null,
             "duration": {
-                "totalMilliseconds": 3300000000,
-                "seconds": 0,
-                "minutes": 55,
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
                 "hours": 0
             }
         },
@@ -555,18 +519,6 @@
                             "title": "Basic Refresher",
                             "content": [
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Previous Event Reflections",
-                            "content": [
-                                "Have you had any reflections or additional thoughts on the first conversation?"
                             ],
                             "duration": {
                                 "totalMilliseconds": 360000000,
@@ -648,9 +600,9 @@
             "eventNumber": 3,
             "additionalInformation": null,
             "duration": {
-                "totalMilliseconds": 3300000000,
-                "seconds": 0,
-                "minutes": 55,
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
                 "hours": 0
             }
         },
@@ -664,18 +616,6 @@
                             "title": "Basic Refresher",
                             "content": [
                                 "Briefly refresh us on your name and why you decided to participate in this conversation."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 360000000,
-                                "seconds": 0,
-                                "minutes": 6,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Previous Event Reflections",
-                            "content": [
-                                "Have you had any reflections or additional thoughts on the first conversation?"
                             ],
                             "duration": {
                                 "totalMilliseconds": 360000000,
@@ -757,9 +697,9 @@
             "eventNumber": 4,
             "additionalInformation": null,
             "duration": {
-                "totalMilliseconds": 3300000000,
-                "seconds": 0,
-                "minutes": 55,
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
                 "hours": 0
             }
         }

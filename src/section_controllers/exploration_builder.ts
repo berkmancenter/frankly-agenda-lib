@@ -76,10 +76,6 @@ export class ExplorationBuilder implements ISectionBuilder {
             agendaItems.push(groupDiscussionItem);
 
         }
-
-
-
-
         return agendaItems;
     }
 
@@ -171,7 +167,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
             this.groupDiscussionTime = this.groupDiscussionTime + timeToRemove;
             timePerParticipant_minparts = this.maxMinutesToSpeak; // set to max time
-            timePerParticipant_maxparts = this.minimumMinutesToSpeak; // set to ideal time
+            timePerParticipant_maxparts = this.minimumMinutesToSpeak; // set to minimum time
         }
 
         // set variables
