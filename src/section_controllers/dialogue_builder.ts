@@ -1,4 +1,4 @@
-import { Agenda, AgendaItem, AgendaSection } from "../models/agenda_models.js";
+import { Agenda, AgendaItem, AgendaSection, CustomDuration } from "../models/agenda_models.js";
 import dialogueData from "../section_data/initial_event/dialogue.json"
 import { ISectionBuilder } from "./section_builder.js";
 
@@ -6,12 +6,12 @@ export class DialogueBuilder implements ISectionBuilder {
 
     topic: string;
     isMainGoal: boolean;
-    eventLength: number;
+    sectionDuration: CustomDuration;
 
-    constructor(topic: string, isMainGoal: boolean, eventLength: number) {
+    constructor(topic: string, isMainGoal: boolean, sectionDuration: CustomDuration) {
         this.topic = topic;
         this.isMainGoal = isMainGoal;
-        this.eventLength = eventLength;
+        this.sectionDuration = sectionDuration;
     }
 
     public createSection(): AgendaSection {
@@ -42,7 +42,7 @@ export class DialogueBuilder implements ISectionBuilder {
     }
 
     determineItems(): number[] {
-        if (this.isMainGoal && this.eventLength >= 2700000000) {
+        if (this.isMainGoal && this.sectionDuration.getMinutes() >= 45) {
             return [0, 1]; // return both dialogue questions
         } else {
             return [0]
