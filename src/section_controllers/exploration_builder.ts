@@ -60,7 +60,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         for (let i = 0; i < this.totalPrompts; i++) {
             // TODO: generate using LLM
-            const promptTitle: string = "Prompt " + numToString(i);
+            const promptTitle: string = "Prompt " + numToString(i+1);
             const tempPrompt = "hello, I'm prompt " + i;
 
             const item: AgendaItem = new AgendaItem(promptTitle, [tempPrompt]);

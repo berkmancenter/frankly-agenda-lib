@@ -71,12 +71,6 @@
                             "content": [
                                 "Share a personal experience relating to Climate Change"
                             ]
-                        },
-                        {
-                            "title": "Purpose",
-                            "content": [
-                                "What sense of purpose/mission/duty guides you in your life? How does this inform your perspective on Climate Change?"
-                            ]
                         }
                     ]
                 },
@@ -189,9 +183,9 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -204,9 +198,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         },
@@ -216,9 +210,9 @@
                                 "hello, I'm prompt 1"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -231,9 +225,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         },
@@ -243,9 +237,9 @@
                                 "hello, I'm prompt 2"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -258,36 +252,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Prompt Three",
-                            "content": [
-                                "hello, I'm prompt 3"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
-                                "hours": 0
-                            },
-                            "guidance": [
-                                "Each participant takes 1 to 3 minutes to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Group Discussion",
-                            "content": [
-                                "This is a time for everyone to explore as a group what was discussed."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         }
@@ -402,9 +369,9 @@
                                 "hello, I'm prompt 0"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -417,9 +384,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         },
@@ -429,9 +396,9 @@
                                 "hello, I'm prompt 1"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -444,9 +411,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         },
@@ -456,9 +423,9 @@
                                 "hello, I'm prompt 2"
                             ],
                             "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
                                 "hours": 0
                             },
                             "guidance": [
@@ -471,36 +438,9 @@
                                 "This is a time for everyone to explore as a group what was discussed."
                             ],
                             "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
-                                "hours": 0
-                            }
-                        },
-                        {
-                            "title": "Prompt Three",
-                            "content": [
-                                "hello, I'm prompt 3"
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 349000000,
-                                "seconds": 49,
-                                "minutes": 5,
-                                "hours": 0
-                            },
-                            "guidance": [
-                                "Each participant takes 1 to 3 minutes to explore the question prompt."
-                            ]
-                        },
-                        {
-                            "title": "Group Discussion",
-                            "content": [
-                                "This is a time for everyone to explore as a group what was discussed."
-                            ],
-                            "duration": {
-                                "totalMilliseconds": 501000000,
-                                "seconds": 21,
-                                "minutes": 8,
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
                                 "hours": 0
                             }
                         }
