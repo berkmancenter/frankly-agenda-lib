@@ -178,7 +178,7 @@
                             ]
                         },
                         {
-                            "title": "Prompt Zero",
+                            "title": "Prompt One",
                             "content": [
                                 "hello, I'm prompt 0"
                             ],
@@ -205,7 +205,7 @@
                             }
                         },
                         {
-                            "title": "Prompt One",
+                            "title": "Prompt Two",
                             "content": [
                                 "hello, I'm prompt 1"
                             ],
@@ -232,7 +232,7 @@
                             }
                         },
                         {
-                            "title": "Prompt Two",
+                            "title": "Prompt Three",
                             "content": [
                                 "hello, I'm prompt 2"
                             ],
@@ -364,7 +364,7 @@
                             ]
                         },
                         {
-                            "title": "Prompt Zero",
+                            "title": "Prompt One",
                             "content": [
                                 "hello, I'm prompt 0"
                             ],
@@ -391,7 +391,7 @@
                             }
                         },
                         {
-                            "title": "Prompt One",
+                            "title": "Prompt Two",
                             "content": [
                                 "hello, I'm prompt 1"
                             ],
@@ -418,7 +418,7 @@
                             }
                         },
                         {
-                            "title": "Prompt Two",
+                            "title": "Prompt Three",
                             "content": [
                                 "hello, I'm prompt 2"
                             ],
