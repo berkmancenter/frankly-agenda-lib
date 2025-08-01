@@ -1,5 +1,5 @@
 {
-    "eventName": "Climate Change Discussion Agenda",
+    "eventName": "Climate Change Agenda",
     "eventDescription": "This is to discuss policy options for climate change.",
     "isSeries": true,
     "agendas": [
@@ -15,20 +15,10 @@
                                 "Share your name, where you live, and what drew you here."
                             ],
                             "duration": {
-                                "hours": 0,
+                                "totalMilliseconds": 600000000,
+                                "seconds": 0,
                                 "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
+                                "hours": 0
                             }
                         }
                     ]
@@ -64,16 +54,22 @@
                                 "Share what is important to you, speak from experience, and welcome others doing the same."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 300000000,
+                        "seconds": 0,
+                        "minutes": 5,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Dialogue",
                     "description": "This is a time to understand one anothers' perspectives and build trust.",
                     "items": [
                         {
-                            "title": "Purpose",
+                            "title": "Personal Experience",
                             "content": [
-                                "What sense of purpose/mission/duty guides you in your life? How does this inform your perspective on Climate Change Discussion?"
+                                "Share a personal experience relating to Climate Change"
                             ]
                         }
                     ]
@@ -83,23 +79,33 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
                 }
             ],
             "eventNumber": 0,
-            "additionalInformation": null
+            "additionalInformation": null,
+            "duration": {
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
+                "hours": 0
+            }
         },
         {
             "sections": [
@@ -108,25 +114,15 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
                             }
                         }
                     ]
@@ -138,31 +134,34 @@
                         {
                             "title": "Be curious and listen.",
                             "content": [
-                                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
-                                "We are here to explain and understand each other, not to convince others to change their minds."
+                                "Be open to others’ experiences and ready to learn from them. We are here to understand each other, not to change minds."
                             ]
                         },
                         {
                             "title": "Be respectful and do not judge.",
                             "content": [
-                                "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
-                                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+                                "Set judgement aside and strive to make others feel respected and valued."
                             ]
                         },
                         {
                             "title": "Seek common ground.",
                             "content": [
-                                "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
-                                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+                                "Look for shared values and areas of agreement, and embrace diverse views."
                             ]
                         },
                         {
                             "title": "Embrace and welcome authenticity.",
                             "content": [
-                                "Share what is important to you, speak from experience, and welcome others doing the same."
+                                "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Exploration",
@@ -177,6 +176,87 @@
                                 "The goal with facts is to generate a shared reality, and to create a starting point",
                                 "Be careful: facts can be triggering. If people cannot agree on the facts, that can also be a starting point for the conversation. How people feel is most important."
                             ]
+                        },
+                        {
+                            "title": "Prompt One",
+                            "content": [
+                                "hello, I'm prompt 0"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Two",
+                            "content": [
+                                "hello, I'm prompt 1"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Three",
+                            "content": [
+                                "hello, I'm prompt 2"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
                         }
                     ]
                 },
@@ -185,23 +265,33 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
                 }
             ],
             "eventNumber": 1,
-            "additionalInformation": null
+            "additionalInformation": null,
+            "duration": {
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
+                "hours": 0
+            }
         },
         {
             "sections": [
@@ -210,25 +300,15 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
                             }
                         }
                     ]
@@ -240,31 +320,34 @@
                         {
                             "title": "Be curious and listen.",
                             "content": [
-                                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
-                                "We are here to explain and understand each other, not to convince others to change their minds."
+                                "Be open to others’ experiences and ready to learn from them. We are here to understand each other, not to change minds."
                             ]
                         },
                         {
                             "title": "Be respectful and do not judge.",
                             "content": [
-                                "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
-                                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+                                "Set judgement aside and strive to make others feel respected and valued."
                             ]
                         },
                         {
                             "title": "Seek common ground.",
                             "content": [
-                                "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
-                                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+                                "Look for shared values and areas of agreement, and embrace diverse views."
                             ]
                         },
                         {
                             "title": "Embrace and welcome authenticity.",
                             "content": [
-                                "Share what is important to you, speak from experience, and welcome others doing the same."
+                                "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Exploration",
@@ -279,6 +362,87 @@
                                 "The goal with facts is to generate a shared reality, and to create a starting point",
                                 "Be careful: facts can be triggering. If people cannot agree on the facts, that can also be a starting point for the conversation. How people feel is most important."
                             ]
+                        },
+                        {
+                            "title": "Prompt One",
+                            "content": [
+                                "hello, I'm prompt 0"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Two",
+                            "content": [
+                                "hello, I'm prompt 1"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
+                        },
+                        {
+                            "title": "Prompt Three",
+                            "content": [
+                                "hello, I'm prompt 2"
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 407000000.00000006,
+                                "seconds": 47.00000000000006,
+                                "minutes": 6,
+                                "hours": 0
+                            },
+                            "guidance": [
+                                "Each participant takes 1 to 3 minutes to explore the question prompt."
+                            ]
+                        },
+                        {
+                            "title": "Group Discussion",
+                            "content": [
+                                "This is a time for everyone to explore as a group what was discussed."
+                            ],
+                            "duration": {
+                                "totalMilliseconds": 393000000,
+                                "seconds": 33,
+                                "minutes": 6,
+                                "hours": 0
+                            }
                         }
                     ]
                 },
@@ -287,23 +451,33 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
                 }
             ],
             "eventNumber": 2,
-            "additionalInformation": null
+            "additionalInformation": null,
+            "duration": {
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
+                "hours": 0
+            }
         },
         {
             "sections": [
@@ -312,25 +486,15 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
                             }
                         }
                     ]
@@ -342,31 +506,34 @@
                         {
                             "title": "Be curious and listen.",
                             "content": [
-                                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
-                                "We are here to explain and understand each other, not to convince others to change their minds."
+                                "Be open to others’ experiences and ready to learn from them. We are here to understand each other, not to change minds."
                             ]
                         },
                         {
                             "title": "Be respectful and do not judge.",
                             "content": [
-                                "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
-                                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+                                "Set judgement aside and strive to make others feel respected and valued."
                             ]
                         },
                         {
                             "title": "Seek common ground.",
                             "content": [
-                                "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
-                                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+                                "Look for shared values and areas of agreement, and embrace diverse views."
                             ]
                         },
                         {
                             "title": "Embrace and welcome authenticity.",
                             "content": [
-                                "Share what is important to you, speak from experience, and welcome others doing the same."
+                                "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Deliberation",
@@ -391,23 +558,33 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
                 }
             ],
             "eventNumber": 3,
-            "additionalInformation": null
+            "additionalInformation": null,
+            "duration": {
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
+                "hours": 0
+            }
         },
         {
             "sections": [
@@ -416,25 +593,15 @@
                     "description": "Getting to know one another, and why we are here.",
                     "items": [
                         {
-                            "title": "Basic Introduction",
+                            "title": "Basic Refresher",
                             "content": [
-                                "Share your name, where you live, and what drew you here."
+                                "Briefly refresh us on your name and why you decided to participate in this conversation."
                             ],
                             "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
-                            }
-                        },
-                        {
-                            "title": "Partcipation Reason",
-                            "content": [
-                                "Why did you decide to participate in this conversation?"
-                            ],
-                            "duration": {
-                                "hours": 0,
-                                "minutes": 10,
-                                "seconds": 0
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
                             }
                         }
                     ]
@@ -446,31 +613,34 @@
                         {
                             "title": "Be curious and listen.",
                             "content": [
-                                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
-                                "We are here to explain and understand each other, not to convince others to change their minds."
+                                "Be open to others’ experiences and ready to learn from them. We are here to understand each other, not to change minds."
                             ]
                         },
                         {
                             "title": "Be respectful and do not judge.",
                             "content": [
-                                "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
-                                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+                                "Set judgement aside and strive to make others feel respected and valued."
                             ]
                         },
                         {
                             "title": "Seek common ground.",
                             "content": [
-                                "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
-                                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+                                "Look for shared values and areas of agreement, and embrace diverse views."
                             ]
                         },
                         {
                             "title": "Embrace and welcome authenticity.",
                             "content": [
-                                "Share what is important to you, speak from experience, and welcome others doing the same."
+                                "Share what is important to you and speak from experience."
                             ]
                         }
-                    ]
+                    ],
+                    "duration": {
+                        "totalMilliseconds": 120000000,
+                        "seconds": 0,
+                        "minutes": 2,
+                        "hours": 0
+                    }
                 },
                 {
                     "name": "Deliberation",
@@ -495,23 +665,33 @@
                     "description": "A time to reflect on the conversation and appreciate fellow participants.",
                     "items": [
                         {
-                            "title": "Conversation reflections",
+                            "title": "Appreciation",
                             "content": [
-                                "How do we each feel about the conversation we’ve just had?",
-                                "What did you learn about diverging perspectives and views?",
-                                "What might you take away from this conversation?"
+                                "Each participant mention something they appreciated about the conversation.",
+                                "Every participant has the option to mention something they appreciated about the conversation."
                             ],
-                            "duration": null,
+                            "duration": {
+                                "totalMilliseconds": 420000000,
+                                "seconds": 0,
+                                "minutes": 7,
+                                "hours": 0
+                            },
                             "importance": null,
                             "guidance": [
-                                "Each participant chooses one of the reflection prompts to respond to."
+                                "Each participant chooses one of the appreciation prompts to respond to."
                             ]
                         }
                     ]
                 }
             ],
             "eventNumber": 4,
-            "additionalInformation": null
+            "additionalInformation": null,
+            "duration": {
+                "totalMilliseconds": 3400000000,
+                "seconds": 40,
+                "minutes": 56,
+                "hours": 0
+            }
         }
     ]
 }

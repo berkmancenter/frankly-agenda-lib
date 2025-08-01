@@ -1,4 +1,5 @@
 import { Goals } from "../utils/global_enums";
+import { CustomDuration } from "./agenda_models";
 
 interface IEventInputs {
     goals: string[],
@@ -6,11 +7,13 @@ interface IEventInputs {
     topicDescription?: string,
     audienceDescription: string,
     participantCount: string,
+    participantsPerBreakoutGroup: number;
     hasBreakoutGroups: boolean,
     isFacilitated: boolean,
     isSeries: boolean,
     eventCount?: number,
     eventLength: Number,
+    isConcreteDecision?: boolean
 }
 
 interface IEventSection {
@@ -23,16 +26,20 @@ export class EventInputs implements IEventInputs {
     topicDescription?: string;
     audienceDescription: string;
     participantCount: string;
+    upperParticipantCount: number;
+    lowerParticipantCount: number;
+    participantsPerBreakoutGroup: number;
     hasBreakoutGroups: boolean;
     isFacilitated: boolean;
     isSeries: boolean;
     eventCount?: number;
     eventLength: number;
-    isConcrete?: boolean;
+    isConcreteDecision?: boolean;
 }
 
 export class EventSection implements IEventSection {
     sections: Goals[];
+
     constructor() {
         this.sections = [];
     }

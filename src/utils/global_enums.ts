@@ -3,3 +3,5 @@ export enum Goals {
     exploration = "exploration",
     deliberation = "deliberation"
 }
+
+export enum EventLengthType { short, regular, long }
