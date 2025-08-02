@@ -29,7 +29,6 @@ export function generateEventPlan(eventJsonString: string): string {
 // EventsInput is validated and typesafe
 ///
 function _parseEventInput(eventJsonString: string): EventInputs {
-  console.log("The string!!!!: \n" + eventJsonString);
   let event: EventInputs = null;
   try {
     event = JSON.parse(eventJsonString) as EventInputs;
@@ -91,10 +90,12 @@ function _validateEvent(eventInput: EventInputs): string[] {
   }
 
   // breakoutGroup validation 
-  if (eventInput.hasBreakoutGroups == null) {
-    errorMessages.push("Event breakout group information is required.")
-  } else if (typeof eventInput.hasBreakoutGroups !== 'boolean') {
-    errorMessages.push("Event breakout group information must be a boolean.")
+  if (eventInput.participantCount != 'zeroToFive') {
+    if (eventInput.hasBreakoutGroups == null) {
+      errorMessages.push("Event breakout group information is required for participant counts over five.")
+    } else if (typeof eventInput.hasBreakoutGroups !== 'boolean') {
+      errorMessages.push("Event breakout group information must be a boolean.")
+    }
   }
 
   // facilitation validation 
