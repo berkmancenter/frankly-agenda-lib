@@ -1,12 +1,9 @@
-import { AgendaItem, AgendaSection, createDurationByTimeUnit } from "../models/agenda_models";
-import { ISectionBuilder } from "./section_builder";
-import conclusionData from "../section_data/initial_event/conclusion.json";
-import { EventLengthType } from "../utils/global_enums";
-
-enum ConclusionElements {
-    conversationReflections = "conversationReflections",
-    appreciation = "appreciation"
-}
+import { AgendaItem, AgendaSection, createDurationByTimeUnit } from "../models/agenda_models.js";
+import { ISectionBuilder } from "./section_builder.js";
+import { EventLengthType } from "../utils/global_enums.js";
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 export class ConclusionBuilder implements ISectionBuilder {
     topic: string;
@@ -14,11 +11,17 @@ export class ConclusionBuilder implements ISectionBuilder {
     eventLengthType: EventLengthType;
     totalLength: number;
 
+    conclusionData;
+
     constructor(topic: string, eventLengthType: EventLengthType, isFollowOn: boolean) {
         this.topic = topic;
         this.isFollowOn = isFollowOn; // follow on in a series
         this.eventLengthType = eventLengthType;
         this.totalLength = 0;
+
+        // bring in JSON agenda items
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        this.conclusionData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/conclusion.json'), 'utf-8'));
     }
 
     public getIntroLengthInMinutes(): number {
@@ -27,7 +30,7 @@ export class ConclusionBuilder implements ISectionBuilder {
 
     public createSection(): AgendaSection {
         // section info
-        const conclusionSection = new AgendaSection(conclusionData.section, conclusionData.sectionDescription);
+        const conclusionSection = new AgendaSection(this.conclusionData.section, this.conclusionData.sectionDescription);
 
         const conclusionItems: AgendaItem[] = this.createItems();
 
@@ -44,9 +47,9 @@ export class ConclusionBuilder implements ISectionBuilder {
         if (this.eventLengthType == EventLengthType.long) {
             tempDur = 10;
             // 10 minute for conversation reflection 
-            const title: string = conclusionData.items[0].title;
-            const content: string[] = conclusionData.items[0].content;
-            const guidance: string[] = [conclusionData.items[0].guidance];
+            const title: string = this.conclusionData.items[0].title;
+            const content: string[] = this.conclusionData.items[0].content;
+            const guidance: string[] = [this.conclusionData.items[0].guidance];
 
             this.totalLength = this.totalLength + tempDur;
 
@@ -62,9 +65,9 @@ export class ConclusionBuilder implements ISectionBuilder {
             tempDur = 7;
         }
 
-        const title: string = conclusionData.items[1].title;
-        const content: string[] = conclusionData.items[1].content;
-        const guidance: string[] = [conclusionData.items[1].guidance];
+        const title: string = this.conclusionData.items[1].title;
+        const content: string[] = this.conclusionData.items[1].content;
+        const guidance: string[] = [this.conclusionData.items[1].guidance];
 
         this.totalLength = this.totalLength + tempDur;
 

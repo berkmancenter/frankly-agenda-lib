@@ -3,7 +3,7 @@ import { EventPlan } from './models/agenda_models.js'
 import { EventInputs } from './models/input_models.js'
 import { Goals } from "./utils/global_enums.js";
 
-export function generateEventPlan(eventJsonString: string) {
+export function generateEventPlan(eventJsonString: string): string {
 
   ///
   // 1. Parse input 
@@ -29,6 +29,7 @@ export function generateEventPlan(eventJsonString: string) {
 // EventsInput is validated and typesafe
 ///
 function _parseEventInput(eventJsonString: string): EventInputs {
+  console.log("The string!!!!: \n" + eventJsonString);
   let event: EventInputs = null;
   try {
     event = JSON.parse(eventJsonString) as EventInputs;

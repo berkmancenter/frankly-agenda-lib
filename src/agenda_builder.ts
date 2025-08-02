@@ -1,7 +1,7 @@
-import { Agenda, createAgenda, EventPlan } from "./models/agenda_models";
-import { EventInputs, EventSection } from "./models/input_models";
-import { SectionBuilder } from "./section_controllers/section_builder";
-import { Goals } from "./utils/global_enums";
+import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
+import { EventInputs, EventSection } from "./models/input_models.js";
+import { SectionBuilder } from "./section_controllers/section_builder.js";
+import { Goals } from "./utils/global_enums.js";
 
 export class AgendaBuilder {
   eventInput: EventInputs;
