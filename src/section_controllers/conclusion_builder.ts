@@ -4,12 +4,14 @@ import { EventLengthType } from "../utils/global_enums.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { CustomError } from "../utils/custom_error.js";
 
 export class ConclusionBuilder implements ISectionBuilder {
     topic: string;
     isFollowOn: boolean;
     eventLengthType: EventLengthType;
     totalLength: number;
+    warnings: CustomError[] = [];
 
     conclusionData;
 

@@ -4,6 +4,7 @@ import { EventLengthType } from "../utils/global_enums.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { CustomError } from "../utils/custom_error.js";
 
 export class IntroductionBuilder implements ISectionBuilder {
 
@@ -11,6 +12,7 @@ export class IntroductionBuilder implements ISectionBuilder {
     isFollowOn: boolean;
     eventLengthType: EventLengthType;
     totalLength: number;
+    warnings: CustomError[] = [];
 
     introductionData;
     introductionRefresherData;

@@ -1,3 +1,5 @@
+import { CustomError } from "../utils/custom_error"
+
 interface IEventPlan {
     eventName: string,
     eventDescription: string,
@@ -38,6 +40,9 @@ export class EventPlan implements IEventPlan {
     isSeries: boolean;
     agendas: Agenda[];
 
+    warnings: CustomError[] = [];
+
+
     constructor(eventName: string, eventDescription: string, isSeries: boolean, eventNumber?: number[], additionalInformation?: AgendaItem[]) {
         this.eventName = eventName;
         this.eventDescription = eventDescription;
@@ -47,6 +52,10 @@ export class EventPlan implements IEventPlan {
 
     addAgendas(agenda: Agenda): void {
         this.agendas.push(agenda)
+    }
+
+    addWarning(warning: CustomError) {
+        this.warnings.push(warning);
     }
 }
 
@@ -124,7 +133,7 @@ export class CustomDuration implements ICustomDuration {
     }
 
     getMinutes(): number {
-        return this.hours*60 + this.minutes + this.seconds/60;
+        return this.hours * 60 + this.minutes + this.seconds / 60;
     }
 }
 
@@ -138,7 +147,7 @@ export function createAgenda({ eventNumber = null, additionalInformation = null 
 }
 
 export function createDurationByTimeUnit({ hours = 0, minutes = 0, seconds = 0 }): CustomDuration {
-    
+
     const milliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000000
     const newDuration = new CustomDuration(milliseconds);
 

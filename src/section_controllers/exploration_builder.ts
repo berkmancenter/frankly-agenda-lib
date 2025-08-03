@@ -4,6 +4,7 @@ import { numToString } from "../utils/helper_functions.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { CustomError, ErrorCategory, ErrorType } from "../utils/custom_error.js";
 
 export class ExplorationBuilder implements ISectionBuilder {
 
@@ -23,6 +24,8 @@ export class ExplorationBuilder implements ISectionBuilder {
     totalMinutesPerPrompt: number;
 
     explorationData;
+
+    warnings: CustomError[] = [];
 
     constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number) {
         this.topic = topic;
@@ -153,7 +156,9 @@ export class ExplorationBuilder implements ISectionBuilder {
             // if, with the max amount of participants, each participant gets 
             // less than 3/4 of a minute, throw an error
             // that is not enough time to speak
-            throw Error("Not enough time for each participant to speak.");
+            timePerParticipant_maxparts = leftOverTimePerParticipant_maxParts;
+            timePerParticipant_minparts = leftOverTimePerParticipant_minParts;
+            this.warnings.push(new CustomError(ErrorCategory.TimingError, "Exploration section: Not enough time for each participant to speak.", ErrorType.warning));
         }
 
         // if, with the minimum participants, each participant gets more 

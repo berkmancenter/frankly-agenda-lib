@@ -7,9 +7,11 @@ import { ExplorationBuilder } from "./exploration_builder.js";
 import { IntroductionBuilder } from "./introduction_builder.js";
 import { EventLengthType, Goals } from "../utils/global_enums.js";
 import { ConclusionBuilder } from "./conclusion_builder.js";
+import { CustomError } from "../utils/custom_error.js";
 
 export interface ISectionBuilder {
     topic: string;
+    warnings: CustomError[];
     createSection(): AgendaSection;
 }
 
@@ -19,6 +21,9 @@ export class SectionBuilder {
     middleSectionBuilders: ISectionBuilder[] = [];
     sectionList: EventSection;
     eventLengthType: EventLengthType;
+
+    warnings: CustomError[] = [];
+
 
     isFollowOn: boolean;
 
@@ -66,6 +71,9 @@ export class SectionBuilder {
 
         for (let builder of this.middleSectionBuilders) {
             this.agenda.addSection(builder.createSection());
+            for (let i = 0; i < builder.warnings.length; i++) {
+                this.warnings.push(builder.warnings[i]);
+            }
         }
 
         this.agenda.addSection(conclusionNormSection);
