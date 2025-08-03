@@ -3,6 +3,7 @@ import { ISectionBuilder } from "./section_builder.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { CustomError, ErrorCategory, ErrorType } from "../utils/custom_error.js";
 export class CommunityNormBuilder implements ISectionBuilder {
 
     topic: string;
@@ -11,6 +12,9 @@ export class CommunityNormBuilder implements ISectionBuilder {
     communityNormData;
     communityNormFollowOnData;
 
+    warnings: CustomError[] = [];
+
+
     constructor(topic: string, isFollowOn: boolean) {
         this.topic = topic;
         this.isFollowOn = isFollowOn; // first event or single event
@@ -18,8 +22,12 @@ export class CommunityNormBuilder implements ISectionBuilder {
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
-        this.communityNormData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/comunity_norms.json'), 'utf-8'));
-        this.communityNormFollowOnData = JSON.parse(readFileSync(join(__dirname, '../section_data/follow_on_event/comunity_norms.json'), 'utf-8'));
+        try {
+            this.communityNormData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/comunity_norms.json'), 'utf-8'));
+            this.communityNormFollowOnData = JSON.parse(readFileSync(join(__dirname, '../section_data/follow_on_event/comunity_norms.json'), 'utf-8'));
+        } catch (e) {
+            throw new CustomError(ErrorCategory.ParsingError, "Unable to parse community norm data.", ErrorType.error, e);
+        }
 
     }
 

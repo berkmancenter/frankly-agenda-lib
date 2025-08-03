@@ -37,7 +37,11 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
-        this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
+        try {
+            this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
+        } catch (e) {
+            throw new CustomError(ErrorCategory.ParsingError, "Unable to parse exploration section data.", ErrorType.error, e);
+        }
     }
 
     createSection() {

@@ -3,7 +3,7 @@ import { ISectionBuilder } from "./section_builder.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { CustomError } from "../utils/custom_error.js";
+import { CustomError, ErrorCategory, ErrorType } from "../utils/custom_error.js";
 export class DeliberationBuilder implements ISectionBuilder {
     topic: string;
     concreteDecision: boolean;
@@ -18,7 +18,11 @@ export class DeliberationBuilder implements ISectionBuilder {
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
-        this.deliberationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/deliberation.json'), 'utf-8'));
+        try {
+            this.deliberationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/deliberation.json'), 'utf-8'));
+        } catch (e) {
+            throw new CustomError(ErrorCategory.ParsingError, "Unable to parse deliberation section data.", ErrorType.error, e);
+        }
     }
 
     public createSection(): AgendaSection {

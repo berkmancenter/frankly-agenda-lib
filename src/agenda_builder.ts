@@ -1,6 +1,7 @@
 import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
+import { CustomError, ErrorCategory, ErrorType } from "./utils/custom_error.js";
 import { Goals } from "./utils/global_enums.js";
 
 export class AgendaBuilder {
@@ -25,7 +26,12 @@ export class AgendaBuilder {
     if (!this.eventInput.isSeries) {
       eventCount = 1;
     }
-    const eventSections: EventSection[] = this._getEventSections(eventCount, this.eventInput.goals);
+    let eventSections: EventSection[] = [];
+    try {
+      eventSections = this._getEventSections(eventCount, this.eventInput.goals);
+    } catch (e) {
+      throw new CustomError(ErrorCategory.ParsingError, "Error building agenda sections.", ErrorType.error, e);
+    }
 
     // Create agendas 
     if (this.eventInput.isSeries) {
