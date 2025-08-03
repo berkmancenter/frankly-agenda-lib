@@ -1,8 +1,9 @@
 import { Agenda, AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
-import introductionData from '../section_data/initial_event/introduction.json';
-import introductionRefresherData from '../section_data/follow_on_event/introduction.json'
 import { ISectionBuilder } from "./section_builder.js";
 import { EventLengthType } from "../utils/global_enums.js";
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 export class IntroductionBuilder implements ISectionBuilder {
 
@@ -11,11 +12,19 @@ export class IntroductionBuilder implements ISectionBuilder {
     eventLengthType: EventLengthType;
     totalLength: number;
 
+    introductionData;
+    introductionRefresherData;
+
     constructor(topic: string, eventLengthType: EventLengthType, isFollowOn: boolean) {
         this.topic = topic;
         this.isFollowOn = isFollowOn; // follow on in a series
         this.eventLengthType = eventLengthType;
         this.totalLength = 0;
+
+        // bring in JSON agenda items
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        this.introductionData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/introduction.json'), 'utf-8'));
+        this.introductionRefresherData = JSON.parse(readFileSync(join(__dirname, '../section_data/follow_on_event/introduction.json'), 'utf-8'));
     }
 
     public getIntroLengthInMinutes(): number {
@@ -24,14 +33,14 @@ export class IntroductionBuilder implements ISectionBuilder {
 
     public createSection(): AgendaSection {
         // section info
-        const introSection = new AgendaSection(introductionData.section, introductionData.sectionDescription);
+        const introSection = new AgendaSection(this.introductionData.section, this.introductionData.sectionDescription);
         let introItems: AgendaItem[];
 
         if (this.isFollowOn) {
-            introItems = this.createRefresherItems(introductionRefresherData, this.eventLengthType);
+            introItems = this.createRefresherItems(this.introductionRefresherData, this.eventLengthType);
 
         } else {
-            introItems = this.createItems(introductionData, this.eventLengthType);
+            introItems = this.createItems(this.introductionData, this.eventLengthType);
         }
         for (let introItem of introItems) {
             introSection.addItem(introItem);

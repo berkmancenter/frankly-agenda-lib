@@ -1,18 +1,26 @@
 import { AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
-import communityNormData from "../section_data/initial_event/comunity_norms.json"
-import communityNormFollowOnData from "../section_data/follow_on_event/comunity_norms.json"
 import { ISectionBuilder } from "./section_builder.js";
-
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 export class CommunityNormBuilder implements ISectionBuilder {
 
     topic: string;
     isFollowOn: boolean;
     totalLength: number;
+    communityNormData;
+    communityNormFollowOnData;
 
     constructor(topic: string, isFollowOn: boolean) {
         this.topic = topic;
         this.isFollowOn = isFollowOn; // first event or single event
         this.totalLength = 0;
+
+        // bring in JSON agenda items
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        this.communityNormData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/comunity_norms.json'), 'utf-8'));
+        this.communityNormFollowOnData = JSON.parse(readFileSync(join(__dirname, '../section_data/follow_on_event/comunity_norms.json'), 'utf-8'));
+
     }
 
     public getIntroLengthInMinutes(): number {
@@ -21,7 +29,7 @@ export class CommunityNormBuilder implements ISectionBuilder {
 
     public createSection(): AgendaSection {
         // section info
-        const normSection = new AgendaSection(communityNormData.section, communityNormData.sectionDescription);
+        const normSection = new AgendaSection(this.communityNormData.section, this.communityNormData.sectionDescription);
         const recommendedNorms: number[] = this.determineItems();
 
         let normItems: AgendaItem[];
@@ -29,11 +37,11 @@ export class CommunityNormBuilder implements ISectionBuilder {
 
         if (this.isFollowOn) {
             tempDur = 2;
-            normItems = this.createItems(recommendedNorms, communityNormFollowOnData);
+            normItems = this.createItems(recommendedNorms, this.communityNormFollowOnData);
             this.totalLength = this.totalLength + tempDur;
         } else {
             tempDur = 5;
-            normItems = this.createItems(recommendedNorms, communityNormData);
+            normItems = this.createItems(recommendedNorms, this.communityNormData);
             this.totalLength = this.totalLength + tempDur;
         }
         normSection.duration = createDurationByTimeUnit({ minutes: tempDur });

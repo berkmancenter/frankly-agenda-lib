@@ -1,7 +1,9 @@
-import { ISectionBuilder } from "./section_builder";
-import explorationData from "../section_data/initial_event/exploration.json"
-import { AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models";
-import { numToString } from "../utils/helper_functions";
+import { ISectionBuilder } from "./section_builder.js";
+import { AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
+import { numToString } from "../utils/helper_functions.js";
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 export class ExplorationBuilder implements ISectionBuilder {
 
@@ -20,6 +22,8 @@ export class ExplorationBuilder implements ISectionBuilder {
     minTimePerParticipant: number;
     totalMinutesPerPrompt: number;
 
+    explorationData;
+
     constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number) {
         this.topic = topic;
         this.sectionDuration = sectionDuration;
@@ -27,11 +31,15 @@ export class ExplorationBuilder implements ISectionBuilder {
         this.upperParticipantCount = upperParticipantCount;
 
         this.groupDiscussionTime = this._calculateInitialGroupDiscussionTime();
+
+        // bring in JSON agenda items
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
     }
 
     createSection() {
         // section info
-        const explorationSection = new AgendaSection(explorationData.section, explorationData.sectionDescription);
+        const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
 
         const instructionItem: AgendaItem = this._createInstructionItems();
         explorationSection.addItem(instructionItem);
@@ -44,8 +52,8 @@ export class ExplorationBuilder implements ISectionBuilder {
     }
 
     _createInstructionItems(): AgendaItem {
-        const title: string = explorationData.items[0].title; // topic recommendations
-        const contentStrings: string[] = explorationData.items[0].content;
+        const title: string = this.explorationData.items[0].title; // topic recommendations
+        const contentStrings: string[] = this.explorationData.items[0].content;
         return new AgendaItem(title, contentStrings);
     }
 
@@ -53,14 +61,14 @@ export class ExplorationBuilder implements ISectionBuilder {
         // TODO only return topic recommendations if we don't have background to give them
         var agendaItems = [];
 
-        const groupDiscussionTitle: string = explorationData.items[1].title;
-        const groupDiscussionContent: string[] = explorationData.items[1].content;
+        const groupDiscussionTitle: string = this.explorationData.items[1].title;
+        const groupDiscussionContent: string[] = this.explorationData.items[1].content;
 
         this._calculateTimingandPromptQuantity();
 
         for (let i = 0; i < this.totalPrompts; i++) {
             // TODO: generate using LLM
-            const promptTitle: string = "Prompt " + numToString(i+1);
+            const promptTitle: string = "Prompt " + numToString(i + 1);
             const tempPrompt = "hello, I'm prompt " + i;
 
             const item: AgendaItem = new AgendaItem(promptTitle, [tempPrompt]);

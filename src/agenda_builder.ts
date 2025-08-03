@@ -1,7 +1,7 @@
-import { Agenda, createAgenda, EventPlan } from "./models/agenda_models";
-import { EventInputs, EventSection } from "./models/input_models";
-import { SectionBuilder } from "./section_controllers/section_builder";
-import { Goals } from "./utils/global_enums";
+import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
+import { EventInputs, EventSection } from "./models/input_models.js";
+import { SectionBuilder } from "./section_controllers/section_builder.js";
+import { Goals } from "./utils/global_enums.js";
 
 export class AgendaBuilder {
   eventInput: EventInputs;
@@ -21,7 +21,11 @@ export class AgendaBuilder {
     this.eventPlan = new EventPlan(this.agendaName, this.eventInput.topicDescription, true);
 
     const agendaList: Agenda[] = [];
-    const eventSections: EventSection[] = this._getEventSections(this.eventInput.eventCount, this.eventInput.goals);
+    let eventCount = this.eventInput.eventCount;
+    if (!this.eventInput.isSeries) {
+      eventCount = 1;
+    }
+    const eventSections: EventSection[] = this._getEventSections(eventCount, this.eventInput.goals);
 
     // Create agendas 
     if (this.eventInput.isSeries) {

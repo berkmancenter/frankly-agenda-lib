@@ -3,14 +3,7 @@ import { EventPlan } from './models/agenda_models.js'
 import { EventInputs } from './models/input_models.js'
 import { Goals } from "./utils/global_enums.js";
 
-export function generateEventPlan(eventJsonString: string) {
-
-  ///
-  // 1. Parse input 
-  // 2. Based on input, generate structure
-  // 3. Based on structure, gather content
-  // 4. Add it all to the agenda 
-  ///
+export function generateEventPlan(eventJsonString: string): string {
 
   // Parse input
   const eventInputs: EventInputs = _parseEventInput(eventJsonString);
@@ -90,10 +83,12 @@ function _validateEvent(eventInput: EventInputs): string[] {
   }
 
   // breakoutGroup validation 
-  if (eventInput.hasBreakoutGroups == null) {
-    errorMessages.push("Event breakout group information is required.")
-  } else if (typeof eventInput.hasBreakoutGroups !== 'boolean') {
-    errorMessages.push("Event breakout group information must be a boolean.")
+  if (eventInput.participantCount != 'zeroToFive') {
+    if (eventInput.hasBreakoutGroups == null) {
+      errorMessages.push("Event breakout group information is required for participant counts over five.")
+    } else if (typeof eventInput.hasBreakoutGroups !== 'boolean') {
+      errorMessages.push("Event breakout group information must be a boolean.")
+    }
   }
 
   // facilitation validation 
