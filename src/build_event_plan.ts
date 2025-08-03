@@ -5,13 +5,6 @@ import { Goals } from "./utils/global_enums.js";
 
 export function generateEventPlan(eventJsonString: string): string {
 
-  ///
-  // 1. Parse input 
-  // 2. Based on input, generate structure
-  // 3. Based on structure, gather content
-  // 4. Add it all to the agenda 
-  ///
-
   // Parse input
   const eventInputs: EventInputs = _parseEventInput(eventJsonString);
 
