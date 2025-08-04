@@ -4,7 +4,7 @@ import { numToString } from "../utils/helper_functions.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { CustomError, ErrorCategory, ErrorType } from "../utils/custom_error.js";
+import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
 
 export class ExplorationBuilder implements ISectionBuilder {
 

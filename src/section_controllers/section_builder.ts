@@ -7,7 +7,7 @@ import { ExplorationBuilder } from "./exploration_builder.js";
 import { IntroductionBuilder } from "./introduction_builder.js";
 import { EventLengthType, Goals } from "../utils/global_enums.js";
 import { ConclusionBuilder } from "./conclusion_builder.js";
-import { CustomError } from "../utils/custom_error.js";
+import { CustomError } from "../utils/result_handling.js";
 
 export interface ISectionBuilder {
     topic: string;

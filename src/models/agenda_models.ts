@@ -1,4 +1,4 @@
-import { CustomError } from "../utils/custom_error"
+import { CustomError } from "../utils/result_handling"
 
 interface IEventPlan {
     eventName: string,

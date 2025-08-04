@@ -1,7 +1,7 @@
 import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
-import { CustomError, ErrorCategory, ErrorType } from "./utils/custom_error.js";
+import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
 import { Goals } from "./utils/global_enums.js";
 
 export class AgendaBuilder {

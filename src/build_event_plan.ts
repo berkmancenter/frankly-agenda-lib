@@ -1,18 +1,20 @@
 import { AgendaBuilder } from './agenda_builder.js';
 import { EventPlan } from './models/agenda_models.js'
 import { EventInputs } from './models/input_models.js'
-import { CustomError, ErrorCategory, ErrorType } from './utils/custom_error.js';
+import { createResult, CustomError, ErrorCategory, ErrorType, Result } from './utils/result_handling.js';
 import { Goals } from "./utils/global_enums.js";
 
 export function generateEventPlan(eventJsonString: string): string {
 
   let eventInputs: EventInputs;
+  let result: Result;
   
   // Parse input
   try {
     eventInputs = _parseEventInput(eventJsonString);
   } catch (e) {
-    return JSON.stringify(e);
+    result = createResult({isSuccess: false, error: e})
+    return JSON.stringify(result);
   }
 
   // Agenda builder 
@@ -21,9 +23,11 @@ export function generateEventPlan(eventJsonString: string): string {
   // Create new agendas
   try {
     const eventPlan: EventPlan = agendaBuilder.createAgendaPlan();
-    return JSON.stringify(eventPlan);
+    result = createResult({isSuccess: true, eventPlan: eventPlan})
+    return JSON.stringify(result);
   } catch (e) {
-    return JSON.stringify(e);
+    result = createResult({isSuccess: false, error: e})
+    return JSON.stringify(result);
   }
 }
 

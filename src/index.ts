@@ -8,4 +8,5 @@ const sample = JSON.parse(readFileSync(join(__dirname, 'sample.json'), 'utf-8'))
 
 export { generateEventPlan } from './build_event_plan.js'
 
-//console.log(generateEventPlan(JSON.stringify(sample)));
+// console.log(generateEventPlan(JSON.stringify(sample)));
+console.log(generateEventPlan("BAD JSON"));
