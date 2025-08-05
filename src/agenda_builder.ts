@@ -1,16 +1,17 @@
 import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
+import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
 import { Goals } from "./utils/global_enums.js";
 
 export class AgendaBuilder {
   eventInput: EventInputs;
   eventPlan: EventPlan;
-  agendaName: string;
+  eventName: string;
 
   constructor(eventInput: EventInputs) {
     this.eventInput = eventInput;
-    this.agendaName = this.eventInput.topic + " Agenda";
+    this.eventName = this.eventInput.topic + " " + this.eventInput.goals[this.eventInput.goals.length - 1];
   }
 
   ///
@@ -18,14 +19,19 @@ export class AgendaBuilder {
   ///
   createAgendaPlan(): EventPlan {
 
-    this.eventPlan = new EventPlan(this.agendaName, this.eventInput.topicDescription, true);
+    this.eventPlan = new EventPlan(this.eventName, this.eventInput.topicDescription, true);
 
     const agendaList: Agenda[] = [];
     let eventCount = this.eventInput.eventCount;
     if (!this.eventInput.isSeries) {
       eventCount = 1;
     }
-    const eventSections: EventSection[] = this._getEventSections(eventCount, this.eventInput.goals);
+    let eventSections: EventSection[] = [];
+    try {
+      eventSections = this._getEventSections(eventCount, this.eventInput.goals);
+    } catch (e) {
+      throw new CustomError(ErrorCategory.ParsingError, "Error building agenda sections.", ErrorType.error, e);
+    }
 
     // Create agendas 
     if (this.eventInput.isSeries) {
@@ -40,6 +46,9 @@ export class AgendaBuilder {
     for (let i = 0; i < agendaList.length; i++) {
       const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i]);
       builder.buildStructure();
+      for (let i = 0; i < builder.warnings.length; i++) {
+        this.eventPlan.warnings.push(builder.warnings[i]);
+      }
       this.eventPlan.addAgendas(agendaList[i]);
     }
 

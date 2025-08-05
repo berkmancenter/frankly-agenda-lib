@@ -4,6 +4,7 @@ import { numToString } from "../utils/helper_functions.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
 
 export class ExplorationBuilder implements ISectionBuilder {
 
@@ -24,6 +25,8 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     explorationData;
 
+    warnings: CustomError[] = [];
+
     constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number) {
         this.topic = topic;
         this.sectionDuration = sectionDuration;
@@ -34,7 +37,11 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
-        this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
+        try {
+            this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
+        } catch (e) {
+            throw new CustomError(ErrorCategory.ParsingError, "Unable to parse exploration section data.", ErrorType.error, e);
+        }
     }
 
     createSection() {
@@ -153,7 +160,9 @@ export class ExplorationBuilder implements ISectionBuilder {
             // if, with the max amount of participants, each participant gets 
             // less than 3/4 of a minute, throw an error
             // that is not enough time to speak
-            throw Error("Not enough time for each participant to speak.");
+            timePerParticipant_maxparts = leftOverTimePerParticipant_maxParts;
+            timePerParticipant_minparts = leftOverTimePerParticipant_minParts;
+            this.warnings.push(new CustomError(ErrorCategory.TimingError, "Exploration section: Not enough time for each participant to speak.", ErrorType.warning));
         }
 
         // if, with the minimum participants, each participant gets more 

@@ -1,20 +1,34 @@
 import { AgendaBuilder } from './agenda_builder.js';
 import { EventPlan } from './models/agenda_models.js'
 import { EventInputs } from './models/input_models.js'
+import { createResult, CustomError, ErrorCategory, ErrorType, Result } from './utils/result_handling.js';
 import { Goals } from "./utils/global_enums.js";
 
 export function generateEventPlan(eventJsonString: string): string {
 
+  let eventInputs: EventInputs;
+  let result: Result;
+  
   // Parse input
-  const eventInputs: EventInputs = _parseEventInput(eventJsonString);
+  try {
+    eventInputs = _parseEventInput(eventJsonString);
+  } catch (e) {
+    result = createResult({isSuccess: false, error: e})
+    return JSON.stringify(result);
+  }
 
   // Agenda builder 
   const agendaBuilder: AgendaBuilder = new AgendaBuilder(eventInputs);
 
   // Create new agendas
-  const eventPlan: EventPlan = agendaBuilder.createAgendaPlan();
-
-  return JSON.stringify(eventPlan);
+  try {
+    const eventPlan: EventPlan = agendaBuilder.createAgendaPlan();
+    result = createResult({isSuccess: true, eventPlan: eventPlan})
+    return JSON.stringify(result);
+  } catch (e) {
+    result = createResult({isSuccess: false, error: e})
+    return JSON.stringify(result);
+  }
 }
 
 ///
@@ -28,7 +42,7 @@ function _parseEventInput(eventJsonString: string): EventInputs {
   } catch (e) {
     //TODO: Create error class 
     console.log("Parsing error" + e);
-    throw Error("Parsing error!!");
+    throw new CustomError(ErrorCategory.ParsingError, "Unable to parse event input.", ErrorType.error, e);
   }
 
   // TODO: any other error checking on JSON
@@ -37,9 +51,8 @@ function _parseEventInput(eventJsonString: string): EventInputs {
   if (errors.length === 0) {
     return event;
   } else {
-    // TODO: update to use error class 
     console.log(errors);
-    throw Error("Missing information!!");
+    throw new CustomError(ErrorCategory.MissingInformation, "The request has the following information missing: " + errors.toString(), ErrorType.error);
   }
 }
 
