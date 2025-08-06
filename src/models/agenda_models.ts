@@ -1,4 +1,4 @@
-import { CustomError } from "../utils/result_handling"
+import { CustomError } from "../utils/result_handling.js"
 
 interface IEventPlan {
     eventName: string,

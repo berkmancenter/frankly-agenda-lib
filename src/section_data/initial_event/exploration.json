@@ -13,6 +13,12 @@
             ]
         },
         {
+            "title": "Topic Background Human Query",
+            "content": [
+                "The user wants to explore this_topic_replace in a constructive conversation with the goal of generating ideas, questions, and unknowns. Does an exploration of this_topic_replace require background information, such as a set of facts with the purpose of generating a shared reality and creating a starting point for the conversation?"
+            ]
+        },
+        {
             "title": "Group Discussion",
             "content": [
                 "This is a time for everyone to explore as a group what was discussed."

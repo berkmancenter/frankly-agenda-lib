@@ -1,23 +1,26 @@
 import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
-import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
+import { LangChainLLMService } from "./services/langchain_services.js";
 import { Goals } from "./utils/global_enums.js";
+import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
 
 export class AgendaBuilder {
   eventInput: EventInputs;
   eventPlan: EventPlan;
   eventName: string;
+  llmService: LangChainLLMService;
 
-  constructor(eventInput: EventInputs) {
+  constructor(eventInput: EventInputs, llmService: LangChainLLMService) {
     this.eventInput = eventInput;
     this.eventName = this.eventInput.topic + " " + this.eventInput.goals[this.eventInput.goals.length - 1];
+    this.llmService = llmService;
   }
 
   ///
   // Creates the agenda 
   ///
-  createAgendaPlan(): EventPlan {
+  async createAgendaPlan(): Promise<EventPlan> {
 
     this.eventPlan = new EventPlan(this.eventName, this.eventInput.topicDescription, true);
 
@@ -44,8 +47,8 @@ export class AgendaBuilder {
     }
 
     for (let i = 0; i < agendaList.length; i++) {
-      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i]);
-      builder.buildStructure();
+      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], this.llmService);
+      await builder.buildStructure();
       for (let i = 0; i < builder.warnings.length; i++) {
         this.eventPlan.warnings.push(builder.warnings[i]);
       }

@@ -35,7 +35,7 @@ export class CommunityNormBuilder implements ISectionBuilder {
         return this.totalLength;
     }
 
-    public createSection(): AgendaSection {
+    public async createSection():  Promise<AgendaSection> {
         // section info
         const normSection = new AgendaSection(this.communityNormData.section, this.communityNormData.sectionDescription);
         const recommendedNorms: number[] = this.determineItems();

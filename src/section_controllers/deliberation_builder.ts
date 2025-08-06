@@ -25,7 +25,7 @@ export class DeliberationBuilder implements ISectionBuilder {
         }
     }
 
-    public createSection(): AgendaSection {
+    public async createSection():  Promise<AgendaSection> {
         const deliberationSection = new AgendaSection(this.deliberationData.section, this.deliberationData.sectionDescription);
 
         const recommendedItems: number[] = this.determineItems();

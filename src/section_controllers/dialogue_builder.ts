@@ -28,7 +28,7 @@ export class DialogueBuilder implements ISectionBuilder {
         }
     }
 
-    public createSection(): AgendaSection {
+    public async createSection(): Promise<AgendaSection> {
         // section info
         const dialogueSection = new AgendaSection(this.dialogueData.section, this.dialogueData.sectionDescription);
 

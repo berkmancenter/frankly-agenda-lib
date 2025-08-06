@@ -34,7 +34,7 @@ export class ConclusionBuilder implements ISectionBuilder {
         return this.totalLength;
     }
 
-    public createSection(): AgendaSection {
+    public async createSection():  Promise<AgendaSection> {
         // section info
         const conclusionSection = new AgendaSection(this.conclusionData.section, this.conclusionData.sectionDescription);
 

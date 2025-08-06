@@ -5,6 +5,9 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
+import { ExplorationPromptFormat, generateExplorationItemPrompts } from "../services/exploration_queries.js";
+import { LangChainLLMService } from "../services/langchain_services.js";
+import { TopicBackgroundFormat } from "../services/langchain_formatters.js";
 
 export class ExplorationBuilder implements ISectionBuilder {
 
@@ -12,6 +15,7 @@ export class ExplorationBuilder implements ISectionBuilder {
     sectionDuration: CustomDuration;
     upperParticipantCount: number;
     lowerParticipantCount: number;
+    llmService: LangChainLLMService;
 
     // timing for prompt variables
     idealMinutesToSpeak: number = 2;
@@ -27,11 +31,12 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     warnings: CustomError[] = [];
 
-    constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number) {
+    constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
         this.topic = topic;
         this.sectionDuration = sectionDuration;
         this.lowerParticipantCount = lowerParticipantCount;
         this.upperParticipantCount = upperParticipantCount;
+        this.llmService = llmService;
 
         this.groupDiscussionTime = this._calculateInitialGroupDiscussionTime();
 
@@ -44,27 +49,43 @@ export class ExplorationBuilder implements ISectionBuilder {
         }
     }
 
-    createSection() {
+    async createSection(): Promise<AgendaSection> {
         // section info
         const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
 
-        const instructionItem: AgendaItem = this._createInstructionItems();
-        explorationSection.addItem(instructionItem);
+        const instructionItem: AgendaItem = await this._handleTopicBackground();
+        instructionItem != null && explorationSection.addItem(instructionItem);
 
-        const explorationItems: AgendaItem[] = this._createItems();
+        const explorationItems: AgendaItem[] = await this._createItems();
         for (let introItem of explorationItems) {
             explorationSection.addItem(introItem);
         }
         return explorationSection;
     }
 
-    _createInstructionItems(): AgendaItem {
-        const title: string = this.explorationData.items[0].title; // topic recommendations
-        const contentStrings: string[] = this.explorationData.items[0].content;
-        return new AgendaItem(title, contentStrings);
+    async _handleTopicBackground(): Promise<AgendaItem> {
+        let instructionItem: AgendaItem;
+
+        const humanQuery: string = this.explorationData.items[1].content[0].replaceAll("this_topic_replace", this.topic);
+
+        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.askLLMAboutBackgroundInfo(humanQuery);
+
+        if (needsBackgroundInfo.answer == true) {
+            instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
+        }
+        return instructionItem;
     }
 
-    _createItems() {
+    _createTopicBackgroundItem(explanation: string): AgendaItem {
+        const title: string = this.explorationData.items[0].title; // topic recommendations
+        const contentStrings: string[] = this.explorationData.items[0].content;
+        const newItem = new AgendaItem(title, contentStrings);
+        newItem.importance = [explanation];
+        return newItem;
+    }
+
+
+    async _createItems() {
         // TODO only return topic recommendations if we don't have background to give them
         var agendaItems = [];
 
@@ -76,9 +97,11 @@ export class ExplorationBuilder implements ISectionBuilder {
         for (let i = 0; i < this.totalPrompts; i++) {
             // TODO: generate using LLM
             const promptTitle: string = "Prompt " + numToString(i + 1);
-            const tempPrompt = "hello, I'm prompt " + i;
+            const llmPrompt: ExplorationPromptFormat = await generateExplorationItemPrompts(this.topic);
 
-            const item: AgendaItem = new AgendaItem(promptTitle, [tempPrompt]);
+            const item: AgendaItem = new AgendaItem(promptTitle, [llmPrompt.prompt]);
+
+            item.importance = [llmPrompt.explanation];
 
             item.duration = createDurationByTimeUnit({ minutes: this.totalMinutesPerPrompt });
             item.guidance = ["Each participant takes " + Math.round(this.maxTimePerParticipant) + " to " + Math.round(this.minTimePerParticipant) + " minutes to explore the question prompt."];

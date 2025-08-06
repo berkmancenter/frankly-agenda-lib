@@ -37,7 +37,7 @@ export class IntroductionBuilder implements ISectionBuilder {
         return this.totalLength;
     }
 
-    public createSection(): AgendaSection {
+    public async createSection(): Promise<AgendaSection> {
         // section info
         const introSection = new AgendaSection(this.introductionData.section, this.introductionData.sectionDescription);
         let introItems: AgendaItem[];
