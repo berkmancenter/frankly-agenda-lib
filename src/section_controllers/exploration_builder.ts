@@ -5,9 +5,8 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
-import { ExplorationPromptFormat, generateExplorationItemPrompts } from "../services/exploration_queries.js";
 import { LangChainLLMService } from "../services/langchain_services.js";
-import { TopicBackgroundFormat } from "../services/langchain_formatters.js";
+import { ExplorationPromptFormat, TopicBackgroundFormat } from "../services/langchain_formatters.js";
 
 export class ExplorationBuilder implements ISectionBuilder {
 
@@ -68,7 +67,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         const humanQuery: string = this.explorationData.items[1].content[0].replaceAll("this_topic_replace", this.topic);
 
-        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.askLLMAboutBackgroundInfo(humanQuery);
+        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.determineBackgroundInfoFromLLM(humanQuery);
 
         if (needsBackgroundInfo.answer == true) {
             instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
@@ -89,15 +88,17 @@ export class ExplorationBuilder implements ISectionBuilder {
         // TODO only return topic recommendations if we don't have background to give them
         var agendaItems = [];
 
-        const groupDiscussionTitle: string = this.explorationData.items[1].title;
-        const groupDiscussionContent: string[] = this.explorationData.items[1].content;
+        const groupDiscussionTitle: string = this.explorationData.items[this.explorationData.items.length - 1].title;
+        const groupDiscussionContent: string[] = this.explorationData.items[this.explorationData.items.length - 1].content;
 
         this._calculateTimingandPromptQuantity();
 
         for (let i = 0; i < this.totalPrompts; i++) {
             // TODO: generate using LLM
             const promptTitle: string = "Prompt " + numToString(i + 1);
-            const llmPrompt: ExplorationPromptFormat = await generateExplorationItemPrompts(this.topic);
+
+            const promptHumanQuery: string = this.explorationData.items[2].content[0].replaceAll("this_topic_replace", this.topic);
+            const llmPrompt: ExplorationPromptFormat = await this.llmService.getExplorationPromptFromLLM(promptHumanQuery);
 
             const item: AgendaItem = new AgendaItem(promptTitle, [llmPrompt.prompt]);
 

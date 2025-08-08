@@ -12,11 +12,7 @@ import { getLLMModel } from "./langchain_services.js";
 
 // });
 
-const ExplorationPromptFormatter = z.object({
-    prompt: z.string().describe("A prompt that provokes exploration of a certain topic. This prompt will be part of a discussion designed to generate ideas, questions, and unknowns about a topic. The topic should be unbiased and nonpartisan. It should be designed just to prompt people to discuss and explore, but not bias them in any way."),
-    explanation: z.string().describe("The rationale why the prompt is good."),
 
-});
 
 // Classes 
 
@@ -29,14 +25,7 @@ const ExplorationPromptFormatter = z.object({
 //     }
 // }
 
-export class ExplorationPromptFormat {
-    prompt: string;
-    explanation: string;
-    constructor(data: z.infer<typeof ExplorationPromptFormatter>) {
-        // Assign properties from the validated data
-        Object.assign(this, data);
-    }
-}
+
 
 // export async function askLLMAboutBackgroundInfo(topic: string) {
 
@@ -61,24 +50,24 @@ export class ExplorationPromptFormat {
 //     }
 // }
 
-export async function generateExplorationItemPrompts(topic: string): Promise<ExplorationPromptFormat> {
-    const model = getLLMModel();
+// export async function generateExplorationItemPrompts(topic: string): Promise<ExplorationPromptFormat> {
+//     const model = getLLMModel();
 
-    const query: string = "The user wants to explore " + topic + " in a constructive conversation with the goal of generating ideas, questions, and unknowns. Generate a prompt that facilitates that."
+//     const query: string = "The user wants to explore " + topic + " in a constructive conversation with the goal of generating ideas, questions, and unknowns. Generate a prompt that facilitates that."
 
-    // Bind the schema to the model
-    const modelWithStructure = model.withStructuredOutput(ExplorationPromptFormatter);
-    // Invoke the model
-    const aiMsg = await modelWithStructure.invoke(
-        query
-    );
+//     // Bind the schema to the model
+//     const modelWithStructure = model.withStructuredOutput(ExplorationPromptFormatter);
+//     // Invoke the model
+//     const aiMsg = await modelWithStructure.invoke(
+//         query
+//     );
 
-    console.log(aiMsg);
+//     console.log(aiMsg);
 
-    try {
-        const validatedMsg = ExplorationPromptFormatter.parse(aiMsg);
-        return new ExplorationPromptFormat(validatedMsg)
-    } catch (e) {
-        throw new CustomError(ErrorCategory.ParsingError, "Unable to parse exploration prompt response from LLM.", ErrorType.error, e);
-    }
-}
+//     try {
+//         const validatedMsg = ExplorationPromptFormatter.parse(aiMsg);
+//         return new ExplorationPromptFormat(validatedMsg)
+//     } catch (e) {
+//         throw new CustomError(ErrorCategory.ParsingError, "Unable to parse exploration prompt response from LLM.", ErrorType.error, e);
+//     }
+// }

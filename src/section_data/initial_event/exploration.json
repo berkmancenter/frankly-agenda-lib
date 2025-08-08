@@ -19,6 +19,12 @@
             ]
         },
         {
+            "title": "Prompt Human Query",
+            "content": [
+                "The user wants to explore this_topic_replace in a constructive conversation with the goal of generating ideas, questions, and unknowns. Generate a prompt that facilitates that."
+            ]
+        },
+        {
             "title": "Group Discussion",
             "content": [
                 "This is a time for everyone to explore as a group what was discussed."

@@ -32,6 +32,7 @@ export function generateEventPlan(eventJsonString: string): string {
     })
     .catch((e) => {
       result = createResult({ isSuccess: false, error: e })
+      console.log("Error: " + result.error);
       return JSON.stringify(result);
     })
     .finally(() => {

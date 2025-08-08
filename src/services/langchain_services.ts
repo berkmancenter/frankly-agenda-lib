@@ -13,7 +13,7 @@ import {
 } from "@langchain/langgraph"
 import { UUID } from "crypto";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
-import { RequiresTopicBackgroundFormatter, StructuredOutputGraphAnnotation, TopicBackgroundFormat } from "./langchain_formatters.js";
+import { ExplorationPromptFormat, ExplorationPromptFormatter, RequiresTopicBackgroundFormatter, StructuredOutputGraphAnnotation, StructureType, TopicBackgroundFormat, } from "./langchain_formatters.js";
 
 export class LangChainLLMService {
     llm: ChatOpenAI;
@@ -93,10 +93,25 @@ export class LangChainLLMService {
         this.config = { configurable: { thread_id: this.threadID } };
     }
 
-    async askLLMAboutBackgroundInfo(humanQuery: string): Promise<TopicBackgroundFormat> {
+    async determineBackgroundInfoFromLLM(humanQuery: string): Promise<TopicBackgroundFormat> {
+        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationTopicBackground);
+        const validatedMessage = RequiresTopicBackgroundFormatter.parse(message);
+        console.log(validatedMessage);
+        return new TopicBackgroundFormat(validatedMessage);
+    }
 
+    async getExplorationPromptFromLLM(humanQuery: string): Promise<ExplorationPromptFormat> {
+        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationPrompt);
+        const validatedMessage = ExplorationPromptFormatter.parse(message);
+        console.log(validatedMessage);
+        return new ExplorationPromptFormat(validatedMessage);
+    }
+
+    async _getStructuredLLMResponses(humanQuery: string, structureType: StructureType) {
         // bind schema to the model
-        const modelWithStructure = this.llm.withStructuredOutput(RequiresTopicBackgroundFormatter);
+        let modelWithStructure;
+
+        structureType == StructureType.explorationTopicBackground ? modelWithStructure = this.llm.withStructuredOutput(RequiresTopicBackgroundFormatter) : modelWithStructure = this.llm.withStructuredOutput(ExplorationPromptFormatter);
 
         // the function that calls the model
         const callStructuredModel = async (state: typeof StructuredOutputGraphAnnotation.State) => {
@@ -116,24 +131,13 @@ export class LangChainLLMService {
 
         const structuredOutputApp = structuredOutputWorkflow.compile({ checkpointer: this.memory });
 
-
-
         this.structuredOutputResp = await structuredOutputApp.invoke({
             messages: [
                 new HumanMessage(humanQuery)
             ]
         }, this.config);
 
-        const message = JSON.parse(this.structuredOutputResp["messages"][1]["content"]);
-        const validatedMessage = RequiresTopicBackgroundFormatter.parse(message);
-        const finalClass = new TopicBackgroundFormat(validatedMessage);
-        console.log(finalClass);
-        return finalClass;
-        //this.testpromptTemplateOTHER_checkold();
-    }
-
-    async testpromptTemplateOTHER() {
-
+        return JSON.parse(this.structuredOutputResp["messages"][this.structuredOutputResp["messages"].length - 1]["content"]);
     }
 
     async testpromptTemplate() {
@@ -196,7 +200,6 @@ export class LangChainLLMService {
         };
         const output5 = await this.app2.invoke(input4, this.config);
         console.log(output5.messages[output5.messages.length - 1]);
-        this.testpromptTemplateOTHER();
     }
 
 
