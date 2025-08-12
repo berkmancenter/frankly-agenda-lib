@@ -7,3 +7,4 @@ lib/
 *.tmp
 .env
 node_modules
+testjson.json

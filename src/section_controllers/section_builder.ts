@@ -55,7 +55,7 @@ export class SectionBuilder {
         const introTime: number = intro.getIntroLengthInMinutes();
 
         // community norms 
-        const communityNorm: CommunityNormBuilder = new CommunityNormBuilder(this.eventInput.topic, this.isFollowOn)
+        const communityNorm: CommunityNormBuilder = new CommunityNormBuilder(this.eventInput.topic, this.isFollowOn, this.eventInput.goals[this.eventInput.goals.length - 1])
         const communityNormSection: AgendaSection = await communityNorm.createSection();
         const communityNormTime: number = communityNorm.getIntroLengthInMinutes();
 
