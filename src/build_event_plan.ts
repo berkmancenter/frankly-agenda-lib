@@ -5,7 +5,7 @@ import { createResult, CustomError, ErrorCategory, ErrorType, Result } from './u
 import { Goals } from "./utils/global_enums.js";
 import { LangChainLLMService } from './services/langchain_services.js';
 
-export function generateEventPlan(eventJsonString: string): string {
+export async function generateEventPlan(eventJsonString: string): Promise<string> {
 
   let eventInputs: EventInputs;
   let result: Result;
@@ -19,25 +19,23 @@ export function generateEventPlan(eventJsonString: string): string {
   }
 
   // Agenda builder 
-  const llmService: LangChainLLMService = new LangChainLLMService();
+  const llmService: LangChainLLMService = new LangChainLLMService(eventInputs);
+  // llmService.initialContextPrompt();
   const agendaBuilder: AgendaBuilder = new AgendaBuilder(eventInputs, llmService);
 
   // Create new agendas
-  let eventPlan: EventPlan;
-  agendaBuilder.createAgendaPlan()
-    .then((data) => {
-      eventPlan = data;
-      result = createResult({ isSuccess: true, eventPlan: eventPlan })
-      return JSON.stringify(result);
-    })
-    .catch((e) => {
-      result = createResult({ isSuccess: false, error: e })
-      console.log("Error: " + result.error);
-      return JSON.stringify(result);
-    })
-    .finally(() => {
-      console.log("Completed agenda build.");
-    });
+  try {
+    const eventPlan: EventPlan = await agendaBuilder.createAgendaPlan();
+    result = createResult({ isSuccess: true, eventPlan: eventPlan })
+    return JSON.stringify(result);
+  } catch (e) {
+    result = createResult({ isSuccess: false, error: e })
+    console.log("Error: " + result.error);
+    return JSON.stringify(result);
+  } finally {
+    console.log("Completed agenda build.");
+
+  }
 }
 
 ///
@@ -49,8 +47,6 @@ function _parseEventInput(eventJsonString: string): EventInputs {
   try {
     event = JSON.parse(eventJsonString) as EventInputs;
   } catch (e) {
-    //TODO: Create error class 
-    console.log("Parsing error" + e);
     throw new CustomError(ErrorCategory.ParsingError, "Unable to parse event input.", ErrorType.error, e);
   }
 
@@ -60,7 +56,6 @@ function _parseEventInput(eventJsonString: string): EventInputs {
   if (errors.length === 0) {
     return event;
   } else {
-    console.log(errors);
     throw new CustomError(ErrorCategory.MissingInformation, "The request has the following information missing: " + errors.toString(), ErrorType.error);
   }
 }

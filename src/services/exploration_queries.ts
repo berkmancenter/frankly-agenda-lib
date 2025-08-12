@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
-import { getLLMModel } from "./langchain_services.js";
 
 // Schemas
 

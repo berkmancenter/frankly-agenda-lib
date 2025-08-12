@@ -1,0 +1,22 @@
+[
+    {
+        "title": "Initial Guidance",
+        "content": "The user is creating an agenda for an event that facilitates a constructive conversation."
+    },
+    {
+        "title": "Topic Description",
+        "content": "The user provided the following description of the topic: "
+    },
+    {
+        "title": "Audience Description",
+        "content": "The user provided the following description of the the event's participants: "
+    },
+    {
+        "title": "Facilitated Description",
+        "content": "The conversation will have a facilitator. So someone will be guiding the conversation."
+    },
+    {
+        "title": "Non-Facilitated Description",
+        "content": "The conversation will not be facilitated. That means that any prompts should flow easily from one to the next and be both descriptive and easy to understand."
+    }
+]

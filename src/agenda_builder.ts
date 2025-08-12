@@ -76,7 +76,6 @@ export class AgendaBuilder {
 
     // deliberation section 
     if (goals.includes(Goals.deliberation)) {
-      console.log("getting deliberation")
       goalsArray.push(Goals.deliberation);
     }
 

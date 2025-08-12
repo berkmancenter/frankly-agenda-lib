@@ -12,27 +12,53 @@ import {
     Annotation,
 } from "@langchain/langgraph"
 import { UUID } from "crypto";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { ExplorationPromptFormat, ExplorationPromptFormatter, RequiresTopicBackgroundFormatter, StructuredOutputGraphAnnotation, StructureType, TopicBackgroundFormat, } from "./langchain_formatters.js";
+
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
+import { Goals } from "../utils/global_enums.js";
+import { EventInputs } from "../models/input_models.js";
 
 export class LangChainLLMService {
     llm: ChatOpenAI;
     threadID: string;
-
-    workflow;
     memory: MemorySaver;
+    eventInput: EventInputs;
+
     app;
     config: object;
     app2;
     app3;
     structuredOutputResp;
 
-    constructor() {
+    // json data for LLM prompts
+    dialogueData;
+    explorationData;
+    deliberationData;
+
+    genericPromptData;
+
+    constructor(eventInput: EventInputs) {
+        this.eventInput = eventInput;
         this.llm = this._getLLMModel();
         this.threadID = uuidv4();
-        this._setUpState();
-        this._createLLMApp();
-        //this._createDifferentLLMApp();
+        this._setUpService();
+    }
+
+    _importJsonData() {
+        // bring in JSON agenda items
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        try {
+            this.dialogueData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/dialogue.json'), 'utf-8'));
+            this.explorationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/exploration.json'), 'utf-8'));
+            this.deliberationData = JSON.parse(readFileSync(join(__dirname, '../section_data/initial_event/deliberation.json'), 'utf-8'));
+            this.genericPromptData = JSON.parse(readFileSync(join(__dirname, '../section_data/generic_llm_prompts.json'), 'utf-8'));
+        } catch (e) {
+            throw new CustomError(ErrorCategory.ParsingError, "Unable to parse exploration section data.", ErrorType.error, e);
+        }
     }
 
     _getLLMModel() {
@@ -42,72 +68,106 @@ export class LangChainLLMService {
         });
     }
 
-    async testMemory() {
-        // const input = [
-        //     {
-        //         role: "user",
-        //         content: "Tell me about the dude that wrote a book about memory.",
-        //     },
-        // ];
-
-        // const output = await this.app.invoke({ messages: input }, this.config);
-        // console.log(output.messages[output.messages.length - 1]);
-        //this.testMemory2();
-        // this.askLLMAboutBackgroundInfo("climate change");
-    }
-
-    async testMemory2() {
-        console.log("\nn\nIn test memory 2")
-        const input = [
-            {
-                role: "user",
-                content: "That author, when was he born?",
-            },
-        ];
-
-        const output = await this.app.invoke({ messages: input }, this.config);
-        console.log(output.messages[output.messages.length - 1]);
-
-        this.testpromptTemplate();
-    }
-
-    // function that calls the model
-    _callModel = async (state: typeof MessagesAnnotation.State) => {
-        const response = await this.llm.invoke(state.messages);
-        // Update message history with response:
-        return { messages: response };
-    };
-
-    _setUpState() {
-        // new graph
-        this.workflow = new StateGraph(MessagesAnnotation)
-            // node in the graph
-            .addNode("model", this._callModel)
-            .addEdge(START, "model")
-            .addEdge("model", END);
-
-        // Add memory
+    _setUpService() {
+        // import data for prompts 
+        this._importJsonData();
+        // create memory
         this.memory = new MemorySaver();
-        this.app = this.workflow.compile({ checkpointer: this.memory });
-
+        // set up config
         this.config = { configurable: { thread_id: this.threadID } };
     }
 
-    async determineBackgroundInfoFromLLM(humanQuery: string): Promise<TopicBackgroundFormat> {
-        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationTopicBackground);
+
+    async initialContextPrompt() {
+        const guidance: string = this._getInitialModelGuidence();
+
+        const prompt = ChatPromptTemplate.fromMessages([
+            ["system", guidance],
+            new MessagesPlaceholder("messages"),
+        ]);
+
+        // the State
+        const GraphAnnotation = Annotation.Root({
+            // Spread `MessagesAnnotation` into the state to add the `messages` field.
+            ...MessagesAnnotation.spec,
+        });
+        const runnable = prompt.pipe(this.llm);
+        // the function that calls the model
+        const callModel2 = async (state: typeof GraphAnnotation.State) => {
+            const response = await runnable.invoke(state);
+            // Update message history with response:
+            return { messages: [response] };
+        };
+
+        const workflow2 = new StateGraph(GraphAnnotation)
+            .addNode("model", callModel2)
+            .addEdge(START, "model")
+            .addEdge("model", END);
+
+        const intitialContextApp = workflow2.compile({ checkpointer: this.memory });
+
+        const input4 = {
+            messages: [
+                {
+                    role: "user",
+                    content: "Describe some examples of what you understand and what you will give.",
+                },
+            ]
+        };
+        const output4 = await intitialContextApp.invoke(input4, this.config);
+        console.log(output4.messages[output4.messages.length - 1]);
+    }
+
+    _getInitialModelGuidence(): string {
+
+        let llmContextGuidance: string[] = [];
+
+        llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Initial Guidance").content.replaceAll("this_topic_replace", this.eventInput.topic));
+
+        const finalGoal: string = this.eventInput.goals[this.eventInput.goals.length - 1];
+
+        if (finalGoal == Goals.dialogue) {
+            llmContextGuidance.push(this.dialogueData.llm_prompts.find(item => item.title == "Event Goal").content.replaceAll("this_topic_replace", this.eventInput.topic));
+        } else if (finalGoal == Goals.exploration) {
+            llmContextGuidance.push(this.explorationData.llm_prompts.find(item => item.title == "Event Goal").content.replaceAll("this_topic_replace", this.eventInput.topic));
+        } else if (finalGoal == Goals.deliberation) {
+            llmContextGuidance.push(this.deliberationData.llm_prompts.find(item => item.title == "Event Goal").content.replaceAll("this_topic_replace", this.eventInput.topic));
+        }
+        if (this.eventInput.topicDescription != null) {
+            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Topic Description").content + this.eventInput.topicDescription);
+        }
+        llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Audience Description").content + this.eventInput.audienceDescription);
+
+        if (this.eventInput.isFacilitated == true) {
+            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Facilitated Description").content + this.eventInput.audienceDescription);
+        } else {
+            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Non-Facilitated Description").content + this.eventInput.audienceDescription);
+        }
+
+        let llmBackgroundInstruction: string = "";
+
+        for (let i = 0; i < llmContextGuidance.length; i++) {
+            llmBackgroundInstruction = llmBackgroundInstruction + "\n" + llmContextGuidance[i];
+        }
+        console.log("background instruction: " + llmBackgroundInstruction);
+
+        return llmBackgroundInstruction;
+    }
+
+
+    async determineBackgroundInfoFromLLM(isInitialQuery: boolean, humanQuery: string): Promise<TopicBackgroundFormat> {
+        const message = await this._getStructuredLLMResponses(isInitialQuery, humanQuery, StructureType.explorationTopicBackground);
         const validatedMessage = RequiresTopicBackgroundFormatter.parse(message);
-        console.log(validatedMessage);
         return new TopicBackgroundFormat(validatedMessage);
     }
 
-    async getExplorationPromptFromLLM(humanQuery: string): Promise<ExplorationPromptFormat> {
-        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationPrompt);
+    async getExplorationPromptFromLLM(isInitialQuery: boolean, humanQuery: string): Promise<ExplorationPromptFormat> {
+        const message = await this._getStructuredLLMResponses(isInitialQuery, humanQuery, StructureType.explorationPrompt);
         const validatedMessage = ExplorationPromptFormatter.parse(message);
-        console.log(validatedMessage);
         return new ExplorationPromptFormat(validatedMessage);
     }
 
-    async _getStructuredLLMResponses(humanQuery: string, structureType: StructureType) {
+    async _getStructuredLLMResponses(isInitialQuery: boolean, humanQuery: string, structureType: StructureType) {
         // bind schema to the model
         let modelWithStructure;
 
@@ -131,139 +191,38 @@ export class LangChainLLMService {
 
         const structuredOutputApp = structuredOutputWorkflow.compile({ checkpointer: this.memory });
 
-        this.structuredOutputResp = await structuredOutputApp.invoke({
-            messages: [
+        let messageArray = [new HumanMessage(humanQuery)];
+        if (isInitialQuery) {
+            const guidance: string = this._getInitialModelGuidence();
+            messageArray = [
+                new SystemMessage(guidance),
                 new HumanMessage(humanQuery)
             ]
+        }
+        this.structuredOutputResp = await structuredOutputApp.invoke({
+            messages: messageArray
         }, this.config);
 
         return JSON.parse(this.structuredOutputResp["messages"][this.structuredOutputResp["messages"].length - 1]["content"]);
     }
 
-    async testpromptTemplate() {
-        console.log("\n\n IN TEST PROMPT TEMPLATE ")
 
-        // const config3 = { configurable: { thread_id: uuidv4() } };
-        const input4 = [
-            {
-                role: "user",
-                content: "Tell me about the dude that wrote a book about memory.",
-            },
-        ];
-        const output4 = await this.app2.invoke(input4, this.config);
-        console.log(output4.messages[output4.messages.length - 1]);
-        this.testpromptTemplate2();
-    }
 
-    _createLLMApp() {
-        const prompt = ChatPromptTemplate.fromMessages([
-            ["system", "You are a {adjective} old man. You were an NCO in the army for 20 years and achieved the rank of master sergeant. act as such.."],
-            new MessagesPlaceholder("messages"),
-        ]);
+    async testMemory() {
+        // const input = [
+        //     {
+        //         role: "user",
+        //         content: "Tell me about the dude that wrote a book about memory.",
+        //     },
+        // ];
 
-        // the State
-        const GraphAnnotation = Annotation.Root({
-            adjective: Annotation<string>(),
-            // Spread `MessagesAnnotation` into the state to add the `messages` field.
-            ...MessagesAnnotation.spec,
-        });
-        const runnable = prompt.pipe(this.llm);
-        // the function that calls the model
-        const callModel2 = async (state: typeof GraphAnnotation.State) => {
-            const response = await runnable.invoke(state);
-            // Update message history with response:
-            return { messages: [response] };
-        };
-
-        const workflow2 = new StateGraph(GraphAnnotation)
-            .addNode("model", callModel2)
-            .addEdge(START, "model")
-            .addEdge("model", END);
-
-        this.app2 = workflow2.compile({ checkpointer: this.memory });
+        // const output = await this.app.invoke({ messages: input }, this.config);
+        // console.log(output.messages[output.messages.length - 1]);
+        //this.testMemory2();
+        // this.askLLMAboutBackgroundInfo("climate change");
     }
 
 
-
-    async testpromptTemplate2() {
-        console.log("\n\n IN the second test template ")
-
-        // const config3 = { configurable: { thread_id: uuidv4() } };
-        const input4 = {
-            messages: [
-                {
-                    role: "user",
-                    content: "Why does this matter to you?",
-                },
-            ],
-            adjective: "crotchety",
-        };
-        const output5 = await this.app2.invoke(input4, this.config);
-        console.log(output5.messages[output5.messages.length - 1]);
-    }
-
-
-
-    async testpromptTemplateOTHER_checkold() {
-        console.log("\n\n IN the different test template the second time")
-
-        // const config3 = { configurable: { thread_id: uuidv4() } };
-        const input4 = {
-            messages: [
-                {
-                    role: "user",
-                    content: "Okay can you tell me about the guy we were talking about in the beginning?",
-                },
-            ]
-        };
-        const output5 = await this.app3.invoke(input4, this.config);
-        console.log(output5.messages[output5.messages.length - 1]);
-        this.testMemory4();
-    }
-
-    async testMemory4() {
-
-
-        console.log("\nn\nIn test memory final 4")
-        const input = [
-            {
-                role: "user",
-                content: "So what was the thing with the hat?",
-            },
-        ];
-
-        const output = await this.app.invoke({ messages: input }, this.config);
-        console.log(output.messages[output.messages.length - 1]);
-
-    }
-
-}
-
-export function getLLMModel() {
-    const model = new ChatOpenAI({
-        model: "gpt-4o-mini",
-        temperature: 0,
-    });
-    return model;
-}
-
-export async function askLLM(systemMessage: string, humanMessage: string) {
-
-    const model = new ChatOpenAI({
-        model: "gpt-4o-mini", configuration: {
-            baseURL: process.env.OPENAI_BASE_URL,
-            apiKey: process.env.OPENAI_API_KEY
-        },
-    });
-
-    const promptTemplate = ChatPromptTemplate.fromMessages([
-        ["system", systemMessage],
-        ["human", humanMessage]
-    ]);
-    const chain = RunnableSequence.from([promptTemplate, model, new StringOutputParser()])
-
-    const output = await chain.invoke({})
-    return output;
 }
 
 

@@ -41,5 +41,11 @@
                 "What opportunities for action are there?"
             ]
         }
+    ],
+    "llm_prompts": [
+        {
+            "title": "Event Goal",
+            "content": "The goal of this event is to find common ground and shared perspectives around this_topic_replace in order to make decisions."
+        }
     ]
 }

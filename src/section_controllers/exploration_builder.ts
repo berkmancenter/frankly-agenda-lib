@@ -65,9 +65,9 @@ export class ExplorationBuilder implements ISectionBuilder {
     async _handleTopicBackground(): Promise<AgendaItem> {
         let instructionItem: AgendaItem;
 
-        const humanQuery: string = this.explorationData.items[1].content[0].replaceAll("this_topic_replace", this.topic);
+        const humanQuery = this.explorationData.llm_prompts.find(item => item.title == "Topic Background Query").content.replaceAll("this_topic_replace", this.topic);
 
-        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.determineBackgroundInfoFromLLM(humanQuery);
+        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.determineBackgroundInfoFromLLM(true, humanQuery);
 
         if (needsBackgroundInfo.answer == true) {
             instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
@@ -76,8 +76,10 @@ export class ExplorationBuilder implements ISectionBuilder {
     }
 
     _createTopicBackgroundItem(explanation: string): AgendaItem {
-        const title: string = this.explorationData.items[0].title; // topic recommendations
-        const contentStrings: string[] = this.explorationData.items[0].content;
+        const title: string = this.explorationData.items.find(item => item.title == "Topic Background Recommendations").title; // topic recommendations
+
+        const contentStrings: string[] = this.explorationData.items.find(item => item.title == "Topic Background Recommendations").content;
+
         const newItem = new AgendaItem(title, contentStrings);
         newItem.importance = [explanation];
         return newItem;
@@ -88,17 +90,19 @@ export class ExplorationBuilder implements ISectionBuilder {
         // TODO only return topic recommendations if we don't have background to give them
         var agendaItems = [];
 
-        const groupDiscussionTitle: string = this.explorationData.items[this.explorationData.items.length - 1].title;
-        const groupDiscussionContent: string[] = this.explorationData.items[this.explorationData.items.length - 1].content;
+        const discussionItems = this.explorationData.items.find(item => item.title == "Group Discussion");
+
+        const groupDiscussionTitle: string = discussionItems.title;
+        const groupDiscussionContent: string[] = discussionItems.content;
 
         this._calculateTimingandPromptQuantity();
 
         for (let i = 0; i < this.totalPrompts; i++) {
             // TODO: generate using LLM
             const promptTitle: string = "Prompt " + numToString(i + 1);
+            const promptHumanQuery = this.explorationData.llm_prompts.find(item => item.title == "Prompt Query").content.replaceAll("this_topic_replace", this.topic);
 
-            const promptHumanQuery: string = this.explorationData.items[2].content[0].replaceAll("this_topic_replace", this.topic);
-            const llmPrompt: ExplorationPromptFormat = await this.llmService.getExplorationPromptFromLLM(promptHumanQuery);
+            const llmPrompt: ExplorationPromptFormat = await this.llmService.getExplorationPromptFromLLM(false, promptHumanQuery);
 
             const item: AgendaItem = new AgendaItem(promptTitle, [llmPrompt.prompt]);
 
