@@ -1,7 +1,5 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { RunnableSequence } from '@langchain/core/runnables'
 import { v4 as uuidv4 } from "uuid";
 import {
     START,
@@ -11,7 +9,6 @@ import {
     MemorySaver,
     Annotation,
 } from "@langchain/langgraph"
-import { UUID } from "crypto";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { ExplorationPromptFormat, ExplorationPromptFormatter, RequiresTopicBackgroundFormatter, StructuredOutputGraphAnnotation, StructureType, TopicBackgroundFormat, } from "./langchain_formatters.js";
 
@@ -27,6 +24,7 @@ export class LangChainLLMService {
     threadID: string;
     memory: MemorySaver;
     eventInput: EventInputs;
+    queryCount: number;
 
     app;
     config: object;
@@ -46,6 +44,7 @@ export class LangChainLLMService {
         this.llm = this._getLLMModel();
         this.threadID = uuidv4();
         this._setUpService();
+        this.queryCount = 0;
     }
 
     _importJsonData() {
@@ -77,12 +76,15 @@ export class LangChainLLMService {
         this.config = { configurable: { thread_id: this.threadID } };
     }
 
-
-    async initialContextPrompt() {
-        const guidance: string = this._getInitialModelGuidence();
-
+    async getDialogueItem(): Promise<string> {
+        let systemMessage: string;
+        if (this.queryCount < 1) {
+            systemMessage = this._getInitialModelGuidenceString();
+        } else {
+            systemMessage = "Fulfill the following prompt in the context of your previous guidance."
+        }
         const prompt = ChatPromptTemplate.fromMessages([
-            ["system", guidance],
+            ["system", systemMessage],
             new MessagesPlaceholder("messages"),
         ]);
 
@@ -93,32 +95,89 @@ export class LangChainLLMService {
         });
         const runnable = prompt.pipe(this.llm);
         // the function that calls the model
-        const callModel2 = async (state: typeof GraphAnnotation.State) => {
+        const callDialogueModel = async (state: typeof GraphAnnotation.State) => {
             const response = await runnable.invoke(state);
             // Update message history with response:
             return { messages: [response] };
         };
 
-        const workflow2 = new StateGraph(GraphAnnotation)
-            .addNode("model", callModel2)
+        const dialogueWorkflow = new StateGraph(GraphAnnotation)
+            .addNode("model", callDialogueModel)
             .addEdge(START, "model")
             .addEdge("model", END);
 
-        const intitialContextApp = workflow2.compile({ checkpointer: this.memory });
+        const intitialContextApp = dialogueWorkflow.compile({ checkpointer: this.memory });
 
-        const input4 = {
+        const humanQuery = this.dialogueData.llm_prompts.find(item => item.title == "Main Query").content.replaceAll("this_topic_replace", this.eventInput.topic)
+
+        const dialogueInput = {
             messages: [
                 {
                     role: "user",
-                    content: "Describe some examples of what you understand and what you will give.",
+                    content: humanQuery,
                 },
             ]
         };
-        const output4 = await intitialContextApp.invoke(input4, this.config);
-        console.log(output4.messages[output4.messages.length - 1]);
+        const dialogueOutput = await intitialContextApp.invoke(dialogueInput, this.config);
+        console.log(dialogueOutput.messages[dialogueOutput.messages.length - 1].content);
+        this.queryCount = this.queryCount + 1;
+        return dialogueOutput.messages[dialogueOutput.messages.length - 1].content.toString();
     }
 
-    _getInitialModelGuidence(): string {
+
+    async determineBackgroundInfoFromLLM(humanQuery: string): Promise<TopicBackgroundFormat> {
+        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationTopicBackground);
+        const validatedMessage = RequiresTopicBackgroundFormatter.parse(message);
+        return new TopicBackgroundFormat(validatedMessage);
+    }
+
+    async getExplorationPromptFromLLM(humanQuery: string): Promise<ExplorationPromptFormat> {
+        const message = await this._getStructuredLLMResponses(humanQuery, StructureType.explorationPrompt);
+        const validatedMessage = ExplorationPromptFormatter.parse(message);
+        return new ExplorationPromptFormat(validatedMessage);
+    }
+
+    async _getStructuredLLMResponses(humanQuery: string, structureType: StructureType) {
+        // bind schema to the model
+        let modelWithStructure;
+
+        structureType == StructureType.explorationTopicBackground ? modelWithStructure = this.llm.withStructuredOutput(RequiresTopicBackgroundFormatter) : modelWithStructure = this.llm.withStructuredOutput(ExplorationPromptFormatter);
+
+        // the function that calls the model
+        const callStructuredModel = async (state: typeof StructuredOutputGraphAnnotation.State) => {
+            const response = await modelWithStructure.invoke(state.messages);
+            const message = new AIMessage(JSON.stringify(response));
+            return {
+                messages: [message],
+                structured_response: response,
+            };
+        };
+
+        const structuredOutputWorkflow = new StateGraph(MessagesAnnotation)
+            // node in the graph
+            .addNode("model", callStructuredModel)
+            .addEdge(START, "model")
+            .addEdge("model", END);
+
+        const structuredOutputApp = structuredOutputWorkflow.compile({ checkpointer: this.memory });
+
+        let messageArray = [new HumanMessage(humanQuery)];
+        if (this.queryCount < 1) {
+            const guidance: string = this._getInitialModelGuidenceString();
+            messageArray = [
+                new SystemMessage(guidance),
+                new HumanMessage(humanQuery)
+            ]
+        }
+        this.structuredOutputResp = await structuredOutputApp.invoke({
+            messages: messageArray
+        }, this.config);
+
+        this.queryCount = this.queryCount + 1;
+        return JSON.parse(this.structuredOutputResp["messages"][this.structuredOutputResp["messages"].length - 1]["content"]);
+    }
+
+    _getInitialModelGuidenceString(): string {
 
         let llmContextGuidance: string[] = [];
 
@@ -153,76 +212,6 @@ export class LangChainLLMService {
 
         return llmBackgroundInstruction;
     }
-
-
-    async determineBackgroundInfoFromLLM(isInitialQuery: boolean, humanQuery: string): Promise<TopicBackgroundFormat> {
-        const message = await this._getStructuredLLMResponses(isInitialQuery, humanQuery, StructureType.explorationTopicBackground);
-        const validatedMessage = RequiresTopicBackgroundFormatter.parse(message);
-        return new TopicBackgroundFormat(validatedMessage);
-    }
-
-    async getExplorationPromptFromLLM(isInitialQuery: boolean, humanQuery: string): Promise<ExplorationPromptFormat> {
-        const message = await this._getStructuredLLMResponses(isInitialQuery, humanQuery, StructureType.explorationPrompt);
-        const validatedMessage = ExplorationPromptFormatter.parse(message);
-        return new ExplorationPromptFormat(validatedMessage);
-    }
-
-    async _getStructuredLLMResponses(isInitialQuery: boolean, humanQuery: string, structureType: StructureType) {
-        // bind schema to the model
-        let modelWithStructure;
-
-        structureType == StructureType.explorationTopicBackground ? modelWithStructure = this.llm.withStructuredOutput(RequiresTopicBackgroundFormatter) : modelWithStructure = this.llm.withStructuredOutput(ExplorationPromptFormatter);
-
-        // the function that calls the model
-        const callStructuredModel = async (state: typeof StructuredOutputGraphAnnotation.State) => {
-            const response = await modelWithStructure.invoke(state.messages);
-            const message = new AIMessage(JSON.stringify(response));
-            return {
-                messages: [message],
-                structured_response: response,
-            };
-        };
-
-        const structuredOutputWorkflow = new StateGraph(MessagesAnnotation)
-            // node in the graph
-            .addNode("model", callStructuredModel)
-            .addEdge(START, "model")
-            .addEdge("model", END);
-
-        const structuredOutputApp = structuredOutputWorkflow.compile({ checkpointer: this.memory });
-
-        let messageArray = [new HumanMessage(humanQuery)];
-        if (isInitialQuery) {
-            const guidance: string = this._getInitialModelGuidence();
-            messageArray = [
-                new SystemMessage(guidance),
-                new HumanMessage(humanQuery)
-            ]
-        }
-        this.structuredOutputResp = await structuredOutputApp.invoke({
-            messages: messageArray
-        }, this.config);
-
-        return JSON.parse(this.structuredOutputResp["messages"][this.structuredOutputResp["messages"].length - 1]["content"]);
-    }
-
-
-
-    async testMemory() {
-        // const input = [
-        //     {
-        //         role: "user",
-        //         content: "Tell me about the dude that wrote a book about memory.",
-        //     },
-        // ];
-
-        // const output = await this.app.invoke({ messages: input }, this.config);
-        // console.log(output.messages[output.messages.length - 1]);
-        //this.testMemory2();
-        // this.askLLMAboutBackgroundInfo("climate change");
-    }
-
-
 }
 
 

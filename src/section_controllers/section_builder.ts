@@ -94,7 +94,7 @@ export class SectionBuilder {
             let section = this.sectionList.sections[i];
             if (section == Goals.dialogue) {
                 let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
-                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, sectionDuration));
+                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, sectionDuration, this.llmService));
             }
             if (section == Goals.exploration) {
                 this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));

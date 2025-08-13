@@ -4,9 +4,12 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.js";
+import { LangChainLLMService } from "../services/langchain_services.js";
+import { numToString } from "../utils/helper_functions.js";
 
 export class DialogueBuilder implements ISectionBuilder {
 
+    llmService: LangChainLLMService;
     topic: string;
     isMainGoal: boolean;
     sectionDuration: CustomDuration;
@@ -14,10 +17,11 @@ export class DialogueBuilder implements ISectionBuilder {
 
     dialogueData;
 
-    constructor(topic: string, isMainGoal: boolean, sectionDuration: CustomDuration) {
+    constructor(topic: string, isMainGoal: boolean, sectionDuration: CustomDuration, llmService: LangChainLLMService) {
         this.topic = topic;
         this.isMainGoal = isMainGoal;
         this.sectionDuration = sectionDuration;
+        this.llmService = llmService;
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -32,8 +36,9 @@ export class DialogueBuilder implements ISectionBuilder {
         // section info
         const dialogueSection = new AgendaSection(this.dialogueData.section, this.dialogueData.sectionDescription);
 
-        const recommendedDialogue: number[] = this.determineItems();
-        const dialogueItems: AgendaItem[] = this.createItems(recommendedDialogue);
+        const recommendedItemQuant: number = this.determineNumberOfItems();
+
+        const dialogueItems: AgendaItem[] = await this.createItems(recommendedItemQuant);
 
         for (let introItem of dialogueItems) {
             dialogueSection.addItem(introItem);
@@ -41,25 +46,21 @@ export class DialogueBuilder implements ISectionBuilder {
         return dialogueSection;
     }
 
-    createItems(recommendedDialogue: number[]): AgendaItem[] {
+    async createItems(recommendedItemQuant: number): Promise<AgendaItem[]> {
         var agendaItems: AgendaItem[] = [];
-        for (let item in recommendedDialogue) {
-            const title: string = this.dialogueData.items[item].title;
-            const contentStrings: string[] = [];
-
-            for (let content of this.dialogueData.items[item].content) {
-                contentStrings.push(content.replaceAll("this_topic_replace", this.topic));
-            }
-            agendaItems.push(new AgendaItem(title, contentStrings));
+        for (let i = 0; i < recommendedItemQuant; i++) {
+            const title: string = "Prompt " + numToString(i+1);
+            const contentString: string = await this.llmService.getDialogueItem();
+            agendaItems.push(new AgendaItem(title, [contentString]));
         }
         return agendaItems;
     }
 
-    determineItems(): number[] {
+    determineNumberOfItems(): number {
         if (this.isMainGoal && this.sectionDuration.getMinutes() >= 45) {
-            return [0, 1]; // return both dialogue questions
+            return 2; // return both dialogue questions
         } else {
-            return [0]
+            return 1;
         }
     }
 }

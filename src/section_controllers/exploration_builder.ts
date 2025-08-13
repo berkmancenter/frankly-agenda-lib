@@ -67,7 +67,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         const humanQuery = this.explorationData.llm_prompts.find(item => item.title == "Topic Background Query").content.replaceAll("this_topic_replace", this.topic);
 
-        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.determineBackgroundInfoFromLLM(true, humanQuery);
+        const needsBackgroundInfo: TopicBackgroundFormat = await this.llmService.determineBackgroundInfoFromLLM(humanQuery);
 
         if (needsBackgroundInfo.answer == true) {
             instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
@@ -102,7 +102,7 @@ export class ExplorationBuilder implements ISectionBuilder {
             const promptTitle: string = "Prompt " + numToString(i + 1);
             const promptHumanQuery = this.explorationData.llm_prompts.find(item => item.title == "Prompt Query").content.replaceAll("this_topic_replace", this.topic);
 
-            const llmPrompt: ExplorationPromptFormat = await this.llmService.getExplorationPromptFromLLM(false, promptHumanQuery);
+            const llmPrompt: ExplorationPromptFormat = await this.llmService.getExplorationPromptFromLLM(promptHumanQuery);
 
             const item: AgendaItem = new AgendaItem(promptTitle, [llmPrompt.prompt]);
 

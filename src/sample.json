@@ -4,7 +4,7 @@
         "deliberation"
     ],
     "isConcreteDecision": false,
-    "topic": "The Soul",
+    "topic": "Climate Change",
     "topicDescription": "This is to discuss policy options for climate change.",
     "audienceDescription": "They are very diverse from parts of rural Maine. Not extremely politically engaged.",
     "participantCount": "zeroToFive",
@@ -13,6 +13,6 @@
     "hasBreakoutGroups": true,
     "isFacilitated": false,
     "isSeries": true,
-    "eventCount": 5,
+    "eventCount": 3,
     "eventLength": 3400000000
 }
