@@ -1,7 +1,7 @@
 [
     {
         "title": "Initial Guidance",
-        "content": "The user is creating an agenda for an event that facilitates a constructive conversation. You will be asked to generate some discussion prompts for the agenda. Ensure that they are thoughtful, and not cheesy or cliche. They should also be concise and to the point."
+        "content": "The user is creating an agenda for an event that facilitates a constructive conversation. You will be asked to generate some discussion prompts for the agenda. Ensure that they are thoughtful, and not cheesy or cliche. They should also be concise and to the point. Each participant should be able to quickly read and digest the prompt. Aim to have them no more than one, maybe two concise sentences. All prompts should reference the topic directly."
     },
     {
         "title": "Topic Description",
@@ -9,7 +9,7 @@
     },
     {
         "title": "Audience Description",
-        "content": "The user provided a description of the event's participants. All prompts should be geared towards the type of audience that they describe. The user describes the audience as such: "
+        "content": "The user provided a description of the event's participants. All prompts should be geared towards the type of audience that they describe. For example, if the audience is conservative, prompts should be in language that is comfortable for conservatives and does not include liberal expressions or buzzwords. The user describes the audience as such: "
     },
     {
         "title": "Facilitated Description",

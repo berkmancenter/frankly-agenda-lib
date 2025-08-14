@@ -12,6 +12,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     topic: string;
     sectionDuration: CustomDuration;
+    totalSectionDuration: CustomDuration;
     upperParticipantCount: number;
     lowerParticipantCount: number;
     llmService: LangChainLLMService;
@@ -19,7 +20,7 @@ export class ExplorationBuilder implements ISectionBuilder {
     // timing for prompt variables
     idealMinutesToSpeak: number = 2;
     maxMinutesToSpeak: number = 3;
-    minimumMinutesToSpeak: number = 1;
+    minimumMinutesToSpeak: number = 1.5;
     groupDiscussionTime: number;
     totalPrompts: number;
     maxTimePerParticipant: number;
@@ -32,8 +33,10 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
         this.topic = topic;
+        this.totalSectionDuration = sectionDuration;
         this.sectionDuration = sectionDuration;
         this.lowerParticipantCount = lowerParticipantCount;
+        if (this.lowerParticipantCount < 2) this.lowerParticipantCount = 2;
         this.upperParticipantCount = upperParticipantCount;
         this.llmService = llmService;
 
@@ -71,6 +74,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         if (needsBackgroundInfo.answer == true) {
             instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
+            this.sectionDuration = createDurationByTimeUnit({minutes: this.totalSectionDuration.minutes - 5});
         }
         return instructionItem;
     }
@@ -82,6 +86,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         const newItem = new AgendaItem(title, contentStrings);
         newItem.importance = [explanation];
+        newItem.duration = createDurationByTimeUnit({ minutes: 5 });
         return newItem;
     }
 
@@ -160,7 +165,7 @@ export class ExplorationBuilder implements ISectionBuilder {
         // calculate how many prompts can be fit into the time 
         // based on time and on average how much time is needed for participants to speak on one item
         // go with lowest amount, we don't want to squeeze in more prompts if not enough time
-        initialPrompts = Math.floor(sectionDuration / ((participantTimeNeeded_minParts + participantTimeNeeded_maxParts) / 2));
+        initialPrompts = Math.floor(sectionDuration / ((participantTimeNeeded_minParts + participantTimeNeeded_maxParts) / 2 + this.groupDiscussionTime));
 
         // but then there will probably be leftover time
         // calculate total leftover time for most and least amount of participants in range 
@@ -208,11 +213,17 @@ export class ExplorationBuilder implements ISectionBuilder {
 
             // based on these deltas, how much time can we give to group discussion
             // being conservative with our estimates to not use too much time, so use lowerCount
-            let timeToRemove = lowerCount * (minDelta + maxDelta);
+            let initialtimeToRemove = lowerCount * Math.min((minDelta + maxDelta), minDelta);
+            let timeToRemove = initialtimeToRemove;
+            const timePerPromptWithDiscussion = sectionDuration / totalPrompts;
 
+            if (initialtimeToRemove + this.groupDiscussionTime > timePerPromptWithDiscussion / 2) {
+                timeToRemove = timePerPromptWithDiscussion / 2 - this.groupDiscussionTime;
+            }
             this.groupDiscussionTime = this.groupDiscussionTime + timeToRemove;
-            timePerParticipant_minparts = this.maxMinutesToSpeak; // set to max time
-            timePerParticipant_maxparts = this.minimumMinutesToSpeak; // set to minimum time
+
+            timePerParticipant_minparts = this.maxMinutesToSpeak + (initialtimeToRemove - timeToRemove) / lowerCount; // set to max time
+            timePerParticipant_maxparts = this.minimumMinutesToSpeak + (initialtimeToRemove - timeToRemove) / upperCount; // set to minimum time
         }
 
         // set variables

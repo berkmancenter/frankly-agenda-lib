@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { generateEventPlan } from './build_event_plan.js';
 import dotenv from 'dotenv';
+import { generateEventPlan } from './build_event_plan.js';
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -12,6 +12,7 @@ export { generateEventPlan } from './build_event_plan.js'
 
 const eventString = await generateEventPlan(JSON.stringify(sample))
 console.log(eventString);
+
 // console.log(generateEventPlan("BAD JSON"));
 
 //console.log(generateText());
