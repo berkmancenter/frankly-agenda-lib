@@ -8,3 +8,4 @@ lib/
 .env
 node_modules
 testjson.json
+test.ts

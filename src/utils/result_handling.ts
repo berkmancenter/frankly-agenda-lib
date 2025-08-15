@@ -7,7 +7,9 @@ export enum ErrorCategory { MissingInformation, TimingError, ParsingError }
 export function createResult({ isSuccess, eventPlan = null, error = null }): Result {
     const newResult = new Result(isSuccess);
     newResult.eventPlan = eventPlan;
-    newResult.error = error;
+    if (error != null) {
+        newResult.error = error.message;
+    }
     return newResult;
 }
 

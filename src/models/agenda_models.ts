@@ -1,4 +1,4 @@
-import { CustomError } from "../utils/result_handling"
+import { CustomError } from "../utils/result_handling.js"
 
 interface IEventPlan {
     eventName: string,
@@ -84,12 +84,13 @@ export class AgendaSection implements IAgendaSection {
     name: string;
     description: string;
     items: AgendaItem[];
-    duration?: CustomDuration;
+    duration: CustomDuration;
 
     constructor(name: string, description: string) {
         this.name = name;
         this.description = description;
         this.items = [];
+        this.duration = new CustomDuration(0);
     }
 
     addItem(item: AgendaItem): void {

@@ -1,4 +1,4 @@
-import { AgendaItem, AgendaSection } from "../models/agenda_models.js";
+import { AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
 import { ISectionBuilder } from "./section_builder.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -7,14 +7,16 @@ import { CustomError, ErrorCategory, ErrorType } from "../utils/result_handling.
 export class DeliberationBuilder implements ISectionBuilder {
     topic: string;
     concreteDecision: boolean;
+    sectionDuration: number;
     warnings: CustomError[] = [];
 
 
     deliberationData;
 
-    constructor(topic: string, concreteDecision: boolean) {
+    constructor(topic: string, concreteDecision: boolean, sectionDuration: number) {
         this.topic = topic;
         this.concreteDecision = concreteDecision;
+        this.sectionDuration = sectionDuration;
 
         // bring in JSON agenda items
         const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -25,7 +27,7 @@ export class DeliberationBuilder implements ISectionBuilder {
         }
     }
 
-    public createSection(): AgendaSection {
+    public async createSection(): Promise<AgendaSection> {
         const deliberationSection = new AgendaSection(this.deliberationData.section, this.deliberationData.sectionDescription);
 
         const recommendedItems: number[] = this.determineItems();
@@ -35,6 +37,7 @@ export class DeliberationBuilder implements ISectionBuilder {
         for (let deliberationItem of deliberationItems) {
             deliberationSection.addItem(deliberationItem);
         }
+        deliberationSection.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
 
         return deliberationSection;
     }

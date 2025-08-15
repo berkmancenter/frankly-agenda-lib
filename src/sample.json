@@ -1,7 +1,7 @@
 {
     "goals": [
         "dialogue",
-        "deliberation"
+        "exploration"
     ],
     "isConcreteDecision": false,
     "topic": "Climate Change",
@@ -10,9 +10,9 @@
     "participantCount": "zeroToFive",
     "upperParticipantCount": 5,
     "lowerParticipantCount": 1,
-    "hasBreakoutGroups": true,
+    "hasBreakoutGroups": false,
     "isFacilitated": false,
     "isSeries": true,
-    "eventCount": 5,
-    "eventLength": 3400000000
+    "eventCount": 1,
+    "eventLength": 2700000000
 }
