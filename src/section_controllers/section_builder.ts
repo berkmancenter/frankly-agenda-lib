@@ -62,10 +62,10 @@ export class SectionBuilder {
         // conclusion
         const conclusionNorm: ConclusionBuilder = new ConclusionBuilder(this.eventInput.topic, this.eventLengthType, this.isFollowOn);
         const conclusionNormSection: AgendaSection = await conclusionNorm.createSection();
-        const conclusionNormTime: number = conclusionNorm.getIntroLengthInMinutes();
+        const conclusionNormTime: number = conclusionNorm.getLengthInMinutes();
 
         // determine how long middle sections are 
-        const middleSectionDuration: CustomDuration = this._determineMiddleSectionTiming(introTime, communityNormTime, conclusionNormTime);
+        const middleSectionDuration: number = this._determineMiddleSectionTiming(introTime, communityNormTime, conclusionNormTime);
 
         // add sections
         this.agenda.addSection(introSection);
@@ -84,7 +84,7 @@ export class SectionBuilder {
         this.agenda.addSection(conclusionNormSection);
     }
 
-    _addMiddleSections(sectionDuration: CustomDuration) {
+    _addMiddleSections(sectionDuration: number) {
 
         const totalSections: number = this.sectionList.sections.length;
 
@@ -100,18 +100,16 @@ export class SectionBuilder {
                 this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
             }
             if (section == Goals.deliberation) {
-                this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision));
+                this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision, sectionDuration));
             }
         }
     }
 
-    _determineMiddleSectionTiming(introTime: number, communityNormTime: number, conclusionNormTime: number): CustomDuration {
+    _determineMiddleSectionTiming(introTime: number, communityNormTime: number, conclusionNormTime: number): number {
 
         const middleSectionsLength = this.agenda.duration.getMinutes() - (introTime + communityNormTime + conclusionNormTime);
 
-        const individualSectionLength = Math.floor(middleSectionsLength / this.sectionList.sections.length)
-
-        const sectionDuration: CustomDuration = createDurationByTimeUnit({ minutes: individualSectionLength });
+        const sectionDuration = Math.floor(middleSectionsLength / this.sectionList.sections.length)
 
         return sectionDuration;
     }

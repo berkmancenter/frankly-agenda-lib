@@ -11,8 +11,8 @@ import { ExplorationPromptFormat, TopicBackgroundFormat } from "../services/lang
 export class ExplorationBuilder implements ISectionBuilder {
 
     topic: string;
-    sectionDuration: CustomDuration;
-    totalSectionDuration: CustomDuration;
+    sectionDuration: number;
+    totalSectionDuration: number;
     upperParticipantCount: number;
     lowerParticipantCount: number;
     llmService: LangChainLLMService;
@@ -27,11 +27,13 @@ export class ExplorationBuilder implements ISectionBuilder {
     minTimePerParticipant: number;
     totalMinutesPerPrompt: number;
 
+    backgroundInformationTime: number = 3;
+
     explorationData;
 
     warnings: CustomError[] = [];
 
-    constructor(topic: string, sectionDuration: CustomDuration, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
+    constructor(topic: string, sectionDuration: number, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
         this.topic = topic;
         this.totalSectionDuration = sectionDuration;
         this.sectionDuration = sectionDuration;
@@ -55,12 +57,22 @@ export class ExplorationBuilder implements ISectionBuilder {
         // section info
         const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
 
+        // create items
         const instructionItem: AgendaItem = await this._handleTopicBackground();
-        instructionItem != null && explorationSection.addItem(instructionItem);
-
         const explorationItems: AgendaItem[] = await this._createItems();
+
+        // add items
+        instructionItem != null && explorationSection.addItem(instructionItem);
         for (let introItem of explorationItems) {
             explorationSection.addItem(introItem);
+        }
+        explorationSection.duration = createDurationByTimeUnit({ minutes: this.totalSectionDuration });
+
+        // get rid of individual timing if there are timing issues
+        if (this.warnings.some(warning => ErrorCategory[warning.name] === ErrorCategory.TimingError)) {
+            for (let i = 0; i < explorationSection.items.length; i++) {
+                explorationSection.items[i].duration = null;
+            }
         }
         return explorationSection;
     }
@@ -74,19 +86,25 @@ export class ExplorationBuilder implements ISectionBuilder {
 
         if (needsBackgroundInfo.answer == true) {
             instructionItem = this._createTopicBackgroundItem(needsBackgroundInfo.explanation);
-            this.sectionDuration = createDurationByTimeUnit({minutes: this.totalSectionDuration.minutes - 5});
+            this.sectionDuration = this.totalSectionDuration - this.backgroundInformationTime;
         }
         return instructionItem;
     }
 
     _createTopicBackgroundItem(explanation: string): AgendaItem {
-        const title: string = this.explorationData.items.find(item => item.title == "Topic Background Recommendations").title; // topic recommendations
+        const backgroundItem = this.explorationData.items.find(item => item.id == "topicBackground");
 
-        const contentStrings: string[] = this.explorationData.items.find(item => item.title == "Topic Background Recommendations").content;
+        const title: string = backgroundItem.title; // topic recommendations
+
+        const contentStrings: string[] = backgroundItem.content;
 
         const newItem = new AgendaItem(title, contentStrings);
         newItem.importance = [explanation];
+
         newItem.duration = createDurationByTimeUnit({ minutes: 5 });
+        newItem.guidance = [backgroundItem.guidance[0].replaceAll("this_topic_replace", this.topic)];
+        newItem.guidance.push(backgroundItem.guidance[1].replaceAll("this_topic_replace", this.topic));
+
         return newItem;
     }
 
@@ -113,14 +131,15 @@ export class ExplorationBuilder implements ISectionBuilder {
 
             item.importance = [llmPrompt.explanation];
 
-            item.duration = createDurationByTimeUnit({ minutes: this.totalMinutesPerPrompt });
             item.guidance = ["Each participant takes " + Math.round(this.maxTimePerParticipant) + " to " + Math.round(this.minTimePerParticipant) + " minutes to explore the question prompt."];
-            agendaItems.push(item);
 
             // add item for group discussion
             const groupDiscussionItem: AgendaItem = new AgendaItem(groupDiscussionTitle, groupDiscussionContent);
 
+            item.duration = createDurationByTimeUnit({ minutes: this.totalMinutesPerPrompt });
             groupDiscussionItem.duration = createDurationByTimeUnit({ minutes: this.groupDiscussionTime });
+
+            agendaItems.push(item);
             agendaItems.push(groupDiscussionItem);
 
         }
@@ -146,7 +165,7 @@ export class ExplorationBuilder implements ISectionBuilder {
         const upperCount: number = this.upperParticipantCount;
         const avgCount: number = ((lowerCount + upperCount) / 2);
 
-        const sectionDuration: number = this.sectionDuration.getMinutes();
+        const sectionDuration: number = this.sectionDuration;
 
         // how many total prompts
         // based on time available and number of participants 
@@ -195,7 +214,7 @@ export class ExplorationBuilder implements ISectionBuilder {
             // that is not enough time to speak
             timePerParticipant_maxparts = leftOverTimePerParticipant_maxParts;
             timePerParticipant_minparts = leftOverTimePerParticipant_minParts;
-            this.warnings.push(new CustomError(ErrorCategory.TimingError, "Exploration section: Not enough time for each participant to speak.", ErrorType.warning));
+            this.warnings.push(new CustomError(ErrorCategory.TimingError, "Not enough time for each participant to speak during the exploration section. Consider making the event longer or hosting a series of events.", ErrorType.warning));
         }
 
         // if, with the minimum participants, each participant gets more 

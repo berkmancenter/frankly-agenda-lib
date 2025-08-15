@@ -30,11 +30,11 @@ export class ConclusionBuilder implements ISectionBuilder {
         }
     }
 
-    public getIntroLengthInMinutes(): number {
+    public getLengthInMinutes(): number {
         return this.totalLength;
     }
 
-    public async createSection():  Promise<AgendaSection> {
+    public async createSection(): Promise<AgendaSection> {
         // section info
         const conclusionSection = new AgendaSection(this.conclusionData.section, this.conclusionData.sectionDescription);
 
@@ -43,6 +43,8 @@ export class ConclusionBuilder implements ISectionBuilder {
         for (let introItem of conclusionItems) {
             conclusionSection.addItem(introItem);
         }
+        conclusionSection.duration = createDurationByTimeUnit({ minutes: this.totalLength });
+
         return conclusionSection;
     }
 

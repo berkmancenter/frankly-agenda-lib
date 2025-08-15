@@ -13,7 +13,8 @@ export class AgendaBuilder {
 
   constructor(eventInput: EventInputs, llmService: LangChainLLMService) {
     this.eventInput = eventInput;
-    this.eventName = this.eventInput.topic + " " + this.eventInput.goals[this.eventInput.goals.length - 1];
+    let eventGoal = this.eventInput.goals[this.eventInput.goals.length - 1];
+    this.eventName = this.eventInput.topic + " " + eventGoal.charAt(0).toUpperCase() + eventGoal.slice(1).toLowerCase();;
     this.llmService = llmService;
   }
 

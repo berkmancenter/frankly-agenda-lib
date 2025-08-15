@@ -1,4 +1,4 @@
-import { Agenda, AgendaItem, AgendaSection, CustomDuration } from "../models/agenda_models.js";
+import { Agenda, AgendaItem, AgendaSection, createDurationByTimeUnit, CustomDuration } from "../models/agenda_models.js";
 import { ISectionBuilder } from "./section_builder.js";
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -12,12 +12,12 @@ export class DialogueBuilder implements ISectionBuilder {
     llmService: LangChainLLMService;
     topic: string;
     isMainGoal: boolean;
-    sectionDuration: CustomDuration;
+    sectionDuration: number;
     warnings: CustomError[] = [];
 
     dialogueData;
 
-    constructor(topic: string, isMainGoal: boolean, sectionDuration: CustomDuration, llmService: LangChainLLMService) {
+    constructor(topic: string, isMainGoal: boolean, sectionDuration: number, llmService: LangChainLLMService) {
         this.topic = topic;
         this.isMainGoal = isMainGoal;
         this.sectionDuration = sectionDuration;
@@ -43,21 +43,25 @@ export class DialogueBuilder implements ISectionBuilder {
         for (let introItem of dialogueItems) {
             dialogueSection.addItem(introItem);
         }
+        dialogueSection.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
         return dialogueSection;
     }
 
     async createItems(recommendedItemQuant: number): Promise<AgendaItem[]> {
         var agendaItems: AgendaItem[] = [];
+        const durationInMinutes: number = this.sectionDuration / recommendedItemQuant;
         for (let i = 0; i < recommendedItemQuant; i++) {
-            const title: string = "Prompt " + numToString(i+1);
+            const title: string = "Prompt " + numToString(i + 1);
             const contentString: string = await this.llmService.getDialogueItem();
-            agendaItems.push(new AgendaItem(title, [contentString]));
+            const agendaItem: AgendaItem = new AgendaItem(title, [contentString]);
+            agendaItem.duration = createDurationByTimeUnit({ minutes: durationInMinutes });
+            agendaItems.push(agendaItem);
         }
         return agendaItems;
     }
 
     determineNumberOfItems(): number {
-        if (this.isMainGoal && this.sectionDuration.getMinutes() >= 45) {
+        if (this.isMainGoal && this.sectionDuration >= 45) {
             return 2; // return both dialogue questions
         } else {
             return 1;
