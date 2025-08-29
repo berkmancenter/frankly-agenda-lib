@@ -6,7 +6,10 @@
     "declaration": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"

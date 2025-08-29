@@ -4,6 +4,8 @@ build/
 lib/
 *.js
 *.js.map
-node_modules/
 *.tmp
 .env
+node_modules
+testjson.json
+test.ts

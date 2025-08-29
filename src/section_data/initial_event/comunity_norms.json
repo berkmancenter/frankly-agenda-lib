@@ -3,40 +3,46 @@
     "sectionDescription": "These are a set of norms that we all agree on. These will set the tone of the conversation and ensure that it is welcoming and constructive.",
     "items": [
         {
+            "id": "curious",
             "title": "Be curious and listen.",
             "content": [
-                "Be open to others’ experiences and ready to learn from them. Conversation is as much about listening and absorbing others’ perspectives as it is about sharing your own.",
+                "Be open to others' experiences and ready to learn from them. Conversation is as much about listening and absorbing others' perspectives as it is about sharing your own.",
                 "We are here to explain and understand each other, not to convince others to change their minds."
             ]
         },
         {
-            "title": "Be respectful and do not judge.",
+            "id": "respectful",
+            "title": "Be respectful.",
             "content": [
                 "Judgement is natural, but prevents respect. Strive to set your judgement aside to make others feel respected and valued.",
-                "Give others the benefit of the doubt. Do not make assumptions about others’ views and perspectives."
+                "Give others the benefit of the doubt. Do not make assumptions about others' views and perspectives."
             ]
         },
         {
+            "id": "commonGround",
             "title": "Seek common ground.",
             "content": [
                 "Look for shared values and areas of agreement, while staying curious about differing beliefs and opinions.",
-                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others’ views."
+                "You will encounter diverging views. That is expected and hoped for. Treat everyone with civility and do not push back on others' views."
             ]
         },
         {
-            "title": "Embrace and welcome authenticity.",
+            "id": "speakExperience",
+            "title": "Speak from experience.",
             "content": [
                 "Share what is important to you, speak from experience, and welcome others doing the same."
             ]
         },
         {
+            "id": "purposeful",
             "title": "Be purposeful and to the point.",
             "content": [
                 "Keep your comments concise and relevant. Be conscious of the time you spend speaking and leave space for others to speak."
             ]
         },
         {
-            "title": "ake responsibility for the conversation.",
+            "id": "conversationResponsibility",
+            "title": "Take responsibility for the conversation.",
             "content": [
                 "Take responsibility for the quality of the conversation. Be proactive about keeping yourself and others on track. Ensure conversation agreements are honored."
             ]

@@ -1,7 +1,7 @@
-import { generateAgenda } from './build_agenda.js'
-import agendaJson from './sample.json';
+import dotenv from 'dotenv';
+import { testEventGeneratorLocal } from './test.js';
+dotenv.config();
 
-export { generateAgenda } from './build_agenda.js'
+export { generateEventPlan } from './build_event_plan.js'
 
-
-console.log(generateAgenda(JSON.stringify(agendaJson)));
+//await testEventGeneratorLocal();

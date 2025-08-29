@@ -1,6 +1,6 @@
 {
   "name": "frankly-agenda-builder",
-  "version": "1.0.0",
+  "version": "0.1.0-beta.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -8,8 +8,12 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx rollup -c",
-    "start": "node dist/agenda-builder.js"
+    "build": "npm run clean && tsc && npm run copy-json",
+    "clean": "rm -rf dist",
+    "start": "node dist/index.js",
+    "copy-json": "cpx \"src/**/**/*.json\" dist",
+    "preversion": "npm run build",
+    "postversion": "git push --follow-tags"
   },
   "keywords": [],
   "author": "Casey Elizabeth Gilbert",
@@ -19,11 +23,26 @@
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-typescript": "^12.1.4",
+    "@types/node": "^24.1.0",
+    "cpx": "^1.5.0",
     "rollup": "^4.44.2",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "undici-types": "^7.11.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@langchain/community": "^0.3.34",
+    "@langchain/core": "^0.3.42",
+    "@langchain/langgraph": "^0.4.3",
+    "@langchain/mongodb": "^0.1.0",
+    "@langchain/ollama": "^0.2.0",
+    "@langchain/openai": "^0.4.9",
+    "dotenv": "^16.6.1",
+    "langchain": "^0.3.30"
+  },
+  "resolutions": {
+    "dotenv": "^16.4.5"
+  }
 }

@@ -1,0 +1,41 @@
+{
+    "section": "Exploration",
+    "sectionDescription": "An exploration of a topic: meant to generate ideas, questions, and unknowns.",
+    "items": [
+        {
+            "id": "topicBackground",
+            "title": "Topic Background",
+            "content": [
+                "Focus on objective facts that are relevant to the conversation.",
+                "Provide accredited citations.",
+                "Be careful with framing: do not frame the facts as benefitting one side or the other.",
+                "The goal with facts is to generate a shared reality, and to create a starting point",
+                "Be careful: facts can be triggering. If people cannot agree on the facts, that can also be a starting point for the conversation. How people feel is most important."
+            ],
+            "guidance": [
+                "It looks like your event may be more fruitful with some background information.",
+                "We cannot safely generate this information for you, but we do have some recommendations for developing strong background information that can facilitate exploration of this_topic_replace."
+            ]
+        },
+        {
+            "title": "Group Discussion",
+            "content": [
+                "This is a time for everyone to explore as a group what was discussed."
+            ]
+        }
+    ],
+    "llm_prompts": [
+        {
+            "title": "Topic Background Query",
+            "content": "The user wants to explore this_topic_replace in a constructive conversation with the goal of generating ideas, questions, and unknowns. Does an exploration of this_topic_replace require background information, such as a set of facts with the purpose of generating a shared reality and creating a starting point for the conversation?"
+        },
+        {
+            "title": "Prompt Query",
+            "content": "The user wants to explore this_topic_replace in a constructive conversation with the goal of generating ideas, questions, and unknowns. Generate an exploration prompt that facilitates that. The prompt should not repeat any previous prompts and should add a new angle to exploring this_topic_replace. If there are previous exploration prompts, then this prompt should flow smoothly from the previous one. As always, ensure the prompt opens the conversation and is not biased in any way. For example, if the topic was exploring climate change, some example prompts might be: \n1. What is your experience when the conversation topic turns to climate change? \n2. What relationship do you have with the environment? What meaning does the idea of environmental stewardship hold for you? \n3. What questions do you have about climate change? What gray areas have you discovered? \n4. If the topic was exploring race and ethnicity, some examples might be: \n1. How does being a part of a specific racial or ethnic group infl uence your identity or sense of belonging? \n2. What would a society that values racial and ethnic differences look like? What hopes and fears come up for you when thinking about that society?"
+        },
+        {
+            "title": "Event Goal",
+            "content": "The goal of this event is to generate ideas, questions, and unknowns about this_topic_replace. The goal is not to make decisions but rather to explore the topic in depth."
+        }
+    ]
+}

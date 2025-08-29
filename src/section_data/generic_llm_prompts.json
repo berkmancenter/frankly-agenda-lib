@@ -1,0 +1,22 @@
+[
+    {
+        "title": "Initial Guidance",
+        "content": "The user is creating an agenda for an event that facilitates a constructive conversation. You will be asked to generate some discussion prompts for the agenda. Ensure that they are thoughtful, and not cheesy or cliche. They should also be concise and to the point. Each participant should be able to quickly read and digest the prompt. Aim to have them no more than one, maybe two concise sentences. All prompts should reference the topic directly."
+    },
+    {
+        "title": "Topic Description",
+        "content": "The user provided a description of the topic. This description should provide you additional context when generating relevent and useful prompts. The description is as follows: "
+    },
+    {
+        "title": "Audience Description",
+        "content": "The user provided a description of the event's participants. All prompts should be geared towards the type of audience that they describe. For example, if the audience is conservative, prompts should be in language that is comfortable for conservatives and does not include liberal expressions or buzzwords. The user describes the audience as such: "
+    },
+    {
+        "title": "Facilitated Description",
+        "content": "The conversation will have a facilitator. So someone will be guiding the conversation."
+    },
+    {
+        "title": "Non-Facilitated Description",
+        "content": "The conversation will not be facilitated. That means that any prompts should flow easily from one to the next and be both descriptive and easy to understand."
+    }
+]

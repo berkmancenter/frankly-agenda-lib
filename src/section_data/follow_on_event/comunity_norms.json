@@ -1,0 +1,48 @@
+{
+    "section": "Community Norms",
+    "sectionDescription": "This is a review of the set of norms that we all agree on. They set the tone of the conversation and ensure that it is welcoming and constructive.",
+    "items": [
+        {
+            "id": "curious",
+            "title": "Be curious and listen.",
+            "content": [
+                "Be open to others' experiences and ready to learn from them. We are here to understand each other, not to change minds."
+            ]
+        },
+        {
+            "id": "respectful",
+            "title": "Be respectful.",
+            "content": [
+                "Set judgement aside and strive to make others feel respected and valued."
+            ]
+        },
+        {
+            "id": "commonGround",
+            "title": "Seek common ground.",
+            "content": [
+                "Look for shared values and areas of agreement, and embrace diverse views."
+            ]
+        },
+        {
+            "id": "speakExperience",
+            "title": "Speak from experience.",
+            "content": [
+                "Share what is important to you and speak from experience."
+            ]
+        },
+        {
+            "id": "purposeful",
+            "title": "Be purposeful and to the point.",
+            "content": [
+                "Keep your comments concise and relevant."
+            ]
+        },
+        {
+            "id": "conversationResponsibility",
+            "title": "ake responsibility for the conversation.",
+            "content": [
+                "Be proactive about keeping the conversation on track, and respect the conversation agreements."
+            ]
+        }
+    ]
+}

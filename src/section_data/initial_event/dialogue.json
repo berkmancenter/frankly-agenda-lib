@@ -1,0 +1,28 @@
+{
+    "section": "Dialogue",
+    "sectionDescription": "This is a time to understand one anothers' perspectives and build trust.",
+    "items": [
+        {
+            "title": "Personal Experience",
+            "content": [
+                "Share a personal experience relating to this_topic_replace"
+            ]
+        },
+        {
+            "title": "Purpose",
+            "content": [
+                "What sense of purpose/mission/duty guides you in your life? How does this inform your perspective on this_topic_replace?"
+            ]
+        }
+    ],
+    "llm_prompts": [
+        {
+            "title": "Event Goal",
+            "content": "The goal of this event is to understand one another's perspectives on this_topic_replace and to build trust. Participants are looking for shared values and areas of agreement. The goal is not to change minds or to push back on each others' views."
+        },
+        {
+            "title": "Main Query",
+            "content": "Produce a prompt that encourages participants to open up about this_topic_replace. Sharing personal experiences has shown to be very powerful in bringing people together, so if possible participants should be encouraged to share personal experiences. However, this may not be appropriate for some topics, especially if they are very specific or may not apply to everyone in a population, so judge accordingly. While a participant may not have experienced the topic directly, they may still have experienced ripple effects. The prompt should not bias the participants in any way, but just help them feel comfortable sharing their perspectives. Of course, the prompt should be distinct from any previous prompts like this, and should make sense. Example prompts that the prompt might be similar to: \n 1. Share a personal experience relating to this_topic_replace. \n 2. What sense of purpose/mission/duty guides you in your life? How does this inform your perspective on this_topic_replace?"
+        }
+    ]
+}

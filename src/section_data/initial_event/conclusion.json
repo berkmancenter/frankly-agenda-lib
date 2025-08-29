@@ -5,7 +5,7 @@
         {
             "title": "Conversation reflections",
             "content": [
-                "How do we each feel about the conversation we’ve just had?",
+                "How do we each feel about the conversation we've just had?",
                 "What did you learn about diverging perspectives and views?",
                 "What might you take away from this conversation?"
             ],
@@ -14,8 +14,7 @@
         {
             "title": "Appreciation",
             "content": [
-                "Each participant mention something they appreciated about the conversation.",
-                "Every participant has the option to mention something they appreciated about the conversation."
+                "Every participant has the opportunity to mention something they appreciated about the conversation."
             ],
             "guidance": "Each participant chooses one of the appreciation prompts to respond to."
         }
