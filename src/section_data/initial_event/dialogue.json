@@ -18,7 +18,7 @@
     "llm_prompts": [
         {
             "title": "Event Goal",
-            "content": "The goal of this event is to understand one another’s perspectives on this_topic_replace and to build trust. Participants are looking for shared values and areas of agreement. The goal is not to change minds or to push back on each others' views."
+            "content": "The goal of this event is to understand one another's perspectives on this_topic_replace and to build trust. Participants are looking for shared values and areas of agreement. The goal is not to change minds or to push back on each others' views."
         },
         {
             "title": "Main Query",
