@@ -44,5 +44,9 @@
   },
   "resolutions": {
     "dotenv": "^16.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/berkmancenter/frankly-agenda-lib"
   }
 }
