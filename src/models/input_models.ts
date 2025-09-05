@@ -1,4 +1,4 @@
-import { Goals } from "../utils/global_enums";
+import { Goals, SubGoals } from "../utils/global_enums";
 import { CustomDuration } from "./agenda_models";
 
 interface IEventInputs {
@@ -39,8 +39,10 @@ export class EventInputs implements IEventInputs {
 
 export class EventSection implements IEventSection {
     sections: Goals[];
+    subSections: SubGoals[];
 
     constructor() {
         this.sections = [];
+        this.subSections = [];
     }
 }

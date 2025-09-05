@@ -22,6 +22,12 @@
             "content": [
                 "This is a time for everyone to explore as a group what was discussed."
             ]
+        },
+        {
+            "title": "Abbreviated Exploration",
+            "content": [
+                "Reflect on some questions or unknowns about this_topic_replace."
+            ]
         }
     ],
     "llm_prompts": [

@@ -2,7 +2,7 @@ import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
 import { LangChainLLMService } from "./services/langchain_services.js";
-import { Goals } from "./utils/global_enums.js";
+import { Goals, SubGoals } from "./utils/global_enums.js";
 import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
 
 export class AgendaBuilder {
@@ -65,14 +65,19 @@ export class AgendaBuilder {
   _getEventSections(eventCount: number, goals: String[]): EventSection[] {
     let eventSections: EventSection[] = [];
     const goalsArray: Goals[] = [];
+    const subGoalsArray: SubGoals[] = [];
 
     // dialogue section
-    if (goals.includes(Goals.dialogue) || goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
+    if (goals.includes(Goals.dialogue)) {
       goalsArray.push(Goals.dialogue);
+    } else if (goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
+      subGoalsArray.push(SubGoals.subDialogue);
     }
     // exploration section 
-    if (goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
+    if (goals.includes(Goals.exploration)) {
       goalsArray.push(Goals.exploration);
+    } else if (goals.includes(Goals.deliberation)) {
+      subGoalsArray.push(SubGoals.subExploration);
     }
 
     // deliberation section 
@@ -80,8 +85,29 @@ export class AgendaBuilder {
       goalsArray.push(Goals.deliberation);
     }
 
-    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goalsArray.length);
+    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goalsArray.length, subGoalsArray.length);
 
+    let splitCount = 0;
+    for (let i = 0; i < subGoalsArray.length; i++) {
+      const event = new EventSection();
+      for (let j = 0; j < eventSectionsRaw[i].length; j++) {
+        event.subSections.push(subGoalsArray[eventSectionsRaw[splitCount][j] - 1]);
+      }
+      if ((i+1) % 2 == 0) {
+        // if we are looking at subsections, each section is 2 subsections
+        splitCount = splitCount + 1;
+      }
+
+    }
+    // TODO: figure what the hell i'm doing
+    // TODO: figure out how to not create subsections for this 
+    for (let i = 0; i < goalsArray.length; i++) {
+      const event = new EventSection();
+      for (let j = 0; j < eventSectionsRaw[i].length; j++) {
+        event.sections.push(goalsArray[eventSectionsRaw[i][j] - 1]);
+      }
+      eventSections.push(event);
+    }
     for (let i = 0; i < eventSectionsRaw.length; i++) {
       const event = new EventSection();
       for (let j = 0; j < eventSectionsRaw[i].length; j++) {
@@ -95,24 +121,31 @@ export class AgendaBuilder {
   ///
   // Calculate raw numbers for sections per event etc
   ///
-  _calculateSectionsPerEvent(eventCount: number, totalSections: number): number[][] {
+  _calculateSectionsPerEvent(eventCount: number, totalSections: number, totalSubSections): number[][] {
     let eventList: number[][] = [];
-    const sectionsPerEventDecimal: number = totalSections / eventCount;
+
+    // subsections weren't asked for by the user, so they are shorter
+    // they should each be about 1/2 the time of a regular section
+    // Deliberation + subDialogue + subExploration = 2
+    // Deliberation + exploration  + subDialogue = 1.5 
+    let totalSectionsCombined = totalSections + (totalSubSections / 2);
+    const sectionsPerEventDecimal: number = totalSectionsCombined / eventCount;
 
     if (sectionsPerEventDecimal < 1) {
       // more events than sections 
-      const eventsPerSection: number = Math.floor(eventCount / totalSections);
-      const leftOverEvents: number = eventCount % totalSections;
+      const eventsPerSection: number = Math.floor(eventCount / totalSectionsCombined);
+      const leftOverEvents: number = eventCount % totalSectionsCombined;
 
       let eventsAdded: number = 0;
       let sectionAdding: number = 1;
       for (let i = 0; i < eventCount; i++) {
         let tempEventPerSection = eventsPerSection;
-        if (totalSections - sectionAdding < leftOverEvents) {
+        if (totalSectionsCombined - sectionAdding < leftOverEvents) {
           // the last events are where we want to add the extra sections, i.e. an extra event per section
-          tempEventPerSection = eventsPerSection + 1;
+          tempEventPerSection = eventsPerSection + 1; // temporarily increase how many events have that section to use the leftover event
         }
         if (eventsAdded >= tempEventPerSection) {
+          // added all events for that section, move to the next section
           sectionAdding = sectionAdding + 1;
           eventsAdded = 0;
         }
