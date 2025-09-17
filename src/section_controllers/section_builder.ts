@@ -5,7 +5,7 @@ import { DialogueBuilder } from "./dialogue_builder.js";
 import { DeliberationBuilder } from "./deliberation_builder.js";
 import { ExplorationBuilder } from "./exploration_builder.js";
 import { IntroductionBuilder } from "./introduction_builder.js";
-import { EventLengthType, Goals } from "../utils/global_enums.js";
+import { EventLengthType, Goals, SubGoals } from "../utils/global_enums.js";
 import { ConclusionBuilder } from "./conclusion_builder.js";
 import { CustomError } from "../utils/result_handling.js";
 import { LangChainLLMService } from "../services/langchain_services.js";
@@ -87,9 +87,17 @@ export class SectionBuilder {
     _addMiddleSections(sectionDuration: number) {
 
         const totalSections: number = this.sectionList.sections.length;
+        const totalSubSections: number = this.sectionList.subSections.length;
 
-        const newDuration: number = this.agenda.duration.calculateSubDuration(totalSections);
-
+        for (let i = 0; i < totalSubSections; i++) {
+            let subSection = this.sectionList.subSections[i];
+            if (subSection == SubGoals.subDialogue) {
+                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, false, sectionDuration / 2, this.llmService));
+            }
+            if (subSection == SubGoals.subExploration) {
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration / 2, false, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+            }
+        }
         for (let i = 0; i < totalSections; i++) {
             let section = this.sectionList.sections[i];
             if (section == Goals.dialogue) {
@@ -97,7 +105,7 @@ export class SectionBuilder {
                 this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, sectionDuration, this.llmService));
             }
             if (section == Goals.exploration) {
-                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration, true, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
             }
             if (section == Goals.deliberation) {
                 this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision, sectionDuration));
@@ -109,7 +117,7 @@ export class SectionBuilder {
 
         const middleSectionsLength = this.agenda.duration.getMinutes() - (introTime + communityNormTime + conclusionNormTime);
 
-        const sectionDuration = Math.floor(middleSectionsLength / this.sectionList.sections.length)
+        const sectionDuration = Math.floor(middleSectionsLength / (this.sectionList.sections.length + this.sectionList.subSections.length / 2))
 
         return sectionDuration;
     }

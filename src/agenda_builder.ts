@@ -64,8 +64,8 @@ export class AgendaBuilder {
   ///
   _getEventSections(eventCount: number, goals: String[]): EventSection[] {
     let eventSections: EventSection[] = [];
-    const goalsArray: Goals[] = [];
-    const subGoalsArray: SubGoals[] = [];
+    const goalsArray: Goals[] = []; // user-specified goals
+    const subGoalsArray: SubGoals[] = []; // recommended subgoals for the user-specified ones 
 
     // dialogue section
     if (goals.includes(Goals.dialogue)) {
@@ -97,18 +97,8 @@ export class AgendaBuilder {
         // if we are looking at subsections, each section is 2 subsections
         splitCount = splitCount + 1;
       }
-
     }
-    // TODO: figure what the hell i'm doing
-    // TODO: figure out how to not create subsections for this 
     for (let i = 0; i < goalsArray.length; i++) {
-      const event = new EventSection();
-      for (let j = 0; j < eventSectionsRaw[i].length; j++) {
-        event.sections.push(goalsArray[eventSectionsRaw[i][j] - 1]);
-      }
-      eventSections.push(event);
-    }
-    for (let i = 0; i < eventSectionsRaw.length; i++) {
       const event = new EventSection();
       for (let j = 0; j < eventSectionsRaw[i].length; j++) {
         event.sections.push(goalsArray[eventSectionsRaw[i][j] - 1]);
@@ -126,8 +116,8 @@ export class AgendaBuilder {
 
     // subsections weren't asked for by the user, so they are shorter
     // they should each be about 1/2 the time of a regular section
-    // Deliberation + subDialogue + subExploration = 2
-    // Deliberation + exploration  + subDialogue = 1.5 
+    // i.e. Deliberation + subDialogue + subExploration = 2
+    // i.e. Deliberation + Exploration  + subDialogue = 2.5 
     let totalSectionsCombined = totalSections + (totalSubSections / 2);
     const sectionsPerEventDecimal: number = totalSectionsCombined / eventCount;
 

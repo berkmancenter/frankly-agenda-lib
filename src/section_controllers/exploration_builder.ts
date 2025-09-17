@@ -12,6 +12,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     topic: string;
     sectionDuration: number;
+    mainGoal: boolean;
     totalSectionDuration: number;
     upperParticipantCount: number;
     lowerParticipantCount: number;
@@ -33,9 +34,10 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     warnings: CustomError[] = [];
 
-    constructor(topic: string, sectionDuration: number, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
+    constructor(topic: string, sectionDuration: number, mainGoal: boolean, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
         this.topic = topic;
         this.totalSectionDuration = sectionDuration;
+        this.mainGoal = mainGoal;
         this.sectionDuration = sectionDuration;
         this.lowerParticipantCount = lowerParticipantCount;
         if (this.lowerParticipantCount < 2) this.lowerParticipantCount = 2;
@@ -54,6 +56,27 @@ export class ExplorationBuilder implements ISectionBuilder {
     }
 
     async createSection(): Promise<AgendaSection> {
+        if (this.mainGoal) {
+            return this._createMainSection();
+        } else {
+            return this._createSubSection();
+        }
+    }
+
+    _createSubSection(): AgendaSection {
+        // section info
+        const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
+
+        // create item
+        const item = this.explorationData.items.findIndex(item => item.id === "abbreviatedSection");
+        const title: string = item.title;
+        const contentString: string = item.content[0];
+        const explorationItem: AgendaItem = new AgendaItem(title, [contentString]);
+        explorationItem.duration = createDurationByTimeUnit({ minutes: this.totalSectionDuration });
+        return explorationSection;
+    }
+
+    async _createMainSection(): Promise<AgendaSection> {
         // section info
         const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
 

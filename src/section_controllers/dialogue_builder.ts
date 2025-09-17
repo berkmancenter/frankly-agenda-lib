@@ -35,11 +35,16 @@ export class DialogueBuilder implements ISectionBuilder {
     public async createSection(): Promise<AgendaSection> {
         // section info
         const dialogueSection = new AgendaSection(this.dialogueData.section, this.dialogueData.sectionDescription);
+        let dialogueItems: AgendaItem[];
 
-        const recommendedItemQuant: number = this.determineNumberOfItems();
-
-        const dialogueItems: AgendaItem[] = await this.createItems(recommendedItemQuant);
-
+        if (this.sectionDuration >= 45) {
+            dialogueItems = await this.createItems(2);
+        }
+        else if (this.isMainGoal) {
+            dialogueItems = await this.createItems(1);
+        } else {
+            dialogueItems = this.createSubItem();
+        }
         for (let introItem of dialogueItems) {
             dialogueSection.addItem(introItem);
         }
@@ -60,11 +65,12 @@ export class DialogueBuilder implements ISectionBuilder {
         return agendaItems;
     }
 
-    determineNumberOfItems(): number {
-        if (this.isMainGoal && this.sectionDuration >= 45) {
-            return 2; // return both dialogue questions
-        } else {
-            return 1;
-        }
+    createSubItem(): AgendaItem[] {
+        const item = this.dialogueData.items.findIndex(item => item.id === "briefPersonalExperience");
+        const title: string = item.title;
+        const contentString: string = item.content[0];
+        const agendaItem: AgendaItem = new AgendaItem(title, [contentString]);
+        agendaItem.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
+        return [agendaItem];
     }
 }

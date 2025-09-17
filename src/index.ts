@@ -4,4 +4,4 @@ dotenv.config();
 
 export { generateEventPlan } from './build_event_plan.js'
 
-//await testEventGeneratorLocal();
+await testEventGeneratorLocal();
