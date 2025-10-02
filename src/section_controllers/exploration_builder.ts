@@ -68,9 +68,10 @@ export class ExplorationBuilder implements ISectionBuilder {
         const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
 
         // create item
-        const item = this.explorationData.items.findIndex(item => item.id === "abbreviatedSection");
+        const itemNumber = this.explorationData.items.findIndex(item => item.id === "abbreviatedSection");
+        const item = this.explorationData.items[itemNumber];
         const title: string = item.title;
-        const contentString: string = item.content[0];
+        const contentString: string = item.content[0].replaceAll("this_topic_replace", this.topic);
         const explorationItem: AgendaItem = new AgendaItem(title, [contentString]);
         explorationItem.duration = createDurationByTimeUnit({ minutes: this.totalSectionDuration });
         return explorationSection;

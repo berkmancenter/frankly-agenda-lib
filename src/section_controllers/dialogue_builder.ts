@@ -66,9 +66,10 @@ export class DialogueBuilder implements ISectionBuilder {
     }
 
     createSubItem(): AgendaItem[] {
-        const item = this.dialogueData.items.findIndex(item => item.id === "briefPersonalExperience");
+        const itemNumber = this.dialogueData.items.findIndex(item => item.id === "briefPersonalExperience");
+        const item = this.dialogueData.items[itemNumber];
         const title: string = item.title;
-        const contentString: string = item.content[0];
+        const contentString: string = item.content[0].replaceAll("this_topic_replace", this.topic);
         const agendaItem: AgendaItem = new AgendaItem(title, [contentString]);
         agendaItem.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
         return [agendaItem];

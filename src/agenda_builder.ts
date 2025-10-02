@@ -2,7 +2,7 @@ import { Agenda, createAgenda, EventPlan } from "./models/agenda_models.js";
 import { EventInputs, EventSection } from "./models/input_models.js";
 import { SectionBuilder } from "./section_controllers/section_builder.js";
 import { LangChainLLMService } from "./services/langchain_services.js";
-import { Goals, SubGoals } from "./utils/global_enums.js";
+import { Goals } from "./utils/global_enums.js";
 import { CustomError, ErrorCategory, ErrorType } from "./utils/result_handling.js";
 
 export class AgendaBuilder {
@@ -31,6 +31,7 @@ export class AgendaBuilder {
       eventCount = 1;
     }
     let eventSections: EventSection[] = [];
+
     try {
       eventSections = this._getEventSections(eventCount, this.eventInput.goals);
     } catch (e) {
@@ -50,8 +51,8 @@ export class AgendaBuilder {
     for (let i = 0; i < agendaList.length; i++) {
       const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], this.llmService);
       await builder.buildStructure();
-      for (let i = 0; i < builder.warnings.length; i++) {
-        this.eventPlan.warnings.push(builder.warnings[i]);
+      for (let j = 0; j < builder.warnings.length; j++) {
+        this.eventPlan.warnings.push(builder.warnings[j]);
       }
       this.eventPlan.addAgendas(agendaList[i]);
     }
@@ -64,96 +65,99 @@ export class AgendaBuilder {
   ///
   _getEventSections(eventCount: number, goals: String[]): EventSection[] {
     let eventSections: EventSection[] = [];
-    const goalsArray: Goals[] = []; // user-specified goals
-    const subGoalsArray: SubGoals[] = []; // recommended subgoals for the user-specified ones 
+    const goalsArray: Goals[] = []; // all goals, including subgoals
 
+    // We push all main goals twice, so that they have two half sections
+    // which equals one full section 
+    // because they should be twice as long as subsections
     // dialogue section
     if (goals.includes(Goals.dialogue)) {
       goalsArray.push(Goals.dialogue);
+      goalsArray.push(Goals.dialogue);
     } else if (goals.includes(Goals.exploration) || goals.includes(Goals.deliberation)) {
-      subGoalsArray.push(SubGoals.subDialogue);
+      goalsArray.push(Goals.subDialogue);
     }
     // exploration section 
     if (goals.includes(Goals.exploration)) {
       goalsArray.push(Goals.exploration);
+      goalsArray.push(Goals.exploration);
     } else if (goals.includes(Goals.deliberation)) {
-      subGoalsArray.push(SubGoals.subExploration);
+      goalsArray.push(Goals.subExploration);
     }
 
     // deliberation section 
     if (goals.includes(Goals.deliberation)) {
       goalsArray.push(Goals.deliberation);
+      goalsArray.push(Goals.deliberation);
     }
 
-    const eventSectionsRaw: number[][] = this._calculateSectionsPerEvent(eventCount, goalsArray.length, subGoalsArray.length);
+    const eventSectionsRaw: Object[][] = this._calculateSectionsPerEvent(eventCount, goalsArray);
 
-    let splitCount = 0;
-    for (let i = 0; i < subGoalsArray.length; i++) {
+
+    for (let i = 0; i < eventSectionsRaw.length; i++) {
       const event = new EventSection();
       for (let j = 0; j < eventSectionsRaw[i].length; j++) {
-        event.subSections.push(subGoalsArray[eventSectionsRaw[splitCount][j] - 1]);
-      }
-      if ((i+1) % 2 == 0) {
-        // if we are looking at subsections, each section is 2 subsections
-        splitCount = splitCount + 1;
-      }
-    }
-    for (let i = 0; i < goalsArray.length; i++) {
-      const event = new EventSection();
-      for (let j = 0; j < eventSectionsRaw[i].length; j++) {
-        event.sections.push(goalsArray[eventSectionsRaw[i][j] - 1]);
+        event.sections.push(eventSectionsRaw[i][j] as Goals);
       }
       eventSections.push(event);
     }
+
     return eventSections;
   }
 
   ///
   // Calculate raw numbers for sections per event etc
   ///
-  _calculateSectionsPerEvent(eventCount: number, totalSections: number, totalSubSections): number[][] {
-    let eventList: number[][] = [];
+  _calculateSectionsPerEvent(eventCount: number, sectionArray: Goals[]): Object[][] {
+    let eventList: Object[][] = [];
 
     // subsections weren't asked for by the user, so they are shorter
     // they should each be about 1/2 the time of a regular section
     // i.e. Deliberation + subDialogue + subExploration = 2
     // i.e. Deliberation + Exploration  + subDialogue = 2.5 
-    let totalSectionsCombined = totalSections + (totalSubSections / 2);
-    const sectionsPerEventDecimal: number = totalSectionsCombined / eventCount;
+    let totalHalfSections = sectionArray.length;
+    const halfSectionsPerEventDecimal: number = (totalHalfSections) / eventCount;
 
-    if (sectionsPerEventDecimal < 1) {
-      // more events than sections 
-      const eventsPerSection: number = Math.floor(eventCount / totalSectionsCombined);
-      const leftOverEvents: number = eventCount % totalSectionsCombined;
+    if (halfSectionsPerEventDecimal < 1) {
+      // more events than sections, so we have each section repeat in multiple events 
+      const halfEventsPerSection: number = Math.floor(eventCount / totalHalfSections);
+      let leftOverEvents: number = eventCount % totalHalfSections;
+      let tempHalfEventPerSection = halfEventsPerSection;
 
-      let eventsAdded: number = 0;
-      let sectionAdding: number = 1;
+
+      const leftOverEventIncrement: number = Math.ceil(eventCount / leftOverEvents)
+
+      let halfEventsAdded: number = 0;
+      let sectionAdding: number = 0;
+      let eventCounter = 0;
       for (let i = 0; i < eventCount; i++) {
-        let tempEventPerSection = eventsPerSection;
-        if (totalSectionsCombined - sectionAdding < leftOverEvents) {
+        if ((i > 0 && i % leftOverEventIncrement == 0) ||
+          (eventCount - 1 == i && leftOverEvents > 0)) { // leftoverevent spot 
           // the last events are where we want to add the extra sections, i.e. an extra event per section
-          tempEventPerSection = eventsPerSection + 1; // temporarily increase how many events have that section to use the leftover event
+          tempHalfEventPerSection = tempHalfEventPerSection + 1; // temporarily increase how many events have that section to use the leftover event
+          leftOverEvents = leftOverEvents - 1;
         }
-        if (eventsAdded >= tempEventPerSection) {
+        if (halfEventsAdded >= tempHalfEventPerSection) {
           // added all events for that section, move to the next section
           sectionAdding = sectionAdding + 1;
-          eventsAdded = 0;
+          halfEventsAdded = 0;
+          tempHalfEventPerSection = halfEventsPerSection;
         }
-        eventList[i] = [sectionAdding];
-        eventsAdded = eventsAdded + 1;
+        eventList[i] = [sectionArray[sectionAdding]];
+        halfEventsAdded = halfEventsAdded + 1;
       }
     } else {
-      const sectionsPerEvent: number = Math.floor(totalSections / eventCount);
-      const leftOverSections: number = totalSections % eventCount;
-      let sectionAdding: number = 1;
+      const halfSectionsPerEvent: number = Math.floor(totalHalfSections / eventCount);
+      const leftOverSections: number = totalHalfSections % eventCount;
+      let sectionAdding: number = 0;
       for (let i = 0; i < eventCount; i++) {
         eventList[i] = [];
-        for (let j = 0; j < sectionsPerEvent; j++) {
-          eventList[i].push(sectionAdding);
+        for (let j = 0; j < halfSectionsPerEvent; j++) {
+          eventList[i].push(sectionArray[sectionAdding]);
           sectionAdding = sectionAdding + 1;
         }
         if (i < leftOverSections) {
-          eventList[i].push(sectionAdding);
+          eventList[i].push(sectionArray[sectionAdding]);
           sectionAdding = sectionAdding + 1;
         }
       }
