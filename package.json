@@ -17,8 +17,8 @@
   },
   "keywords": [],
   "author": "Casey Elizabeth Gilbert",
-  "license": "TODO: update me",
-  "description": "A library that generates an agenda to facilitate events for constructive dialogue.",
+  "license": "AGPL-3.0-only",
+  "description": "BETA. A library that generates an agenda to facilitate events for constructive dialogue. In progress, contains known bugs. Use with caution.",
   "private": true,
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
