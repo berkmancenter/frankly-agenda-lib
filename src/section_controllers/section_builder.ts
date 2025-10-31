@@ -24,6 +24,7 @@ export class SectionBuilder {
     sectionList: EventSection;
     eventLengthType: EventLengthType;
     llmService: LangChainLLMService;
+    firstExploration: boolean;
 
 
     warnings: CustomError[] = [];
@@ -31,13 +32,14 @@ export class SectionBuilder {
 
     isFollowOn: boolean;
 
-    constructor(agenda: Agenda, eventInput: EventInputs, sectionList: EventSection, llmService: LangChainLLMService) {
+    constructor(agenda: Agenda, eventInput: EventInputs, sectionList: EventSection, llmService: LangChainLLMService, firstExploration: boolean) {
         this.agenda = agenda;
         this.eventInput = eventInput;
         this.sectionList = sectionList;
         this.agenda.addDuration(this.eventInput.eventLength);
         this.isFollowOn = this.eventInput.isSeries == true && this.agenda.eventNumber > 0;
         this.llmService = llmService;
+        this.firstExploration = firstExploration;
     }
 
     public async buildStructure(): Promise<void> {
@@ -109,14 +111,14 @@ export class SectionBuilder {
                 this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, false, duration, this.llmService));
             }
             if (currSection == Goals.subExploration) {
-                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, false, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, false, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService, this.firstExploration));
             }
             if (currSection == Goals.dialogue) {
                 let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
                 this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, duration, this.llmService));
             }
             if (currSection == Goals.exploration) {
-                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, true, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, true, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService, this.firstExploration));
             }
             if (currSection == Goals.deliberation) {
                 this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision, duration));

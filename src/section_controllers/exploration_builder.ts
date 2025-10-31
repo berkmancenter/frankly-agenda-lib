@@ -17,6 +17,7 @@ export class ExplorationBuilder implements ISectionBuilder {
     upperParticipantCount: number;
     lowerParticipantCount: number;
     llmService: LangChainLLMService;
+    firstExploration: boolean;
 
     // timing for prompt variables
     idealMinutesToSpeak: number = 2;
@@ -34,7 +35,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     warnings: CustomError[] = [];
 
-    constructor(topic: string, sectionDuration: number, mainGoal: boolean, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService) {
+    constructor(topic: string, sectionDuration: number, mainGoal: boolean, lowerParticipantCount: number, upperParticipantCount: number, llmService: LangChainLLMService, firstExploration: boolean) {
         this.topic = topic;
         this.totalSectionDuration = sectionDuration;
         this.mainGoal = mainGoal;
@@ -43,6 +44,7 @@ export class ExplorationBuilder implements ISectionBuilder {
         if (this.lowerParticipantCount < 2) this.lowerParticipantCount = 2;
         this.upperParticipantCount = upperParticipantCount;
         this.llmService = llmService;
+        this.firstExploration = firstExploration;
 
         this.groupDiscussionTime = this._calculateInitialGroupDiscussionTime();
 
@@ -102,6 +104,11 @@ export class ExplorationBuilder implements ISectionBuilder {
     }
 
     async _handleTopicBackground(): Promise<AgendaItem> {
+        if (!this.firstExploration) {
+            // follow on 
+            return;
+        }
+
         let instructionItem: AgendaItem;
 
         const humanQuery = this.explorationData.llm_prompts.find(item => item.title == "Topic Background Query").content.replaceAll("this_topic_replace", this.topic);
