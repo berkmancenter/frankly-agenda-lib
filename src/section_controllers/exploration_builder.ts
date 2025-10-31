@@ -65,7 +65,7 @@ export class ExplorationBuilder implements ISectionBuilder {
 
     _createSubSection(): AgendaSection {
         // section info
-        const explorationSection = new AgendaSection(this.explorationData.section, this.explorationData.sectionDescription);
+        const explorationSection = new AgendaSection(this.explorationData.abbreviatedSectionName, this.explorationData.sectionDescription);
 
         // create item
         const itemNumber = this.explorationData.items.findIndex(item => item.id === "abbreviatedSection");

@@ -34,7 +34,8 @@ export class DialogueBuilder implements ISectionBuilder {
 
     public async createSection(): Promise<AgendaSection> {
         // section info
-        const dialogueSection = new AgendaSection(this.dialogueData.section, this.dialogueData.sectionDescription);
+        let sectionName = this.dialogueData.section;
+
         let dialogueItems: AgendaItem[];
 
         if (this.sectionDuration >= 45) {
@@ -44,7 +45,11 @@ export class DialogueBuilder implements ISectionBuilder {
             dialogueItems = await this.createItems(1);
         } else {
             dialogueItems = this.createSubItem();
+            sectionName = this.dialogueData.abbreviatedSectionName
         }
+
+        const dialogueSection = new AgendaSection(sectionName, this.dialogueData.sectionDescription);
+
         for (let introItem of dialogueItems) {
             dialogueSection.addItem(introItem);
         }
