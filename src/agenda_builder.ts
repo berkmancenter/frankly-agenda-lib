@@ -40,16 +40,25 @@ export class AgendaBuilder {
 
     // Create agendas 
     if (this.eventInput.isSeries) {
+
       for (var i = 0; i < this.eventInput.eventCount; i++) {
         // TODO: input whatever is needed to determine agenda characteristics 
+
         agendaList.push(createAgenda({ eventNumber: i }));
       }
     } else {
       agendaList.push(createAgenda({}));
     }
 
+    let sentExplorationSection = false;
     for (let i = 0; i < agendaList.length; i++) {
-      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], this.llmService);
+      // check if we are sending our first exploration section
+      let firstExploration = false;
+      if (sentExplorationSection == false && eventSections[i].sections.includes(Goals.exploration) || eventSections[i].sections.includes(Goals.subExploration)) {
+        sentExplorationSection = true;
+        firstExploration = true;
+      }
+      const builder: SectionBuilder = new SectionBuilder(agendaList[i], this.eventInput, eventSections[i], this.llmService, firstExploration);
       await builder.buildStructure();
       for (let j = 0; j < builder.warnings.length; j++) {
         this.eventPlan.warnings.push(builder.warnings[j]);
@@ -92,7 +101,6 @@ export class AgendaBuilder {
     }
 
     const eventSectionsRaw: Object[][] = this._calculateSectionsPerEvent(eventCount, goalsArray);
-
 
     for (let i = 0; i < eventSectionsRaw.length; i++) {
       const event = new EventSection();
