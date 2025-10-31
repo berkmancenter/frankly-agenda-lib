@@ -88,28 +88,51 @@ export class SectionBuilder {
 
         const totalSections: number = this.sectionList.sections.length;
 
-        const newDuration: number = this.agenda.duration.calculateSubDuration(totalSections);
+        let sectionCounter = 0;
+        while (sectionCounter < totalSections) {
+            let currSection = this.sectionList.sections[sectionCounter];
+            let nextSection = null;
+            if (sectionCounter < (totalSections - 1)) {
+                nextSection = this.sectionList.sections[sectionCounter + 1]
+            }
+            
+            let duration = sectionDuration;
 
-        for (let i = 0; i < totalSections; i++) {
-            let section = this.sectionList.sections[i];
-            if (section == Goals.dialogue) {
+            // since we added main Goals in halves, we have to recombine them into a full
+            if (currSection == nextSection) { 
+                duration = sectionDuration * 2;
+                sectionCounter = sectionCounter + 1; // if we skip the next one, then we need to record that it is added
+            }
+
+            // Now section checks 
+            if (currSection == Goals.subDialogue) {
+                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, false, duration, this.llmService));
+            }
+            if (currSection == Goals.subExploration) {
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, false, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+            }
+            if (currSection == Goals.dialogue) {
                 let mainGoal: boolean = this.sectionList.sections.length == 1 ? true : false;
-                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, sectionDuration, this.llmService));
+                this.middleSectionBuilders.push(new DialogueBuilder(this.eventInput.topic, mainGoal, duration, this.llmService));
             }
-            if (section == Goals.exploration) {
-                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, sectionDuration, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
+            if (currSection == Goals.exploration) {
+                this.middleSectionBuilders.push(new ExplorationBuilder(this.eventInput.topic, duration, true, this.eventInput.lowerParticipantCount, this.eventInput.upperParticipantCount, this.llmService));
             }
-            if (section == Goals.deliberation) {
-                this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision, sectionDuration));
+            if (currSection == Goals.deliberation) {
+                this.middleSectionBuilders.push(new DeliberationBuilder(this.eventInput.topic, this.eventInput.isConcreteDecision, duration));
             }
+
+            sectionCounter = sectionCounter + 1;
         }
     }
 
     _determineMiddleSectionTiming(introTime: number, communityNormTime: number, conclusionNormTime: number): number {
 
+        // How much time we have total for the middle sections
         const middleSectionsLength = this.agenda.duration.getMinutes() - (introTime + communityNormTime + conclusionNormTime);
 
-        const sectionDuration = Math.floor(middleSectionsLength / this.sectionList.sections.length)
+        // divide that by how many sections we have to get each section's duration 
+        const sectionDuration = Math.floor(middleSectionsLength / this.sectionList.sections.length);
 
         return sectionDuration;
     }

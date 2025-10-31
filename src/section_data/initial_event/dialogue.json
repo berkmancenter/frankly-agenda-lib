@@ -1,14 +1,24 @@
 {
     "section": "Dialogue",
+    "abbreviatedSectionName": "Connect",
     "sectionDescription": "This is a time to understand one anothers' perspectives and build trust.",
     "items": [
         {
+            "id": "personalExperience",
             "title": "Personal Experience",
             "content": [
                 "Share a personal experience relating to this_topic_replace"
             ]
         },
         {
+            "id": "briefPersonalExperience",
+            "title": "Brief Personal Experience",
+            "content": [
+                "Briefly share your personal experience or interest in this_topic_replace."
+            ]
+        },
+        {
+            "id": "purpose",
             "title": "Purpose",
             "content": [
                 "What sense of purpose/mission/duty guides you in your life? How does this inform your perspective on this_topic_replace?"

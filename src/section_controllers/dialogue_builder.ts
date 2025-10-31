@@ -34,11 +34,21 @@ export class DialogueBuilder implements ISectionBuilder {
 
     public async createSection(): Promise<AgendaSection> {
         // section info
-        const dialogueSection = new AgendaSection(this.dialogueData.section, this.dialogueData.sectionDescription);
+        let sectionName = this.dialogueData.section;
 
-        const recommendedItemQuant: number = this.determineNumberOfItems();
+        let dialogueItems: AgendaItem[];
 
-        const dialogueItems: AgendaItem[] = await this.createItems(recommendedItemQuant);
+        if (this.sectionDuration >= 45) {
+            dialogueItems = await this.createItems(2);
+        }
+        else if (this.isMainGoal) {
+            dialogueItems = await this.createItems(1);
+        } else {
+            dialogueItems = this.createSubItem();
+            sectionName = this.dialogueData.abbreviatedSectionName
+        }
+
+        const dialogueSection = new AgendaSection(sectionName, this.dialogueData.sectionDescription);
 
         for (let introItem of dialogueItems) {
             dialogueSection.addItem(introItem);
@@ -60,11 +70,13 @@ export class DialogueBuilder implements ISectionBuilder {
         return agendaItems;
     }
 
-    determineNumberOfItems(): number {
-        if (this.isMainGoal && this.sectionDuration >= 45) {
-            return 2; // return both dialogue questions
-        } else {
-            return 1;
-        }
+    createSubItem(): AgendaItem[] {
+        const itemNumber = this.dialogueData.items.findIndex(item => item.id === "briefPersonalExperience");
+        const item = this.dialogueData.items[itemNumber];
+        const title: string = item.title;
+        const contentString: string = item.content[0].replaceAll("this_topic_replace", this.topic);
+        const agendaItem: AgendaItem = new AgendaItem(title, [contentString]);
+        agendaItem.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
+        return [agendaItem];
     }
 }

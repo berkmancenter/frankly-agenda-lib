@@ -1,5 +1,6 @@
 {
     "section": "Exploration",
+    "abbreviatedSectionName": "Brief Topic Reflection",
     "sectionDescription": "An exploration of a topic: meant to generate ideas, questions, and unknowns.",
     "items": [
         {
@@ -21,6 +22,13 @@
             "title": "Group Discussion",
             "content": [
                 "This is a time for everyone to explore as a group what was discussed."
+            ]
+        },
+        {
+            "id": "abbreviatedSection",
+            "title": "Abbreviated Exploration",
+            "content": [
+                "Reflect on some questions or unknowns about this_topic_replace."
             ]
         }
     ],
