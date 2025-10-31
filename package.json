@@ -19,7 +19,7 @@
   "author": "Casey Elizabeth Gilbert",
   "license": "AGPL-3.0-only",
   "description": "BETA. A library that generates an agenda to facilitate events for constructive dialogue. In progress, contains known bugs. Use with caution.",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-typescript": "^12.1.4",
