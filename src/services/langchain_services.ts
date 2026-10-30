@@ -76,7 +76,7 @@ export class LangChainLLMService {
         this.config = { configurable: { thread_id: this.threadID } };
     }
 
-    async getDialogueItem(): Promise<string> {
+    async getDialogueItem(formatString: string|null=null): Promise<string> {
         let systemMessage: string;
         if (this.queryCount < 1) {
             systemMessage = this._getInitialModelGuidenceString();
@@ -108,7 +108,12 @@ export class LangChainLLMService {
 
         const intitialContextApp = dialogueWorkflow.compile({ checkpointer: this.memory });
 
-        const humanQuery = this.dialogueData.llm_prompts.find(item => item.title == "Main Query").content.replaceAll("this_topic_replace", this.eventInput.topic)
+        let humanQuery: string;
+        if (formatString != null) {
+            humanQuery = `Take the following string and reformat it to make sense in the context of the topic. For example, if the topic name should not be capitalized, don't capitalize it. Just make it sound normal and make sense and not be awkward. String: ${formatString}`;
+        } else {
+            humanQuery = this.dialogueData.llm_prompts.find((item: { title: string; }) => item.title == "Main Query").content.replaceAll("this_topic_replace", this.eventInput.topic)
+        }
 
         const dialogueInput = {
             messages: [
@@ -198,9 +203,9 @@ export class LangChainLLMService {
         llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Audience Description").content + this.eventInput.audienceDescription);
 
         if (this.eventInput.isFacilitated == true) {
-            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Facilitated Description").content + this.eventInput.audienceDescription);
+            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Facilitated Description").content);
         } else {
-            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Non-Facilitated Description").content + this.eventInput.audienceDescription);
+            llmContextGuidance.push(this.genericPromptData.find(item => item.title == "Non-Facilitated Description").content);
         }
 
         let llmBackgroundInstruction: string = "";

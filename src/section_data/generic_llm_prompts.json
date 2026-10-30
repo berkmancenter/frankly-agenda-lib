@@ -1,7 +1,7 @@
 [
     {
         "title": "Initial Guidance",
-        "content": "The user is creating an agenda for an event that facilitates a constructive conversation. You will be asked to generate some discussion prompts for the agenda. Ensure that they are thoughtful, and not cheesy or cliche. They should also be concise and to the point. Each participant should be able to quickly read and digest the prompt. Aim to have them no more than one, maybe two concise sentences. All prompts should reference the topic directly."
+        "content": "The user is creating an agenda for an event that facilitates a constructive conversation. You will be asked to generate some discussion prompts for the agenda. Ensure that they are thoughtful, and not cheesy or cliche. They should also be concise and to the point. Each participant should be able to quickly read and digest the prompt. Aim to have them no more than one, maybe two concise sentences. All prompts should reference the topic directly. Also, the topic may be capitalized when you receive it. Only capitalize it if it is appropriate to do so, for example names, places, etc. Most of the time it probably will not be appropriate. Your responses should make sense, and read as if a human wrote them."
     },
     {
         "title": "Topic Description",

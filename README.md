@@ -4,4 +4,11 @@ A library that generates agendas to guide constructive discussions. Takes in a j
 
 ## Getting Started
 
-TBD
+# Steps to run library
+
+1. `npm run build` Build the library
+2. `npm start` run the build
+
+# Steps to deploy the library 
+
+

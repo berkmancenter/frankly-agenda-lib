@@ -1,10 +1,12 @@
 {
     "goals": [
+        "dialogue",
+        "exploration",
         "deliberation"
     ],
     "isConcreteDecision": false,
-    "topic": "Climate Change",
-    "topicDescription": "This is to discuss policy options for climate change.",
+    "topic": "Abortion",
+    "topicDescription": "This is to discuss policy options for abortion and understand each others' opinions.",
     "audienceDescription": "They are very diverse from parts of rural Maine. Not extremely politically engaged.",
     "participantCount": "zeroToFive",
     "upperParticipantCount": 5,
@@ -12,6 +14,6 @@
     "hasBreakoutGroups": false,
     "isFacilitated": false,
     "isSeries": true,
-    "eventCount": 3,
-    "eventLength": 2700000000
+    "eventCount": 5,
+    "eventLength": 3600000000
 }
