@@ -164,6 +164,8 @@ export class ExplorationBuilder implements ISectionBuilder {
 
             item.guidance = ["Each participant takes " + Math.round(this.maxTimePerParticipant) + " to " + Math.round(this.minTimePerParticipant) + " minutes to explore the question prompt."];
 
+            // reformat the group discussion item
+            groupDiscussionContent[0] = await this.llmService.getDialogueItem(groupDiscussionContent[0]);
             // add item for group discussion
             const groupDiscussionItem: AgendaItem = new AgendaItem(groupDiscussionTitle, groupDiscussionContent);
 

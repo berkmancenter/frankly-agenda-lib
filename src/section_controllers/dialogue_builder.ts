@@ -38,13 +38,13 @@ export class DialogueBuilder implements ISectionBuilder {
 
         let dialogueItems: AgendaItem[];
 
-        if (this.sectionDuration >= 45) {
+        if (this.sectionDuration >= 20) {
             dialogueItems = await this.createItems(2);
         }
         else if (this.isMainGoal) {
             dialogueItems = await this.createItems(1);
         } else {
-            dialogueItems = this.createSubItem();
+            dialogueItems = await this.createSubItem();
             sectionName = this.dialogueData.abbreviatedSectionName
         }
 
@@ -70,11 +70,12 @@ export class DialogueBuilder implements ISectionBuilder {
         return agendaItems;
     }
 
-    createSubItem(): AgendaItem[] {
+    async createSubItem(): Promise<AgendaItem[]> {
         const itemNumber = this.dialogueData.items.findIndex(item => item.id === "briefPersonalExperience");
         const item = this.dialogueData.items[itemNumber];
         const title: string = item.title;
-        const contentString: string = item.content[0].replaceAll("this_topic_replace", this.topic);
+        let contentString: string = item.content[0].replaceAll("this_topic_replace", this.topic);
+        contentString = await this.llmService.getDialogueItem(contentString);
         const agendaItem: AgendaItem = new AgendaItem(title, [contentString]);
         agendaItem.duration = createDurationByTimeUnit({ minutes: this.sectionDuration });
         return [agendaItem];
