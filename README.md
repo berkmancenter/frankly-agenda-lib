@@ -11,4 +11,6 @@ A library that generates agendas to guide constructive discussions. Takes in a j
 
 # Steps to deploy the library 
 
-
+1. `npm run build` Build the library
+2. `npm login` Login to the account
+3. `npm publish` Publish the library 
